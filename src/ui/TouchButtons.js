@@ -23,6 +23,7 @@ export default class TouchButtons {
       { name: 'jump',   x: W - 36,  y: H - 36, r: 26, label: '▲' },
       { name: 'attack', x: W - 94,  y: H - 30, r: 22, label: '✦' },
       { name: 'switch', x: W - 36,  y: H - 92, r: 16, label: '⇄' },
+      { name: 'call',   x: W - 82,  y: H - 84, r: 14, label: 'C' },
     ]
 
     for (const b of this.buttons) {

@@ -18,7 +18,11 @@ export default class CompanionBrain {
     this.reset()
   }
 
-  reset() {
+  // waiting = true: nach einem Wechsel bleibt der Begleiter stehen, bis man
+  // ihn abholt (nah herangeht) oder ruft (Taste C). Daraus entstehen Rätsel.
+  reset(waiting = false) {
+    this.waiting = waiting
+    this.leaderWentAway = false   // war der Partner seit dem Wechsel schon mal richtig weg?
     this.lastJumpTime = 0
     this.moving = false        // laufe ich gerade?
     this.climbing = false      // versuche ich gerade, HOCH zu kommen?
@@ -27,8 +31,15 @@ export default class CompanionBrain {
     this.leaderPlatform = null
   }
 
-  think(me, leader, time, enemies = []) {
+  think(me, leader, time, enemies = [], called = false) {
     const cmd = { left: false, right: false, jump: false, jumpHeld: false, attack: false, teleport: false }
+
+    // Wartet er? Rufen (C) beendet das Warten – oder Abholen: aber nur, wenn der
+    // Partner vorher richtig weg war (direkt nach dem Wechsel steht man ja nebeneinander).
+    const distNow = Math.abs(leader.x - me.x)
+    const nearLeader = distNow <= COMPANION.nearX && Math.abs(leader.body.bottom - me.body.bottom) <= COMPANION.nearY
+    if (distNow > COMPANION.nearX * 2) this.leaderWentAway = true
+    if (this.waiting && (called || (nearLeader && this.leaderWentAway))) this.waiting = false
 
     // --- 0. Gegner in Reichweite? Dann hinschauen und zuschlagen (nur Basisangriff) ---
     const foe = enemies.find((e) => !e.healed
@@ -41,6 +52,7 @@ export default class CompanionBrain {
       cmd.jumpHeld = false
       return cmd
     }
+    if (this.waiting) return cmd                  // stehen bleiben (aber Gegner abwehren, s.o.)
 
     // --- 1. Wo sind wir? ---
     if (me.onGround) this.myPlatform = this.graph.platformAt(me)

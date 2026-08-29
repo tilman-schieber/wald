@@ -18,7 +18,7 @@ export default class Controls {
     this.keys = kb.addKeys({
       left: 'A', right: 'D', up: 'W',
       jump: 'SPACE', switch: 'TAB', switch2: 'SHIFT',
-      attack: 'X', attack2: 'K',
+      attack: 'X', attack2: 'K', call: 'C',
     })
     // Tab soll nicht im Browser "weiterspringen", Leertaste nicht scrollen
     kb.addCapture(['TAB', 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT'])
@@ -28,10 +28,11 @@ export default class Controls {
     this.attackKeys = [this.keys.attack, this.keys.attack2]
 
     // Wird von TouchButtons.js jeden Frame gesetzt
-    this.touch = { left: false, right: false, jump: false, attack: false, switch: false }
+    this.touch = { left: false, right: false, jump: false, attack: false, switch: false, call: false }
     this._prevTouchJump = false
     this._prevTouchSwitch = false
     this._prevTouchAttack = false
+    this._prevTouchCall = false
   }
 
   read() {
@@ -48,6 +49,9 @@ export default class Controls {
     for (const key of this.switchKeys) if (JustDown(key)) sw = true
     let attack = false
     for (const key of this.attackKeys) if (JustDown(key)) attack = true
+    let call = JustDown(this.keys.call)
+    if (t.call && !this._prevTouchCall) call = true
+    this._prevTouchCall = t.call
 
     // Touch: neu gedrückt = jetzt unten, vorher nicht
     if (t.jump && !this._prevTouchJump) jump = true
@@ -59,6 +63,6 @@ export default class Controls {
 
     const jumpHeld = this.jumpKeys.some((key) => key.isDown) || t.jump
 
-    return { left, right, jump, jumpHeld, attack, switch: sw }
+    return { left, right, jump, jumpHeld, attack, switch: sw, call }
   }
 }

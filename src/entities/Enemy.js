@@ -53,12 +53,13 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     return false
   }
 
-  heal() {
+  heal(silent = false) {
     this.healed = true
     this.hp = 0
     this.clearTint()
     this.setTint(P.wiesenGruen)                    // friedlich = grünlich
     this.setVelocity(0, 0)
+    if (silent) return
     // ein kleines Herz steigt auf
     const heart = this.scene.add.text(this.x, this.body.top - 4, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a' }).setOrigin(0.5).setDepth(15)
     this.scene.tweens.add({ targets: heart, y: heart.y - 20, alpha: 0, duration: 900, onComplete: () => heart.destroy() })

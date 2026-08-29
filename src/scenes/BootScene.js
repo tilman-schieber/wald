@@ -9,7 +9,9 @@
 import Phaser from 'phaser'
 import { HEROES, TILESET, GAME, ENEMIES, COMBAT } from '../config.js'
 import { P } from '../palette.js'
-import level1 from '../levels/schwarzwald_01.json'
+
+// Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
+const LEVELS = import.meta.glob('../levels/*.json', { eager: true, import: 'default' })
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -30,8 +32,11 @@ export default class BootScene extends Phaser.Scene {
       this.load.image(TILESET.key, TILESET.file)
     }
 
-    // Das Level kommt direkt aus der JSON-Datei (Vite bündelt es mit).
-    this.cache.tilemap.add('schwarzwald_01', { format: Phaser.Tilemaps.Formats.TILED_JSON, data: level1 })
+    // Jeder Raum landet unter seinem Dateinamen im Cache ('schwarzwald_01' …)
+    for (const [path, data] of Object.entries(LEVELS)) {
+      const key = path.split('/').pop().replace('.json', '')
+      this.cache.tilemap.add(key, { format: Phaser.Tilemaps.Formats.TILED_JSON, data })
+    }
   }
 
   create() {
@@ -45,6 +50,7 @@ export default class BootScene extends Phaser.Scene {
       if (!this.textures.exists(enemy.key)) this.makeEnemyPlaceholder(enemy)
     }
     this.makeSlash()
+    this.makePuzzlePlaceholders()
 
     this.makeParallaxPlaceholders()
     this.makeMarker()
@@ -183,6 +189,26 @@ export default class BootScene extends Phaser.Scene {
     g.fillPath()
     g.generateTexture('slash', w, h)
     g.destroy()
+  }
+
+  // Tor (Holzbalken), Bodenplatte, Hebel
+  makePuzzlePlaceholders() {
+    const t = GAME.tile
+    let g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.holzBraun); g.fillRect(0, 0, t, t)
+    g.fillStyle(P.rindeBraun); g.fillRect(0, 3, t, 2); g.fillRect(0, 11, t, 2); g.fillRect(7, 0, 2, t)
+    g.generateTexture('tor', t, t); g.destroy()
+
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.steinGrau); g.fillRect(0, 0, t, 4)
+    g.fillStyle(P.nebelHell); g.fillRect(1, 0, t - 2, 1)
+    g.generateTexture('platte', t, 4); g.destroy()
+
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.steinGrau); g.fillRect(2, 12, 8, 4)          // Sockel
+    g.fillStyle(P.holzBraun); g.fillRect(5, 2, 2, 11)          // Stange
+    g.fillStyle(P.feuerRot); g.fillRect(4, 0, 4, 4)            // Knauf
+    g.generateTexture('hebel', 12, 16); g.destroy()
   }
 
   // Kleiner Pfeil über dem aktiven Helden
