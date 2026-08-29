@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 17,
+ "nextobjectid": 18,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1378,6 +1378,18 @@
       }
      ],
      "id": 16
+    },
+    {
+     "id": 17,
+     "rotation": 0,
+     "visible": true,
+     "width": 0,
+     "height": 0,
+     "name": "eule",
+     "type": "enemy",
+     "point": true,
+     "x": 560,
+     "y": 130
     }
    ]
   }

@@ -14,6 +14,7 @@ export const world = {
   gatesOpen: {},                                 // { raumKey: Set(torName) }  (per Hebel dauerhaft offen)
   leaves: 0,                                     // gesammelte Blätter
   collected: {},                                 // { raumKey: Set(blattId) }
+  musicOff: false,
 }
 
 export function healedIn(room) {

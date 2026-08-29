@@ -2,8 +2,11 @@
 
 | Datei | PixelLab-ID | Animationen (nur Richtung east, im Spiel gespiegelt) |
 |---|---|---|
-| sprites/jonas.png  | Charakter `46e662b7-0198-433e-aa4c-0aca2681b06c` | idle `359f2194…` (4), run `841c0ce9…` (6, walking-6-frames), jump `22ed038f…` (9, jumping-1) |
-| sprites/leonel.png | Charakter `9c5a608a-7e57-4e94-a3ad-c07282d2b66c` | idle `c7fc8a1b…` (4), run `41d70798…` (6, running-6-frames), jump `4510190a…` (9, jumping-1) |
+| sprites/jonas.png  | Charakter `8e5fc3e2-0495-4784-8930-227df5f61650` ("Jonas Locken", ersetzt `46e662b7…`) | idle `85964bb4…` (4), run `e1d9f93a…` (6, walking-6-frames), jump `e1998c40…` (9, jumping-1), crouch `a339a05b…` (6, crouched-walking), climb `22bbd8f1…` (4, v3 "climbing up a vertical rope") |
+| sprites/leonel.png | Charakter `9c5a608a-7e57-4e94-a3ad-c07282d2b66c` | idle `c7fc8a1b…` (4), run `41d70798…` (6, running-6-frames), jump `4510190a…` (9, jumping-1), crouch `f1b6c1d4…` (6, crouched-walking) |
+| sprites/eule.png | Bild (pixflux, Palette) `4f54d615-7d70-4fba-a573-0d691752d49d`, 28×29 (erster Versuch `ffc1d20a…` war leer) | — |
+| sprites/eule_flug.png | Bild (pixflux, Palette) `7e226552-d932-4435-bece-f4c0eae82553`, 28×16 | — |
+| music/frozen_sprite_loop.mp3 | "Frozen Sprite Loop.mp3" (Projektordner) durch `~/crush.py --preset snes` (10 bit, 26 kHz, Tiefpass, Kompressor), dann ffmpeg → MP3 | — |
 | bg/schwarzwald_berge.png | Bild (pixflux, Palette) `0d73137c-602c-4136-b208-002103d6d003`, 400×272, gespiegelt verdoppelt | — |
 | bg/schwarzwald_baeume.png | Bild (pixflux, Palette) `cc8550f5-b788-4f22-a92e-eccbbcdd2c2d`, Zwischenraum per `tools/colorkey.mjs` (139,155,180) durchsichtig, gespiegelt verdoppelt | — |
 | bg/wald_fern.png (Titelbild) | Bild (pixflux, Palette erzwungen) `73621b03-5e20-404a-8a5b-cce466f3ca3d`, 400×272, gespiegelt verdoppelt mit `tools/mirror-tile.mjs` | — |
@@ -19,6 +22,6 @@
 
 Neu bauen: `node tools/import-character.mjs …` (baut das Spritesheet, richtet die Füße aus),
 dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottöne ausschließen).
-Verbrauch bisher: 22 von 40 Trial-Generierungen.
+Verbrauch bisher: 32 von 40 Trial-Generierungen.
 Parallax-Ebenen: "no_background" liefert bei Szenen oft eine gemalte Fläche statt Transparenz → häufigste Farbe mit colorkey.mjs entfernen.
 Kleine Sprites: `create_image_pixflux` 32×32 mit `no_background` und Paletten-PNG als `color_image_url`, dann `tools/crop.mjs` + `tools/palettize.mjs`.

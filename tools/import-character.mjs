@@ -22,8 +22,19 @@ for (const [anim, { id, n }] of Object.entries(spec)) {
     frames.push(PNG.sync.read(Buffer.from(await res.arrayBuffer())))
   }
 }
+// Alle Bilder auf die Größe des ERSTEN bringen (mittig, unten bündig) – manche
+// Animationen (z.B. v3) kommen mit größerer Leinwand.
 const fw = frames[0].width, fh = frames[0].height
-if (frames.some((f) => f.width !== fw || f.height !== fh)) throw new Error('Bilder unterschiedlich groß!')
+for (let i = 0; i < frames.length; i++) {
+  const f = frames[i]
+  if (f.width === fw && f.height === fh) continue
+  const o = new PNG({ width: fw, height: fh })
+  const sx = Math.max(0, Math.floor((f.width - fw) / 2)), dx = Math.max(0, Math.floor((fw - f.width) / 2))
+  const sy = Math.max(0, f.height - fh), dy = Math.max(0, fh - f.height)
+  PNG.bitblt(f, o, sx, sy, Math.min(fw, f.width), Math.min(fh, f.height), dx, dy)
+  frames[i] = o
+  console.log(`Bild ${i}: ${f.width}x${f.height} → ${fw}x${fh}`)
+}
 
 // Fußzeile = unterste sichtbare Zeile. Ziel = häufigste Fußzeile aller Bilder.
 const feet = frames.map((f) => { let m = 0; for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) if (f.data[(y * fw + x) * 4 + 3] > 0) m = Math.max(m, y); return m })

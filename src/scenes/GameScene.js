@@ -12,13 +12,13 @@
 //    tor      Rechteck, name = Torname; fest, solange es zu ist
 //    platte   Rechteck, Eigenschaft oeffnet = Torname; offen, solange jemand draufsteht
 //    hebel    Rechteck, Eigenschaft oeffnet = Torname; öffnet dauerhaft
-//    ranke    Rechteck (schmal, hoch): Jonas zieht sich mit dem Haken (E) hoch
+//    ranke    Rechteck (schmal, hoch): Jonas klettert daran (Pfeil hoch/runter)
 //    blatt    Punkt: Blatt zum Einsammeln
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT, BACKGROUND } from '../config.js'
+import { GAME, TILESET, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame } from '../save.js'
@@ -28,6 +28,7 @@ import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
 import PlatformGraph from '../entities/PlatformGraph.js'
 import Enemy from '../entities/Enemy.js'
+import Owl from '../entities/Owl.js'
 import Spirit from '../entities/Spirit.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
@@ -51,6 +52,8 @@ export default class GameScene extends Phaser.Scene {
     saveGame(this.roomKey, this.spawnName)      // Checkpoint: jeder Raumeingang
     this.paused = false
     this.input.keyboard.on('keydown-P', () => this.togglePause())
+    this.input.keyboard.on('keydown-M', () => this.toggleMusic())
+    this.startMusic()
     this.input.keyboard.on('keydown-ESC', () => this.togglePause())
 
     // ---------- Level ----------
@@ -116,7 +119,8 @@ export default class GameScene extends Phaser.Scene {
       if (o.type !== 'enemy') continue
       const cfg = ENEMIES[o.name]
       if (!cfg) { console.warn('Unbekannter Gegner:', o.name); continue }
-      const e = new Enemy(this, o.x, o.y - cfg.frame.h / 2, cfg).setDepth(8)
+      const Klasse = cfg.kind === 'flyer' ? Owl : Enemy
+      const e = new Klasse(this, o.x, o.y - cfg.frame.h / 2, cfg).setDepth(8)
       e.objectId = o.id
       if (healedIn(this.roomKey).has(o.id)) e.heal(true)
       this.physics.add.collider(e, this.groundLayer)
@@ -204,7 +208,7 @@ export default class GameScene extends Phaser.Scene {
 
     // ---------- HUD (fest am Bildschirm) ----------
     const hudStyle = { fontFamily: 'monospace', fontSize: '8px', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 2, y: 1 } }
-    this.add.text(2, 2, 'Pfeile laufen/ducken · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm!', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
+    this.add.text(2, 2, 'Pfeile laufen/ducken/klettern · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm! · M Musik', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
     this.nameText = this.add.text(2, 13, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
     this.hud = this.add.text(2, 24, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
@@ -232,6 +236,7 @@ export default class GameScene extends Phaser.Scene {
 
     // 3. Der Aktive tut, was der Spieler sagt … (E = Spezialfähigkeit, nur der Aktive!)
     if (cmd.special) this.useSpecial(this.active, time)
+    this.checkVines(cmd, time)
     this.active.applyCommand(cmd, time)
 
     // 4. … der Begleiter tut, was sein Gehirn sagt.
@@ -259,6 +264,22 @@ export default class GameScene extends Phaser.Scene {
     const sx = this.cameras.main.scrollX
     for (const l of this.bgLayers) l.ts.tilePositionX = sx * l.scroll + l.offsetX
     this.fgBushes.tilePositionX = sx * 1.3
+  }
+
+  // Musik läuft über alle Räume durch (sie gehört zum Spiel, nicht zur Szene)
+  startMusic() {
+    if (!this.cache.audio.exists('musik')) return
+    const existing = this.sound.get('musik')
+    if (existing) { if (!existing.isPlaying && !world.musicOff) existing.play(); return }
+    const m = this.sound.add('musik', { loop: true, volume: MUSIC.volume })
+    if (!world.musicOff) m.play()
+  }
+
+  toggleMusic() {
+    world.musicOff = !world.musicOff
+    const m = this.sound.get('musik')
+    if (m) world.musicOff ? m.pause() : m.resume()
+    this.floatText(this.active, world.musicOff ? 'Musik aus' : 'Musik an')
   }
 
   togglePause() {
@@ -348,10 +369,8 @@ export default class GameScene extends Phaser.Scene {
   useSpecial(hero, time) {
     if (hero.isDazed(time) || hero.hook) return
     if (hero.cfg.key === 'jonas') {
-      // Kletterhaken: gibt es eine Ranke in Reichweite, deren oberes Ende über mir ist?
-      const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= HOOK.reach && hero.body.top > r.top && hero.body.bottom <= r.bottom + 40)
-      if (r) { hero.startHook(r.x, r.top, r.side); this.sfx.play('hook') }
-      else this.floatText(hero, 'Keine Ranke!')
+      // Stampfer: hochspringen und auf den Boden knallen → Gegner ringsum werden benommen
+      if (hero.startSlam(time)) this.sfx.play('hook')
     } else if (hero.cfg.key === 'leonel') {
       // Waldgeist rufen (mit Pause dazwischen)
       if (time < this.spiritReadyAt) return
@@ -359,6 +378,27 @@ export default class GameScene extends Phaser.Scene {
       this.spirits.push(new Spirit(this, hero, time))
       this.sfx.play('spirit')
     }
+  }
+
+  // Jonas ist mit dem Stampfer aufgekommen: Erschütterung!
+  onSlamLanded(hero, time) {
+    this.cameras.main.shake(180, 0.006)
+    this.sfx.play('gate')
+    const ring = this.add.ellipse(hero.x, hero.body.bottom, 10, 4, 0, 0).setStrokeStyle(2, P.sandHell).setDepth(12)
+    this.tweens.add({ targets: ring, width: SLAM.radius * 2, height: 10, alpha: 0, duration: 300, onComplete: () => ring.destroy() })
+    for (const e of this.enemies) {
+      if (e.healed || Math.abs(e.x - hero.x) > SLAM.radius || Math.abs(e.body.bottom - hero.body.bottom) > 24) continue
+      e.stun(time, SLAM.dizzyMs)
+    }
+  }
+
+  // Steht Jonas an einer Ranke und drückt hoch (oder runter, wenn er oben davor steht)? → klettern
+  checkVines(cmd, time) {
+    const hero = this.active
+    if (hero.cfg.key !== 'jonas' || hero.vine || hero.slamming) return
+    if (!cmd.up && !cmd.crouch) return
+    const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= CLIMB.reach && hero.body.bottom > r.top - 4 && hero.body.top < r.bottom)
+    if (r) { hero.startClimb(r); this.sfx.play('hook') }
   }
 
   // Kurzer Text, der über einer Figur aufsteigt

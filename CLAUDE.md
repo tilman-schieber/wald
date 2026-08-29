@@ -11,10 +11,11 @@ Entscheidungen so, dass Kinder mitlesen können.
 - `?debug` an die URL → Trefferboxen sichtbar; `?touch` → Touch-Knöpfe auch am PC;
   `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)
-- Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause
+- Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause, M Musik
 - Szenen: Boot → Title → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand
   zwischen Räumen, `save.js` speichert ihn bei jedem Raumeingang in localStorage
-- Sounds werden in `sound.js` synthetisch erzeugt (keine Dateien)
+- Sounds werden in `sound.js` synthetisch erzeugt (keine Dateien); Musik: `MUSIC.file` (MP3, mit
+  `~/crush.py` im SNES-Stil bearbeitet), läuft über alle Räume durch
 
 ## Feste Grafik-Regeln
 - Interne Auflösung **480×270** (16:9, Full-HD = genau 4×), `pixelArt: true`
@@ -39,10 +40,12 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Kein Blut, keine Grausamkeit; besiegte Gegner werden geheilt
 - Zwei Helden, immer einer aktiv, der andere KI-Begleiter. Wechsel sofort, ohne Animation,
   Kamera springt nicht. Begleiter kann nie ein Game Over verursachen.
-- Jonas: älter, stärker, Kletterhaken. Leonel: jünger, schneller, kleiner, ruft Waldgeister.
+- Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), E = Stampfer (macht Gegner
+  ringsum benommen). Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen →
   benommen (nur dann verwundbar). Igel rollt als Kugel; man hüpft drüber und schlägt danach.
+  Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
 - Deko (Farn, Pilze, Stein) sind Tiled-Objekte vom Typ `deko` ohne Physik, `vorne=true` = vor den Figuren
 - Vier Wälder: Schwarzwald (Start), Floresta da Tijuca, Lorbeerwald La Palma, Plänterwald
 

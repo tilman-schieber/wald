@@ -2,7 +2,7 @@
 //  TITEL-SZENE — W.A.L.D.
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, COMBAT, BACKGROUND } from '../config.js'
+import { GAME, COMBAT, BACKGROUND, MUSIC } from '../config.js'
 import { P, hex } from '../palette.js'
 import { world } from '../world.js'
 import { hasSave, loadGame, clearSave } from '../save.js'
@@ -14,6 +14,13 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     const W = GAME.width, H = GAME.height
+    if (this.cache.audio.exists('musik') && !this.sound.get('musik')) this.sound.add('musik', { loop: true, volume: MUSIC.volume })
+    const m = this.sound.get('musik')
+    if (m && !m.isPlaying && !world.musicOff) {
+      // Browser erlauben Ton erst nach der ersten Berührung/Taste
+      const tryPlay = () => { if (!m.isPlaying && !world.musicOff) m.play() }
+      tryPlay(); this.input.once('pointerdown', tryPlay); this.input.keyboard.once('keydown', tryPlay)
+    }
     if (this.textures.exists(BACKGROUND.titleKey)) {
       this.add.tileSprite(0, 0, W, H, BACKGROUND.titleKey).setOrigin(0)
       this.add.rectangle(0, 0, W, H, P.nachtBlau, 0.5).setOrigin(0)

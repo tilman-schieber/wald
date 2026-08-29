@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO } from '../config.js'
+import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, MUSIC } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -39,7 +39,9 @@ export default class BootScene extends Phaser.Scene {
       if (enemy.file) this.load.image(enemy.key, enemy.file)
       if (enemy.healedFile) this.load.image(enemy.key + '-heil', enemy.healedFile)
       if (enemy.ballFile) this.load.image(enemy.key + '-kugel', enemy.ballFile)
+      if (enemy.flyFile) this.load.image(enemy.key + '-flug', enemy.flyFile)
     }
+    if (MUSIC.file) this.load.audio('musik', [MUSIC.file + '.mp3'])
     for (const [name, d] of Object.entries(DEKO)) {
       if (d.file) this.load.image('deko-' + name, d.file)
     }

@@ -53,6 +53,15 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   // Tut er gerade weh, wenn man ihn berührt?
   hurtsOnTouch(time) { return !this.healed && !this.isCalm(time) && this.state !== 'dizzy' }
 
+  // Vom Stampfer erwischt → sofort benommen (verwundbar)
+  stun(time, ms) {
+    if (this.healed) return
+    this.stopRolling()
+    this.state = 'dizzy'
+    this.stateUntil = time + ms
+    this.showMark(true, '★')
+  }
+
   calm(time, ms) {
     this.calmUntil = time + ms
     this.setTint(P.eisBlau)
@@ -60,9 +69,19 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time, groundLayer, heroes = []) {
-    if (this.healed) { this.setVelocityX(0); return }
-    if (this.isCalm(time)) { this.setVelocityX(0); this.showMark(false); return }
     const ai = this.cfg.ai
+    if (this.healed) {                                       // geheilt: schnüffelt gemütlich herum
+      if (time >= this.stateUntil) {
+        this.wanderPause = !this.wanderPause
+        if (!this.wanderPause) this.dir = Math.random() < 0.5 ? -1 : 1
+        this.stateUntil = time + (this.wanderPause ? rand(1500, 4000) : rand(600, 1500))
+      }
+      if (this.wanderPause) this.setVelocityX(0)
+      else this.walk(ai.healedWanderSpeed ?? 10, groundLayer)
+      this.setFlipX(this.dir > 0)
+      return
+    }
+    if (this.isCalm(time)) { this.setVelocityX(0); this.showMark(false); return }
 
     switch (this.state) {
       case 'wander': {
@@ -169,6 +188,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(0, 0)
     this.setAngle(0)
     this.showMark(false)
+    this.stateUntil = 0
+    this.wanderPause = true
     if (this.scene.textures.exists(this.cfg.key + '-heil')) this.useTexture(this.cfg.key + '-heil')
     else this.setTint(P.wiesenGruen)               // Platzhalter: friedlich = grünlich
     if (silent) return

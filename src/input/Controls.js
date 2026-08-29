@@ -67,7 +67,8 @@ export default class Controls {
     if (t.special && !this._prevTouchSpecial) special = true
     this._prevTouchSpecial = t.special
     const crouch = c.down.isDown || k.down.isDown || t.down
+    const up = c.up.isDown || k.up.isDown || t.jump
 
-    return { left, right, jump, jumpHeld, attack, switch: sw, call, special, crouch }
+    return { left, right, jump, jumpHeld, attack, switch: sw, call, special, crouch, up }
   }
 }

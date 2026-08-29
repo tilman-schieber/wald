@@ -44,16 +44,18 @@ export const HEROES = {
     crouchHeight: 22,    // geduckt so hoch → passt NICHT durch 16-px-Spalten
     frame: { w: 48, h: 48 },
     body: { w: 12, h: 30 },
-    feet: 42,
+    feet: 41,
     color: P.tiefBlau,         // Platzhalter-Farbe
     accent: P.himmelBlau,
-    file: 'assets/sprites/jonas.png',   // PixelLab-Charakter 46e662b7…
+    file: 'assets/sprites/jonas.png',   // PixelLab-Charakter 8e5fc3e2… ("Jonas Locken")
     anims: {
       idle: { frames: [0, 1, 2, 3], rate: 5, repeat: -1 },
       run:  { frames: [4, 5, 6, 7, 8, 9], rate: 10, repeat: -1 },
       jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
       fall: { frames: [16], rate: 1, repeat: 0 },
-      crouch: { frames: [12], rate: 1, repeat: 0 },
+      crouch: { frames: [19], rate: 1, repeat: 0 },
+      crouchWalk: { frames: [19, 20, 21, 22, 23, 24], rate: 10, repeat: -1 },
+      climb: { frames: [25, 26, 27, 28], rate: 6, repeat: -1 },
     },
   },
   leonel: {
@@ -75,7 +77,8 @@ export const HEROES = {
       run:  { frames: [4, 5, 6, 7, 8, 9], rate: 12, repeat: -1 },
       jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
       fall: { frames: [16], rate: 1, repeat: 0 },
-      crouch: { frames: [12], rate: 1, repeat: 0 },
+      crouch: { frames: [19], rate: 1, repeat: 0 },
+      crouchWalk: { frames: [19, 20, 21, 22, 23, 24], rate: 10, repeat: -1 },
     },
   },
 }
@@ -101,10 +104,17 @@ export const CROUCH = {
 // ------------------------------------------------------------
 //  Spezialfähigkeiten (Taste E) – nur der AKTIVE Held, nie der Begleiter
 // ------------------------------------------------------------
-export const HOOK = {          // Jonas: Kletterhaken an Ranken
-  reach: 28,                   // so nah (waagerecht) muss eine Ranke sein
-  speed: 260,                  // Zug-Geschwindigkeit nach oben
-  hop: { x: 90, y: 230 },      // kleiner Satz auf die Kante am Ende
+export const CLIMB = {         // Jonas: klettert an Ranken (Pfeil hoch/runter an einer Ranke)
+  reach: 10,                   // so nah (waagerecht) muss die Ranke sein
+  speed: 70,                   // Klettergeschwindigkeit
+  hop: { x: 90, y: 230 },      // Satz auf die Kante, wenn man oben ankommt
+}
+export const SLAM = {          // Jonas: Stampfer (E) – springt hoch und knallt auf den Boden
+  jump: 260,                   // Absprung nach oben
+  fall: 520,                   // dann mit Wucht nach unten
+  radius: 72,                  // Gegner in dieser Nähe (waagerecht) werden benommen
+  dizzyMs: 1800,               // … so lange
+  cooldownMs: 1400,
 }
 export const SPIRIT = {        // Leonel: Waldgeist rufen
   durationMs: 5000,            // so lange bleibt der Geist
@@ -155,8 +165,36 @@ export const ENEMIES = {
       rollMaxMs: 2200,      // spätestens dann hört er auf zu rollen
       dizzyMs: 1600,        // so lange benommen = Zeitfenster zum Zuschlagen
       cooldownMs: 1200,     // danach so lange nicht wieder angreifen
+      healedWanderSpeed: 10, // geheilt: schnüffelt gemütlich herum
     },
   },
+  eule: {
+    key: 'eule',
+    name: 'Verwirrte Eule',
+    kind: 'flyer',            // eigene Klasse Owl.js
+    hp: 3,
+    damage: 1,
+    frame: { w: 28, h: 29 },          // eule.png (sitzend); eule_flug.png ist 28×16
+    body: { w: 22, h: 25 },
+    color: P.holzBraun,
+    accent: P.sonnenGelb,
+    file: 'assets/sprites/eule.png',         // PixelLab ffc1d20a… (sitzend)
+    flyFile: 'assets/sprites/eule_flug.png', // PixelLab 7e226552… (fliegend)
+    ai: {
+      spiky: true,            // nur verwundbar, wenn sie nach dem Sturzflug am Boden sitzt
+      sight: { x: 170, y: 160 },
+      alertMs: 500,
+      swoopSpeed: 170,        // Sturzflug
+      restMs: 1500,           // sitzt nach dem Sturzflug kurz am Boden (benommen)
+      returnSpeed: 90,        // fliegt zurück auf ihren Ast
+      cooldownMs: 1500,
+    },
+  },
+}
+
+export const MUSIC = {
+  file: 'assets/music/frozen_sprite_loop',   // .mp3 (mit ~/crush.py im SNES-Stil "zerknirscht")
+  volume: 0.35,
 }
 
 // ------------------------------------------------------------
