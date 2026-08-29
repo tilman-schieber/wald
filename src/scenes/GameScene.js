@@ -12,16 +12,19 @@
 //    tor      Rechteck, name = Torname; fest, solange es zu ist
 //    platte   Rechteck, Eigenschaft oeffnet = Torname; offen, solange jemand draufsteht
 //    hebel    Rechteck, Eigenschaft oeffnet = Torname; öffnet dauerhaft
+//    ranke    Rechteck (schmal, hoch): Jonas zieht sich mit dem Haken (E) hoch
+//    blatt    Punkt: Blatt zum Einsammeln
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, ENEMIES, COMBAT } from '../config.js'
+import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT } from '../config.js'
 import { P } from '../palette.js'
-import { world, healedIn, gatesOpenIn } from '../world.js'
+import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
 import PlatformGraph from '../entities/PlatformGraph.js'
 import Enemy from '../entities/Enemy.js'
+import Spirit from '../entities/Spirit.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
 
@@ -68,8 +71,8 @@ export default class GameScene extends Phaser.Scene {
     const spawn = objects.find((o) => o.type === 'spawn' && o.name === this.spawnName)
       ?? objects.find((o) => o.type === 'spawn')
     const facing = spawn.x < map.widthInPixels / 2 ? 1 : -1       // links rein → nach rechts schauen
-    this.jonas = new Jonas(this, spawn.x, spawn.y)
-    this.leonel = new Leonel(this, spawn.x - facing * 20, spawn.y)
+    this.jonas = new Jonas(this, spawn.x, spawn.y).placeFeet(spawn.x, spawn.y)
+    this.leonel = new Leonel(this, spawn.x, spawn.y).placeFeet(spawn.x - facing * 20, spawn.y)
     this.active = world.active === 'leonel' ? this.leonel : this.jonas
     this.companion = this.active === this.jonas ? this.leonel : this.jonas
     this.active.setDepth(10); this.companion.setDepth(9)
@@ -126,6 +129,28 @@ export default class GameScene extends Phaser.Scene {
       flipped: gatesOpenIn(this.roomKey).has(props(o).oeffnet),
     }))
     for (const l of this.levers) if (l.flipped) l.sprite.setFlipX(true)
+    this.gateStateKey = ''
+
+    // Ranken (für Jonas' Kletterhaken) – die Kante ist auf der Seite, wo oben Boden ist
+    this.ranken = objects.filter((o) => o.type === 'ranke').map((o) => {
+      const x = o.x + o.width / 2
+      const side = this.groundLayer.getTileAtWorldXY(x + 24, o.y + 4) ? 1 : -1
+      this.add.tileSprite(x, o.y + o.height / 2, 8, o.height, 'ranke').setDepth(3)
+      return { x, top: o.y, bottom: o.y + o.height, side }
+    })
+
+    // Blätter zum Sammeln (schon eingesammelte fehlen)
+    this.leaves = []
+    for (const o of objects.filter((o) => o.type === 'blatt')) {
+      if (collectedIn(this.roomKey).has(o.id)) continue
+      const img = this.add.image(o.x, o.y, 'blatt').setDepth(6)
+      this.physics.add.existing(img, true)
+      img.objectId = o.id
+      this.tweens.add({ targets: img, y: o.y - 3, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' })
+      this.leaves.push(img)
+    }
+    this.spirits = []
+    this.spiritReadyAt = 0
 
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
@@ -140,7 +165,7 @@ export default class GameScene extends Phaser.Scene {
     if (isTouch) this.touchButtons = new TouchButtons(this, this.controls)
 
     // ---------- HUD (fest am Bildschirm) ----------
-    this.add.text(4, 4, 'Pfeile laufen · Leer springen · X schlagen · Tab wechseln · C Komm!', {
+    this.add.text(4, 4, 'Pfeile laufen/ducken · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm!', {
       fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc',
     }).setScrollFactor(0).setDepth(100).setAlpha(0.8)
     this.nameText = this.add.text(4, 14, '', { fontFamily: 'monospace', fontSize: '8px', color: '#fee761' }).setScrollFactor(0).setDepth(100)
@@ -161,7 +186,8 @@ export default class GameScene extends Phaser.Scene {
     // 2. Wechsel?
     if (cmd.switch) this.switchHero(time)
 
-    // 3. Der Aktive tut, was der Spieler sagt …
+    // 3. Der Aktive tut, was der Spieler sagt … (E = Spezialfähigkeit, nur der Aktive!)
+    if (cmd.special) this.useSpecial(this.active, time)
     this.active.applyCommand(cmd, time)
 
     // 4. … der Begleiter tut, was sein Gehirn sagt.
@@ -172,8 +198,11 @@ export default class GameScene extends Phaser.Scene {
 
     // 5. Gegner laufen, Schläge treffen, Rätsel prüfen
     for (const e of this.enemies) e.update(time, this.groundLayer)
+    for (const sp of this.spirits) sp.update(time, this.enemies)
+    this.spirits = this.spirits.filter((sp) => sp.active)
     this.resolveAttacks(time)
     this.updatePuzzles()
+    this.collectLeaves()
     this.checkExits()
     this.updateHud()
 
@@ -233,10 +262,8 @@ export default class GameScene extends Phaser.Scene {
   teleportCompanion() {
     this.teleports++
     const me = this.companion, leader = this.active
-    const feetOffset = me.body.bottom - me.y
     me.halt()
-    me.setVelocity(0, 0)
-    me.setPosition(leader.x - leader.facing * 10, leader.body.bottom - feetOffset)
+    me.placeFeet(leader.x - leader.facing * 10, leader.body.bottom)
     me.setScale(0.2)
     this.tweens.add({ targets: me, scale: 1, duration: 220, ease: 'Back.Out' })
     const ring = this.add.circle(me.x, me.body.center.y, 6, 0, 0).setStrokeStyle(2, P.eisBlau).setDepth(12)
@@ -259,10 +286,40 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
-  // Ein Held berührt einen (noch nicht geheilten) Gegner
+  // Spezialfähigkeit des aktiven Helden (Taste E)
+  useSpecial(hero, time) {
+    if (hero.isDazed(time) || hero.hook) return
+    if (hero.cfg.key === 'jonas') {
+      // Kletterhaken: gibt es eine Ranke in Reichweite, deren oberes Ende über mir ist?
+      const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= HOOK.reach && hero.body.top > r.top && hero.body.bottom <= r.bottom + 40)
+      if (r) hero.startHook(r.x, r.top, r.side)
+      else this.tweens.add({ targets: this.nameText, alpha: 0.2, yoyo: true, duration: 80 })
+    } else if (hero.cfg.key === 'leonel') {
+      // Waldgeist rufen (mit Pause dazwischen)
+      if (time < this.spiritReadyAt) return
+      this.spiritReadyAt = time + SPIRIT.cooldownMs
+      this.spirits.push(new Spirit(this, hero, time))
+    }
+  }
+
+  // Blätter einsammeln (beide Helden dürfen)
+  collectLeaves() {
+    for (const leaf of this.leaves) {
+      if (!leaf.active) continue
+      if (!this.physics.overlap(leaf, this.jonas) && !this.physics.overlap(leaf, this.leonel)) continue
+      collectedIn(this.roomKey).add(leaf.objectId)
+      world.leaves++
+      this.tweens.add({ targets: leaf, y: leaf.y - 16, alpha: 0, scale: 1.6, duration: 350, onComplete: () => leaf.destroy() })
+      leaf.body.enable = false
+    }
+    this.leaves = this.leaves.filter((l) => l.active)
+  }
+
+  // Ein Held berührt einen (noch nicht geheilten, nicht beruhigten) Gegner
   onTouchEnemy(hero, enemy) {
     if (enemy.healed || this.gameOver) return
     const time = this.time.now
+    if (enemy.isCalm(time)) return
     const result = hero.hurt(time, enemy.x)
     if (result !== 'ko') return
     if (hero === this.companion) hero.daze(time)   // Begleiter: nur benommen, nie Game Over
@@ -286,10 +343,18 @@ export default class GameScene extends Phaser.Scene {
         open.add(l.gate)
       }
     }
+    const closed = []
     for (const [name, g] of Object.entries(this.gates)) {
       const isOpen = open.has(name)
       g.setVisible(!isOpen)
       g.body.enable = !isOpen
+      if (!isOpen) closed.push(name)
+    }
+    // Geschlossene Tore sind für die Wegsuche des Begleiters wie Wände
+    const key = closed.join(',')
+    if (key !== this.gateStateKey) {
+      this.gateStateKey = key
+      this.graph.setBlockers(closed.map((n) => this.gates[n].getBounds()))
     }
   }
 
@@ -325,7 +390,7 @@ export default class GameScene extends Phaser.Scene {
 
   updateHud() {
     const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))
-    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}`)
+    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${world.leaves}`)
   }
 
   updateNameText() {

@@ -12,10 +12,15 @@ export const world = {
   hp: { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp },
   healed: {},                                    // { raumKey: Set(gegnerId) }
   gatesOpen: {},                                 // { raumKey: Set(torName) }  (per Hebel dauerhaft offen)
+  leaves: 0,                                     // gesammelte Blätter
+  collected: {},                                 // { raumKey: Set(blattId) }
 }
 
 export function healedIn(room) {
   return (world.healed[room] ??= new Set())
+}
+export function collectedIn(room) {
+  return (world.collected[room] ??= new Set())
 }
 export function gatesOpenIn(room) {
   return (world.gatesOpen[room] ??= new Set())

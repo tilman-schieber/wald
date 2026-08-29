@@ -209,6 +209,25 @@ export default class BootScene extends Phaser.Scene {
     g.fillStyle(P.holzBraun); g.fillRect(5, 2, 2, 11)          // Stange
     g.fillStyle(P.feuerRot); g.fillRect(4, 0, 4, 4)            // Knauf
     g.generateTexture('hebel', 12, 16); g.destroy()
+
+    // Ranke: grüner Strang mit Blättchen (wiederholbar nach unten)
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.moosGruen); g.fillRect(3, 0, 2, t)
+    g.fillStyle(P.blattGruen); g.fillRect(1, 3, 2, 2); g.fillRect(5, 10, 2, 2)
+    g.generateTexture('ranke', 8, t); g.destroy()
+
+    // Blatt zum Sammeln
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.wiesenGruen); g.fillTriangle(1, 9, 5, 1, 9, 9); g.fillRect(2, 5, 6, 4)
+    g.fillStyle(P.blattGruen); g.fillRect(4, 3, 1, 7)
+    g.generateTexture('blatt', 10, 10); g.destroy()
+
+    // Waldgeist: leuchtender Tropfen mit Gesicht
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.eisBlau, 0.5); g.fillCircle(7, 8, 7)
+    g.fillStyle(P.eisBlau); g.fillCircle(7, 8, 5); g.fillTriangle(4, 6, 7, 0, 10, 6)
+    g.fillStyle(P.weiss); g.fillRect(5, 6, 1, 2); g.fillRect(8, 6, 1, 2)
+    g.generateTexture('geist', 14, 16); g.destroy()
   }
 
   // Kleiner Pfeil über dem aktiven Helden

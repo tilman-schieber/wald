@@ -54,7 +54,9 @@ export default class CompanionBrain {
     }
     if (this.waiting) return cmd                  // stehen bleiben (aber Gegner abwehren, s.o.)
 
-    // --- 1. Wo sind wir? ---
+    // --- 1. Wo sind wir? (alte Flächen vergessen, wenn die Landkarte neu ist) ---
+    if (this.myPlatform && !this.graph.has(this.myPlatform)) this.myPlatform = null
+    if (this.leaderPlatform && !this.graph.has(this.leaderPlatform)) this.leaderPlatform = null
     if (me.onGround) this.myPlatform = this.graph.platformAt(me)
     if (leader.onGround) this.leaderPlatform = this.graph.platformAt(leader)
 
@@ -69,6 +71,8 @@ export default class CompanionBrain {
       }
       hasPath = next !== null
     }
+    // Kein Weg? Dann bleibe ich einfach stehen – das gehört zum Rätsel.
+    if (!hasPath) { this.stuckSince = null; this.moving = false; this.climbing = false; return cmd }
 
     // --- Stecke ich fest? Uhr läuft nur, wenn der Partner steht und wartet ---
     const distLeader = Math.abs(leader.x - me.x)
@@ -77,7 +81,7 @@ export default class CompanionBrain {
     const leaderWaits = leader.onGround && Math.abs(leader.body.velocity.x) < 5
     if (near || !leaderWaits) this.stuckSince = null
     else if (this.stuckSince === null) this.stuckSince = time
-    else if (time - this.stuckSince > COMPANION.stuckMs * (hasPath ? 3 : 1) && me.onGround) {
+    else if (time - this.stuckSince > COMPANION.stuckMs * 3 && me.onGround) {
       cmd.teleport = true
       this.stuckSince = null
       return cmd

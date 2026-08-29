@@ -22,10 +22,19 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.healed = false
     this.dir = -1
     this.flashUntil = 0
+    this.calmUntil = 0           // vom Waldgeist beruhigt: bleibt stehen, tut nicht weh
+  }
+
+  isCalm(time) { return time < this.calmUntil }
+
+  calm(time, ms) {
+    this.calmUntil = time + ms
+    this.setTint(P.eisBlau)
   }
 
   update(time, groundLayer) {
     if (this.healed) { this.setVelocityX(0); return }
+    if (this.isCalm(time)) { this.setVelocityX(0); return }
 
     // Umdrehen an Wand oder Abgrund – der Igel fällt nie von seiner Plattform
     const blocked = this.dir < 0 ? this.body.blocked.left : this.body.blocked.right
@@ -35,7 +44,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.setVelocityX(this.dir * this.cfg.speed)
     this.setFlipX(this.dir > 0)
-    if (time > this.flashUntil) this.clearTint()
+    if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()
   }
 
   get onGround() {

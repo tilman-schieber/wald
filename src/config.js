@@ -41,6 +41,7 @@ export const HEROES = {
     jump: 380,           // Absprung-Geschwindigkeit → ca. 4,5 Tiles hoch
     damage: 2,           // Jonas haut fester …
     attackCooldownMs: 450, // … aber nicht so schnell hintereinander
+    crouchHeight: 22,    // geduckt so hoch → passt NICHT durch 16-px-Spalten
     frame: { w: 48, h: 48 },
     body: { w: 12, h: 30 },
     feet: 42,
@@ -52,6 +53,7 @@ export const HEROES = {
       run:  { frames: [4, 5, 6, 7, 8, 9], rate: 10, repeat: -1 },
       jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
       fall: { frames: [16], rate: 1, repeat: 0 },
+      crouch: { frames: [12], rate: 1, repeat: 0 },
     },
   },
   leonel: {
@@ -61,6 +63,7 @@ export const HEROES = {
     jump: 370,           // ...springt aber ein bisschen weniger hoch
     damage: 1,           // Leonel haut weniger fest …
     attackCooldownMs: 300, // … dafür schneller
+    crouchHeight: 12,    // geduckt so klein → kriecht durch 16-px-Spalten
     frame: { w: 40, h: 40 },
     body: { w: 10, h: 26 },   // kleiner → passt später durch enge Spalten
     feet: 35,
@@ -72,6 +75,7 @@ export const HEROES = {
       run:  { frames: [4, 5, 6, 7, 8, 9], rate: 12, repeat: -1 },
       jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
       fall: { frames: [16], rate: 1, repeat: 0 },
+      crouch: { frames: [12], rate: 1, repeat: 0 },
     },
   },
 }
@@ -85,6 +89,30 @@ export const JUMP = {
   bufferMs: 100,      // drückt man kurz VOR der Landung, springt man
                       // trotzdem direkt beim Aufkommen
   cutFactor: 0.45,    // lässt man die Taste früh los → kürzerer Sprung
+}
+
+// ------------------------------------------------------------
+//  Ducken / Kriechen (Pfeil runter)
+// ------------------------------------------------------------
+export const CROUCH = {
+  speedFactor: 0.5,     // geduckt ist man halb so schnell
+}
+
+// ------------------------------------------------------------
+//  Spezialfähigkeiten (Taste E) – nur der AKTIVE Held, nie der Begleiter
+// ------------------------------------------------------------
+export const HOOK = {          // Jonas: Kletterhaken an Ranken
+  reach: 20,                   // so nah (waagerecht) muss eine Ranke sein
+  speed: 260,                  // Zug-Geschwindigkeit nach oben
+  hop: { x: 90, y: 230 },      // kleiner Satz auf die Kante am Ende
+}
+export const SPIRIT = {        // Leonel: Waldgeist rufen
+  durationMs: 5000,            // so lange bleibt der Geist
+  cooldownMs: 8000,            // Pause bis zum nächsten Ruf
+  speed: 110,
+  range: 180,                  // Gegner in dieser Nähe werden beruhigt
+  calmMs: 4000,                // so lange bleibt ein beruhigter Gegner friedlich
+  damage: 1,
 }
 
 // ------------------------------------------------------------

@@ -9,7 +9,7 @@
 //  Genau deshalb ist der Wechsel zwischen den Helden so einfach.
 // ============================================================
 import Phaser from 'phaser'
-import { JUMP, COMBAT } from '../config.js'
+import { JUMP, COMBAT, CROUCH, HOOK } from '../config.js'
 import { P } from '../palette.js'
 
 export default class Hero extends Phaser.Physics.Arcade.Sprite {
@@ -37,6 +37,10 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.attackUntil = 0         // bis wann der aktuelle Schlag "wirkt"
     this.attackReadyAt = 0       // ab wann man wieder schlagen darf
     this.hitThisAttack = new Set()   // wen dieser Schlag schon getroffen hat
+    this.crouched = false
+    this.hook = null             // { x, y, side } solange der Kletterhaken zieht
+    this.hopUntil = 0            // kurz nach dem Haken: Satz zur Seite nicht überschreiben
+    this.rope = scene.add.graphics().setDepth(9)
     this.slash = scene.add.image(0, 0, 'slash').setVisible(false).setDepth(11)
     this.zzz = scene.add.text(0, 0, 'zzz', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setVisible(false).setDepth(11)
 
@@ -47,12 +51,22 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     return this.body.blocked.down
   }
 
+  // Figur so setzen, dass die FÜSSE bei (x, feetY) stehen – egal wie das Bild aufgebaut ist
+  placeFeet(x, feetY) {
+    this.setPosition(x, feetY - (this.body.bottom - this.y))
+    this.setVelocity(0, 0)
+    return this
+  }
+
   isDazed(time) { return time < this.dazedUntil }
   isInvulnerable(time) { return time < this.invulnUntil }
 
-  // cmd = { left, right, jump, jumpHeld, attack }
+  // cmd = { left, right, jump, jumpHeld, attack, crouch }
   applyCommand(cmd, time) {
-    const { speed, jump } = this.cfg
+    const { jump } = this.cfg
+
+    // Am Kletterhaken: nur nach oben ziehen, nichts anderes
+    if (this.hook) { this.updateHook(time); return }
 
     // Benommen: sitzt nur da und wartet
     if (this.isDazed(time)) {
@@ -63,6 +77,11 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     }
     if (this.zzz.visible) { this.zzz.setVisible(false); this.clearTint() }
 
+    // --- ducken ---
+    if (cmd.crouch && this.onGround) this.setCrouched(true)
+    else if (this.crouched && !cmd.crouch && this.canStand()) this.setCrouched(false)
+    const speed = this.crouched ? this.cfg.speed * CROUCH.speedFactor : this.cfg.speed
+
     // --- laufen ---
     if (cmd.left && !cmd.right) {
       this.setVelocityX(-speed)
@@ -70,7 +89,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     } else if (cmd.right && !cmd.left) {
       this.setVelocityX(speed)
       this.facing = 1
-    } else {
+    } else if (time >= this.hopUntil) {
       this.setVelocityX(0)
     }
     this.setFlipX(this.facing < 0)
@@ -82,7 +101,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     const canCoyote = time - this.lastGroundTime <= JUMP.coyoteMs
     const wantsJump = this.jumpBufferTime >= 0 && time - this.jumpBufferTime <= JUMP.bufferMs
 
-    if (wantsJump && canCoyote) {
+    if (wantsJump && canCoyote && !this.crouched) {
       this.setVelocityY(-jump)
       this.jumpBufferTime = -1
       this.lastGroundTime = -9999   // kein Doppelsprung
@@ -109,9 +128,61 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.setAlpha(this.isInvulnerable(time) && Math.floor(time / 80) % 2 === 0 ? 0.3 : 1)
 
     // --- Animation ---
-    if (!this.onGround) this.playIfNew(this.body.velocity.y > 0 && this.hasAnim('fall') ? 'fall' : 'jump')
+    if (this.crouched) this.playIfNew('crouch')
+    else if (!this.onGround) this.playIfNew(this.body.velocity.y > 0 && this.hasAnim('fall') ? 'fall' : 'jump')
     else if (this.body.velocity.x !== 0) this.playIfNew('run')
     else this.playIfNew('idle')
+  }
+
+  // Trefferbox klein machen (ducken) oder wieder groß (aufstehen)
+  setCrouched(on) {
+    if (this.crouched === on) return
+    this.crouched = on
+    const feet = this.cfg.file ? this.cfg.feet ?? this.cfg.frame.h : this.cfg.frame.h
+    const height = on ? this.cfg.crouchHeight : this.cfg.body.h
+    this.body.setSize(this.cfg.body.w, height)
+    this.body.setOffset((this.cfg.frame.w - this.cfg.body.w) / 2, feet - height)
+  }
+
+  // Ist über mir Platz zum Aufstehen?
+  canStand() {
+    const extra = this.cfg.body.h - this.cfg.crouchHeight
+    const tiles = this.scene.groundLayer.getTilesWithinWorldXY(this.body.left + 1, this.body.top - extra, this.body.width - 2, extra, { isNotEmpty: true })
+    const gateAbove = Object.values(this.scene.gates).some((g) => g.body.enable && Phaser.Geom.Rectangle.Overlaps(g.getBounds(), new Phaser.Geom.Rectangle(this.body.left + 1, this.body.top - extra, this.body.width - 2, extra)))
+    return tiles.length === 0 && !gateAbove
+  }
+
+  // --- Kletterhaken (Jonas) ---
+  // Zieht sich zum Ankerpunkt (x, y) hoch; side = auf welcher Seite die Kante ist
+  startHook(x, y, side) {
+    this.hook = { x, y, side }
+    this.setCrouched(false)
+    this.body.setAllowGravity(false)
+    this.setVelocity(0, 0)
+    this.attackUntil = 0
+    this.slash.setVisible(false)
+  }
+
+  updateHook(time) {
+    const { x, y, side } = this.hook
+    // Seil zeichnen
+    this.rope.clear().lineStyle(1, 0xb86f50).lineBetween(this.x, this.body.top + 4, x, y)
+    this.facing = side
+    this.setFlipX(side < 0)
+    this.playIfNew('jump')
+    // Hochziehen, bis die Füße ÜBER der Kante sind (y = Oberkante des Simses)
+    const bottomOffset = this.body.bottom - this.y
+    if (this.body.bottom > y - 4) {
+      this.scene.physics.moveTo(this, x, y - 6 - bottomOffset, HOOK.speed)
+    } else {
+      // oben angekommen → kleiner Satz auf die Kante
+      this.rope.clear()
+      this.hook = null
+      this.body.setAllowGravity(true)
+      this.setVelocity(side * HOOK.hop.x, -HOOK.hop.y)
+      this.hopUntil = time + 400
+      this.lastGroundTime = -9999
+    }
   }
 
   // Der Bereich vor der Figur, in dem ein Schlag gerade trifft (oder null)
@@ -155,5 +226,11 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   halt() {
     this.setVelocityX(0)
     this.jumpBufferTime = -1
+  }
+
+  // Beim Verlassen des Raums die Extras wegräumen
+  destroy(fromScene) {
+    this.rope?.destroy(); this.slash?.destroy(); this.zzz?.destroy()
+    super.destroy(fromScene)
   }
 }
