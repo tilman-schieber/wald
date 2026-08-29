@@ -8,8 +8,13 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Phaser 3 + Vite, reines JavaScript (kein TypeScript)
 - `npm run dev` startet mit `--host` → im WLAN auf dem Handy testbar
 - Tiled-Maps als JSON in `src/levels/`, werden in `BootScene` in den Cache gelegt
-- `?debug` an die URL → Trefferboxen sichtbar; `?touch` → Touch-Knöpfe auch am PC
+- `?debug` an die URL → Trefferboxen sichtbar; `?touch` → Touch-Knöpfe auch am PC;
+  `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)
+- Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause
+- Szenen: Boot → Title → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand
+  zwischen Räumen, `save.js` speichert ihn bei jedem Raumeingang in localStorage
+- Sounds werden in `sound.js` synthetisch erzeugt (keine Dateien)
 
 ## Feste Grafik-Regeln
 - Interne Auflösung **480×270** (16:9, Full-HD = genau 4×), `pixelArt: true`

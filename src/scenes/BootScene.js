@@ -58,7 +58,10 @@ export default class BootScene extends Phaser.Scene {
     this.makeParallaxPlaceholders()
     this.makeMarker()
 
-    this.scene.start('Game')
+    // ?raum=schwarzwald_02 an die URL → direkt in diesen Raum (zum Testen)
+    const raum = new URLSearchParams(location.search).get('raum')
+    if (raum) this.scene.start('Game', { room: raum, spawn: 'start' })
+    else this.scene.start('Title')
   }
 
   // Ein Held als Rechteck: Körper in seiner Farbe, ein helles

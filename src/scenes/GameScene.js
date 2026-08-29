@@ -19,6 +19,8 @@ import Phaser from 'phaser'
 import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT, BACKGROUND } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
+import { saveGame } from '../save.js'
+import Sfx from '../sound.js'
 import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
@@ -43,6 +45,12 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.sfx = new Sfx(this)
+    saveGame(this.roomKey, this.spawnName)      // Checkpoint: jeder Raumeingang
+    this.paused = false
+    this.input.keyboard.on('keydown-P', () => this.togglePause())
+    this.input.keyboard.on('keydown-ESC', () => this.togglePause())
+
     // ---------- Level ----------
     const map = this.make.tilemap({ key: this.roomKey })
     const tiles = map.addTilesetImage('tiles', TILESET.key)
@@ -180,12 +188,19 @@ export default class GameScene extends Phaser.Scene {
     this.hud = this.add.text(2, 24, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
 
+    this.pauseText = this.add.text(GAME.width / 2, GAME.height / 2, 'PAUSE\n\nP oder Esc zum Weiterspielen', {
+      fontFamily: 'monospace', fontSize: '14px', color: '#fee761', align: 'center', backgroundColor: 'rgba(24,20,37,0.85)', padding: { x: 10, y: 8 },
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(300).setVisible(false)
+    // kleiner Pause-Knopf oben rechts (für Touch)
+    this.add.text(GAME.width - 4, 3, 'II', { fontFamily: 'monospace', fontSize: '10px', color: '#c0cbdc', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 4, y: 1 } })
+      .setOrigin(1, 0).setScrollFactor(0).setDepth(100).setInteractive().on('pointerdown', () => this.togglePause())
+
     // Zum Nachschauen in der Browser-Konsole: __wald.scene.jonas.x usw.
     window.__wald = { scene: this, world }
   }
 
   update(time) {
-    if (this.gameOver || this.leaving) return
+    if (this.gameOver || this.leaving || this.paused) return
 
     // 1. Finger lesen (setzt controls.touch), dann Kommando bauen
     this.touchButtons?.update()
@@ -199,6 +214,7 @@ export default class GameScene extends Phaser.Scene {
     this.active.applyCommand(cmd, time)
 
     // 4. … der Begleiter tut, was sein Gehirn sagt.
+    if (cmd.call && this.brain.waiting) this.sfx.play('call')
     const aiCmd = this.brain.think(this.companion, this.active, time, this.enemies, cmd.call)
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
@@ -222,6 +238,14 @@ export default class GameScene extends Phaser.Scene {
     if (this.bgForest) this.bgForest.tilePositionX = sx * BACKGROUND.scroll
     else { this.bgFar.tilePositionX = sx * 0.2; this.bgMid.tilePositionX = sx * 0.5 }
     this.fgBushes.tilePositionX = sx * 1.3
+  }
+
+  togglePause() {
+    if (this.gameOver || this.leaving) return
+    this.paused = !this.paused
+    this.pauseText.setVisible(this.paused)
+    if (this.paused) { this.physics.pause(); this.anims.pauseAll(); this.tweens.pauseAll() }
+    else { this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll() }
   }
 
   // Zeichnet den Boden mit dem Wang-Tileset (siehe Erklärung in config.js).
@@ -256,6 +280,7 @@ export default class GameScene extends Phaser.Scene {
       return
     }
     ;[this.active, this.companion] = [this.companion, this.active]
+    this.sfx.play('switch')
     this.companion.halt()
     this.brain.reset(true)
     this.active.setDepth(10)
@@ -269,6 +294,7 @@ export default class GameScene extends Phaser.Scene {
   // Füße auf gleiche Höhe wie die des Spielers, kleiner Blubb-Effekt.
   teleportCompanion() {
     this.teleports++
+    this.sfx.play('plopp')
     const me = this.companion, leader = this.active
     me.halt()
     me.placeFeet(leader.x - leader.facing * 10, leader.body.bottom)
@@ -289,7 +315,8 @@ export default class GameScene extends Phaser.Scene {
         if (e.healed || hero.hitThisAttack.has(e)) continue
         if (!Phaser.Geom.Rectangle.Overlaps(rect, e.getBounds())) continue
         hero.hitThisAttack.add(e)
-        if (e.hit(damage, hero.x, time)) healedIn(this.roomKey).add(e.objectId)
+        if (e.hit(damage, hero.x, time)) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal') }
+        else this.sfx.play('hit')
       }
     }
   }
@@ -300,13 +327,14 @@ export default class GameScene extends Phaser.Scene {
     if (hero.cfg.key === 'jonas') {
       // Kletterhaken: gibt es eine Ranke in Reichweite, deren oberes Ende über mir ist?
       const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= HOOK.reach && hero.body.top > r.top && hero.body.bottom <= r.bottom + 40)
-      if (r) hero.startHook(r.x, r.top, r.side)
+      if (r) { hero.startHook(r.x, r.top, r.side); this.sfx.play('hook') }
       else this.tweens.add({ targets: this.nameText, alpha: 0.2, yoyo: true, duration: 80 })
     } else if (hero.cfg.key === 'leonel') {
       // Waldgeist rufen (mit Pause dazwischen)
       if (time < this.spiritReadyAt) return
       this.spiritReadyAt = time + SPIRIT.cooldownMs
       this.spirits.push(new Spirit(this, hero, time))
+      this.sfx.play('spirit')
     }
   }
 
@@ -317,6 +345,7 @@ export default class GameScene extends Phaser.Scene {
       if (!this.physics.overlap(leaf, this.jonas) && !this.physics.overlap(leaf, this.leonel)) continue
       collectedIn(this.roomKey).add(leaf.objectId)
       world.leaves++
+      this.sfx.play('collect')
       this.tweens.add({ targets: leaf, y: leaf.y - 16, alpha: 0, scale: 1.6, duration: 350, onComplete: () => leaf.destroy() })
       leaf.body.enable = false
     }
@@ -329,6 +358,7 @@ export default class GameScene extends Phaser.Scene {
     const time = this.time.now
     if (enemy.isCalm(time)) return
     const result = hero.hurt(time, enemy.x)
+    if (result) this.sfx.play('hurt')
     if (result !== 'ko') return
     if (hero === this.companion) hero.daze(time)   // Begleiter: nur benommen, nie Game Over
     else this.loseRoom()
@@ -347,6 +377,7 @@ export default class GameScene extends Phaser.Scene {
       if (!l.flipped && this.physics.overlap(l.zone, this.active)) {
         l.flipped = true
         l.sprite.setFlipX(true)
+        this.sfx.play('gate')
         gatesOpenIn(this.roomKey).add(l.gate)
         open.add(l.gate)
       }
@@ -361,6 +392,7 @@ export default class GameScene extends Phaser.Scene {
     // Geschlossene Tore sind für die Wegsuche des Begleiters wie Wände
     const key = closed.join(',')
     if (key !== this.gateStateKey) {
+      if (this.gateStateKey !== '' || key !== '') this.sfx.play('gate')
       this.gateStateKey = key
       this.graph.setBlockers(closed.map((n) => this.gates[n].getBounds()))
     }
@@ -375,6 +407,7 @@ export default class GameScene extends Phaser.Scene {
 
   goToRoom(room, spawn) {
     this.leaving = true
+    this.sfx.play('room')
     world.hp.jonas = this.jonas.hp
     world.hp.leonel = this.leonel.hp
     this.active.halt(); this.companion.halt()
@@ -385,6 +418,7 @@ export default class GameScene extends Phaser.Scene {
   // Der aktive Held hat keine Herzen mehr → der Raum beginnt von vorn (volle Herzen)
   loseRoom() {
     this.gameOver = true
+    this.sfx.play('lose')
     this.active.setVelocity(0, 0)
     this.companion.setVelocity(0, 0)
     world.hp.jonas = COMBAT.heroHp

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { GAME, PHYSICS } from './config.js'
 import { P, hex } from './palette.js'
 import BootScene from './scenes/BootScene.js'
+import TitleScene from './scenes/TitleScene.js'
 import GameScene from './scenes/GameScene.js'
 
 // ?debug an die Adresse hängen → man sieht die Trefferboxen
@@ -35,7 +36,7 @@ const config = {
     },
   },
 
-  scene: [BootScene, GameScene],
+  scene: [BootScene, TitleScene, GameScene],
 }
 
 new Phaser.Game(config)

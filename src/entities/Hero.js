@@ -103,6 +103,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
     if (wantsJump && canCoyote && !this.crouched) {
       this.setVelocityY(-jump)
+      this.scene.sfx?.play('jump')
       this.jumpBufferTime = -1
       this.lastGroundTime = -9999   // kein Doppelsprung
       this.jumpCut = false
@@ -118,6 +119,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     if (cmd.attack && time >= this.attackReadyAt) {
       this.attackUntil = time + COMBAT.attackMs
       this.attackReadyAt = time + this.cfg.attackCooldownMs
+      this.scene.sfx?.play('attack')
       this.hitThisAttack.clear()
     }
     const rect = this.attackRect(time)
