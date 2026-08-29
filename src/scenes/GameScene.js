@@ -215,7 +215,7 @@ export default class GameScene extends Phaser.Scene {
 
     // Waldherz (Ziel)
     this.hearts = objects.filter((o) => o.type === 'waldherz').map((o) => {
-      const img = this.add.image(o.x, o.y - 10, 'waldherz').setDepth(6)
+      const img = (this.anims.exists('waldherz-anim') ? this.add.sprite(o.x, o.y - 10, 'waldherz').play('waldherz-anim') : this.add.image(o.x, o.y - 10, 'waldherz')).setDepth(6)
       this.physics.add.existing(img, true)
       this.tweens.add({ targets: img, y: o.y - 16, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' })
       return img
@@ -238,7 +238,7 @@ export default class GameScene extends Phaser.Scene {
     const hudStyle = { fontFamily: font, fontSize: font === 'monospace' ? '8px' : '10px', stroke: '#181425', strokeThickness: 2 }
     if (this.textures.exists('panel')) {
       // Holz-Rahmen als Neun-Teile-Bild: Ecken bleiben scharf, Mitte wird gestreckt
-      this.add.nineslice(2, 2, 'panel', undefined, 176, 40, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setOrigin(0).setScrollFactor(0).setDepth(99).setAlpha(0.92)
+      this.add.nineslice(2, 2, 'panel', undefined, 214, 40, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setOrigin(0).setScrollFactor(0).setDepth(99).setAlpha(0.92)
     } else {
       hudStyle.backgroundColor = 'rgba(24,20,37,0.7)'; hudStyle.padding = { x: 2, y: 1 }
     }

@@ -34,3 +34,4 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Tiere: eichhoernchen `1acb2811…`, hase `dcf1244f…`, schmetterling `9874205a…`
 - Vordergrund-Ebenen: kronen `7e51d395…` (weiß freigestellt, unter Zeile 100 gelöscht), farne `7dba52d7…`
 - Gegenstände: blatt `36b527a3…`, waldherz `4d392a56…`
+- Runde 2: Jubelbild `create_image_pro` `ae7c4e14…` → bg/schwarzwald_ende.png (unpalettisiert); Wildschwein `0adf7ee7…` / Sturm `42c3513f…` / schlafend `b844a0c9…` + Lauf `c5eb7d6e…`; Schlag-Effekt `d47f7c28…`; Herzen (pixen) `3bb1d083…` / `5914ab12…`; Tier-Animationen Eichhörnchen `28597ae5…`, Hase `d69dca68…`, Schmetterling `c15efac9…`; Waldherz-Leuchten `5ab23adc…`

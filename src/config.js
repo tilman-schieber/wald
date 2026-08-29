@@ -214,6 +214,7 @@ ENEMIES.wildschwein = {
   file: 'assets/sprites/wildschwein.png',          // PixelLab 0adf7ee7…
   healedFile: 'assets/sprites/wildschwein_heil.png', // PixelLab b844a0c9… (schläft)
   ballFile: 'assets/sprites/wildschwein_sturm.png',  // PixelLab 42c3513f… (Sturm-Pose; "Kugel"-Slot)
+  walkSheet: { file: 'assets/sprites/wildschwein_lauf.png', w: 30, h: 25, n: 6, rate: 8 },   // animate_image c5eb7d6e…
   ai: {
     spiky: false,           // immer verwundbar
     rotate: false,          // beim Stürmen nicht drehen (ist ja keine Kugel)
@@ -269,9 +270,9 @@ export const DEKO = {
 //  hüpfen manchmal ein Stück. In Tiled: type "tier", name = Schlüssel.
 // ------------------------------------------------------------
 export const TIERE = {
-  eichhoernchen: { file: 'assets/sprites/tier_eichhoernchen.png', hop: true },
-  hase:          { file: 'assets/sprites/tier_hase.png', hop: true },
-  schmetterling: { file: 'assets/sprites/tier_schmetterling.png', flatter: true },
+  eichhoernchen: { file: 'assets/sprites/tier_eichhoernchen_anim.png', anim: { w: 22, h: 24, n: 4, rate: 5 }, hop: true },   // animate_image 28597ae5…
+  hase:          { file: 'assets/sprites/tier_hase_anim.png', anim: { w: 21, h: 29, n: 4, rate: 5 }, hop: true },            // animate_image d69dca68…
+  schmetterling: { file: 'assets/sprites/tier_schmetterling_anim.png', anim: { w: 26, h: 19, n: 4, rate: 10 }, flatter: true }, // animate_image c15efac9…
 }
 
 // ------------------------------------------------------------
@@ -279,7 +280,7 @@ export const TIERE = {
 // ------------------------------------------------------------
 export const ITEMS = {
   blatt:    { file: 'assets/sprites/blatt.png' },       // PixelLab 36b527a3…
-  waldherz: { file: 'assets/sprites/waldherz.png' },    // PixelLab 4d392a56…
+  waldherz: { file: 'assets/sprites/waldherz_anim.png', anim: { w: 28, h: 44, n: 4, rate: 4 } },    // PixelLab 4d392a56… + animate_image 5ab23adc…
 }
 
 // ------------------------------------------------------------

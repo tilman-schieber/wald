@@ -58,7 +58,11 @@ export default class BootScene extends Phaser.Scene {
     }
     if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
     if (TILESET2.file) this.load.image(TILESET2.key, TILESET2.file)
-    for (const [name, it] of Object.entries(ITEMS)) if (it.file) this.load.image(name, it.file)
+    for (const [name, it] of Object.entries(ITEMS)) {
+      if (!it.file) continue
+      if (it.anim) this.load.spritesheet(name, it.file, { frameWidth: it.anim.w, frameHeight: it.anim.h })
+      else this.load.image(name, it.file)
+    }
     if (SLASH.file) this.load.image('slash', SLASH.file)
     if (HEARTS.full) { this.load.image('herz', HEARTS.full); this.load.image('herz_leer', HEARTS.empty) }
     if (UI.panelFile) this.load.image('panel', UI.panelFile)
@@ -303,6 +307,7 @@ export default class BootScene extends Phaser.Scene {
       if (e.flySheet) mk(e.key + '-flug-anim', e.key + '-flug-anim', e.flySheet.n, e.flySheet.rate ?? 8)
     }
     if (SPIRIT.sheet) mk('geist-anim', 'geist-anim', SPIRIT.sheet.n, SPIRIT.sheet.rate ?? 6)
+    for (const [name, it] of Object.entries(ITEMS)) if (it.anim) mk(name + '-anim', name, it.anim.n, it.anim.rate ?? 4)
   }
 
   // Deko-Platzhalter: Farn = grüne Zacken, Pilze = rote Hüte, Stein = grauer Buckel
