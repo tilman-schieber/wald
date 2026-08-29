@@ -18,9 +18,10 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    // Trefferbox unten in der Bildmitte
+    // Trefferbox: waagerecht mittig, unten an der Fußlinie
+    const feet = cfg.file ? cfg.feet ?? cfg.frame.h : cfg.frame.h
     this.body.setSize(cfg.body.w, cfg.body.h)
-    this.body.setOffset((cfg.frame.w - cfg.body.w) / 2, cfg.frame.h - cfg.body.h)
+    this.body.setOffset((cfg.frame.w - cfg.body.w) / 2, feet - cfg.body.h)
     this.setCollideWorldBounds(true)
 
     this.facing = 1              // 1 = rechts, -1 = links
@@ -72,9 +73,13 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     }
 
     // --- Animation ---
-    if (!this.onGround) this.playIfNew('jump')
+    if (!this.onGround) this.playIfNew(this.body.velocity.y > 0 && this.hasAnim('fall') ? 'fall' : 'jump')
     else if (this.body.velocity.x !== 0) this.playIfNew('run')
     else this.playIfNew('idle')
+  }
+
+  hasAnim(name) {
+    return this.scene.anims.exists(`${this.cfg.key}-${name}`)
   }
 
   playIfNew(name) {

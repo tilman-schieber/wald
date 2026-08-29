@@ -16,13 +16,13 @@
   {
    "firstgid": 1,
    "name": "tiles",
-   "image": "../../assets/tiles/tiles.png",
-   "imagewidth": 48,
-   "imageheight": 16,
+   "image": "../../public/assets/tiles/schwarzwald.png",
+   "imagewidth": 64,
+   "imageheight": 64,
    "tilewidth": 16,
    "tileheight": 16,
-   "tilecount": 3,
-   "columns": 3,
+   "tilecount": 16,
+   "columns": 4,
    "margin": 0,
    "spacing": 0
   }

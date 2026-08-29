@@ -22,12 +22,16 @@ export const PHYSICS = {
 //  frame:  Größe EINES Bildes im Spritesheet (das Bild darf größer
 //          sein als die Figur, z.B. wegen Armen oder dem Kletterhaken)
 //  body:   die "Trefferbox" – der Teil, der wirklich mit Boden und
-//          Wänden zusammenstößt. Immer unten in der Mitte des Bildes.
+//          Wänden zusammenstößt. Waagerecht in der Bildmitte, unten an
+//          der Fußlinie.
+//  feet:   Fußlinie = wie viele Pixel von oben der Boden im Bild ist.
+//          (null = ganz unten). Steht in der Ausgabe von tools/import-character.mjs.
 //  file:   null = Platzhalter-Rechteck. Später kommt hier der Pfad
 //          zum echten Spritesheet von PixelLab hin, z.B.
 //          'assets/sprites/jonas.png'. Sonst ändert sich nichts!
 //  anims:  welche Bilder (Frame-Nummern) zu welcher Animation gehören.
-//          Beim Platzhalter gibt es nur Bild 0.
+//          Beim Platzhalter (file: null) wird immer nur Bild 0 benutzt.
+//          "fall" ist optional: Bild fürs Runterfallen nach dem Sprung.
 // ------------------------------------------------------------
 export const HEROES = {
   jonas: {
@@ -35,15 +39,17 @@ export const HEROES = {
     name: 'Jonas',
     speed: 110,          // Pixel pro Sekunde
     jump: 380,           // Absprung-Geschwindigkeit → ca. 4,5 Tiles hoch
-    frame: { w: 32, h: 32 },
+    frame: { w: 48, h: 48 },
     body: { w: 12, h: 30 },
+    feet: 42,
     color: P.tiefBlau,         // Platzhalter-Farbe
     accent: P.himmelBlau,
-    file: null,
+    file: 'assets/sprites/jonas.png',   // PixelLab-Charakter 46e662b7…
     anims: {
-      idle: { frames: [0], rate: 6, repeat: -1 },
-      run:  { frames: [0], rate: 10, repeat: -1 },
-      jump: { frames: [0], rate: 1, repeat: 0 },
+      idle: { frames: [0, 1, 2, 3], rate: 5, repeat: -1 },
+      run:  { frames: [4, 5, 6, 7, 8, 9], rate: 10, repeat: -1 },
+      jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
+      fall: { frames: [16], rate: 1, repeat: 0 },
     },
   },
   leonel: {
@@ -51,15 +57,17 @@ export const HEROES = {
     name: 'Leonel',
     speed: 140,          // schneller als Jonas...
     jump: 360,           // ...springt aber ein bisschen weniger hoch
-    frame: { w: 32, h: 32 },
+    frame: { w: 40, h: 40 },
     body: { w: 10, h: 26 },   // kleiner → passt später durch enge Spalten
+    feet: 35,
     color: P.fuchsOrange,
     accent: P.hellGelb,
-    file: null,
+    file: 'assets/sprites/leonel.png',  // PixelLab-Charakter 9c5a608a…
     anims: {
-      idle: { frames: [0], rate: 6, repeat: -1 },
-      run:  { frames: [0], rate: 12, repeat: -1 },
-      jump: { frames: [0], rate: 1, repeat: 0 },
+      idle: { frames: [0, 1, 2, 3], rate: 5, repeat: -1 },
+      run:  { frames: [4, 5, 6, 7, 8, 9], rate: 12, repeat: -1 },
+      jump: { frames: [13, 14, 15], rate: 10, repeat: 0 },
+      fall: { frames: [16], rate: 1, repeat: 0 },
     },
   },
 }
@@ -87,11 +95,18 @@ export const COMPANION = {
 // ------------------------------------------------------------
 //  Tileset
 // ------------------------------------------------------------
-//  file: null = Platzhalter-Kacheln. Später Pfad zum PixelLab-Tileset.
-//  Die Kachel-Nummern (0 = Erde, 1 = Gras, 2 = Plattform) müssen dann
-//  im Tiled-Level stimmen — oder wir passen die Map an.
+//  file: null = Platzhalter-Kacheln (0 = Erde, 1 = Gras, 2 = Plattform).
+//
+//  Mit echtem Tileset (PixelLab "Wang-Set", 16 Kacheln in 4×4):
+//  Jede Kachel beschreibt eine ECKE zwischen vier Feldern – die Gras-
+//  kante läuft durch die Kachelmitte. Darum zeichnet GameScene eine
+//  Grafik-Ebene, die um eine halbe Kachel (8 px) verschoben ist.
+//  Welche der 16 Kacheln passt, sagt der "Wang-Index" (Summe):
+//     +1 wenn unten-rechts fest, +2 unten-links, +4 oben-rechts, +8 oben-links
+//  wangFrames[index] = Bildnummer im Tileset (Zeile für Zeile gezählt).
 export const TILESET = {
   key: 'tiles',
-  file: null,
-  columns: 3,
+  file: 'assets/tiles/schwarzwald.png',   // PixelLab-Tileset f346a925…
+  columns: 4,
+  wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
 }

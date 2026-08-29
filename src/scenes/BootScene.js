@@ -64,14 +64,15 @@ export default class BootScene extends Phaser.Scene {
     g.destroy()
   }
 
-  // Animationen: heute nur Bild 0 — später echte Bildfolgen aus der Config.
+  // Animationen aus der Config. Beim Platzhalter gibt es nur Bild 0.
   makeAnimations(hero) {
     for (const [name, a] of Object.entries(hero.anims)) {
       const key = `${hero.key}-${name}`
       if (this.anims.exists(key)) continue
+      const frames = hero.file ? a.frames : [0]
       this.anims.create({
         key,
-        frames: a.frames.map((f) => ({ key: hero.key, frame: f })),
+        frames: frames.map((f) => ({ key: hero.key, frame: f })),
         frameRate: a.rate,
         repeat: a.repeat,
       })

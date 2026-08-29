@@ -19,9 +19,12 @@ Entscheidungen so, dass Kinder mitlesen können.
 
 ## Architektur (bitte beibehalten)
 - Alle Zahlen (Tempo, Sprung, Größen) in `src/config.js`, nirgendwo sonst
-- Grafik-Austausch: `HEROES[x].file` / `TILESET.file` in `config.js` von `null` auf einen
-  Pfad setzen → `BootScene` lädt das Bild statt den Platzhalter zu malen. Der Spielcode
-  kennt nur Texturnamen (`'jonas'`, `'leonel'`, `'tiles'`) und Animationsnamen (`'jonas-run'`).
+- Grafik-Austausch: `HEROES[x].file` / `TILESET.file` in `config.js` (`null` = Platzhalter,
+  sonst Pfad unter `public/`) → `BootScene` lädt das Bild statt den Platzhalter zu malen. Der
+  Spielcode kennt nur Texturnamen (`'jonas'`, `'leonel'`, `'tiles'`) und Animationsnamen (`'jonas-run'`).
+- Bilder liegen in `public/assets/`; Herkunft und PixelLab-IDs in `public/assets/QUELLEN.md`
+- Das Tileset ist ein Wang-Set (Ecken-Kacheln): `GameScene.makeWangLayer` zeichnet die Grafik
+  um 8 px versetzt, die Tiled-Ebene `Boden` ist nur Kollision (sichtbar mit `?debug`)
 - Ein `Hero` bewegt sich nie selbst: er bekommt jeden Frame ein Kommando
   `{ left, right, jump, jumpHeld }`. Spieler-Kommandos kommen aus `Controls`,
   Begleiter-Kommandos aus `CompanionBrain`. Wechseln = nur tauschen, wer welches Kommando bekommt.
@@ -35,6 +38,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Vier Wälder: Schwarzwald (Start), Floresta da Tijuca, Lorbeerwald La Palma, Plänterwald
 
 ## Sprites (PixelLab MCP)
-- Free-Tier: **sehr sparsam** generieren, nur das Nötigste
-- Charaktere: Ansicht "side", Frame passend zu `HEROES[x].frame`, Animationen idle/run/jump
-- Frame-Nummern der Animationen dann in `config.js` unter `anims` eintragen
+- Trial: 40 Generierungen, **sehr sparsam** – Stand in `public/assets/QUELLEN.md`
+- Charaktere: Standard-Modus, Ansicht "side", 4 Richtungen, Animationen nur Richtung **east**
+  (im Spiel gespiegelt); Template-Animationen kosten 1 Generierung pro Richtung
+- Import: `node tools/import-character.mjs` (Spritesheet + Fußlinie) → `node tools/palettize.mjs`
+  (nur Palettenfarben; bei Kacheln Rottöne ausschließen) → Werte in `config.js` eintragen

@@ -9,6 +9,8 @@ import CompanionBrain from '../entities/CompanionBrain.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
 
+const DEBUG = new URLSearchParams(location.search).has('debug')
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('Game')
@@ -26,8 +28,15 @@ export default class GameScene extends Phaser.Scene {
     this.bgFar = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_far').setOrigin(0).setScrollFactor(0).setDepth(-30)
     this.bgMid = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_mid').setOrigin(0).setScrollFactor(0).setDepth(-20)
 
+    // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
     this.groundLayer = map.createLayer('Boden', tiles, 0, 0).setDepth(0)
     this.groundLayer.setCollisionByExclusion([-1])   // jede gesetzte Kachel ist fest
+
+    // Mit echtem Tileset: Boden unsichtbar (nur Kollision), hübsche Grafik-Ebene obendrauf
+    if (TILESET.file) {
+      this.groundLayer.setVisible(DEBUG)
+      this.makeWangLayer(map, tiles)
+    }
 
     this.fgBushes = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'fg_bushes').setOrigin(0).setScrollFactor(0).setDepth(20)
 
@@ -93,6 +102,30 @@ export default class GameScene extends Phaser.Scene {
     this.bgFar.tilePositionX = sx * 0.2
     this.bgMid.tilePositionX = sx * 0.5
     this.fgBushes.tilePositionX = sx * 1.3
+  }
+
+  // Zeichnet den Boden mit dem Wang-Tileset (siehe Erklärung in config.js).
+  // Für jede ECKE zwischen vier Feldern schauen wir, welche der vier fest
+  // sind, und wählen die passende Kachel. Die Ebene ist um 8 px verschoben,
+  // damit die Kachelmitte genau auf der Ecke liegt.
+  makeWangLayer(map, tiles) {
+    const W = map.width, H = map.height
+    const solid = (x, y) => {
+      if (y < 0) return false                       // über der Welt: Luft
+      if (y >= H) return true                       // unter der Welt: Erde
+      x = Phaser.Math.Clamp(x, 0, W - 1)            // seitlich: wie am Rand
+      return this.groundLayer.getTileAt(x, y) !== null
+    }
+    const layer = map.createBlankLayer('BodenGrafik', tiles, -GAME.tile / 2, -GAME.tile / 2, W + 1, H + 1)
+    for (let vy = 0; vy <= H; vy++) {
+      for (let vx = 0; vx <= W; vx++) {
+        const idx = (solid(vx, vy) ? 1 : 0) + (solid(vx - 1, vy) ? 2 : 0)
+                  + (solid(vx, vy - 1) ? 4 : 0) + (solid(vx - 1, vy - 1) ? 8 : 0)
+        if (idx === 0) continue                       // nur Luft → nichts zeichnen
+        layer.putTileAt(tiles.firstgid + TILESET.wangFrames[idx], vx, vy)
+      }
+    }
+    layer.setDepth(0)
   }
 
   // Wechsel: sofort, ohne Animation. Der neue Begleiter bleibt stehen,
