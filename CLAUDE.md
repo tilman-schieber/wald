@@ -20,7 +20,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 ## Feste Grafik-Regeln
 - Interne Auflösung **480×270** (16:9, Full-HD = genau 4×), `pixelArt: true`
 - Figuren 32 px hoch, Tiles 16×16
-- **Nur Farben aus `src/palette.js`** (32 Farben, Endesga-32, deutsche Namen)
+- **Nur Farben aus `src/palette.js`** (32 Farben, Endesga-32, deutsche Namen) – einzige Ausnahme:
+  das gemalte Titelbild `public/assets/bg/titel.png` (Pro-Bild, palettisiert sah es matschig aus)
 - Seitenansicht mit Parallax, Ebenen als Liste in `BACKGROUND.layers` (config.js):
   Himmel (0) → Berge (0.1) → Bäume fern (0.3, bläulich) → Bäume nah (0.55) → Dunst → Spielebene (1) → Büsche (1.3)
 
@@ -46,7 +47,9 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen →
   benommen (nur dann verwundbar). Igel rollt als Kugel; man hüpft drüber und schlägt danach.
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
-- Deko (Farn, Pilze, Stein) sind Tiled-Objekte vom Typ `deko` ohne Physik, `vorne=true` = vor den Figuren
+- Deko sind Tiled-Objekte vom Typ `deko` ohne Physik (`DEKO` in config: haengend/glow/anim), `vorne=true` = vor den Figuren;
+  Tiere (`tier`) sind lebendige Deko (hüpfen, flattern); Stein-Material: gids ab 17 im selben Layer `Boden`
+- Schrift "Waldschrift" (TTF, FontFace in BootScene), Holz-Panel als NineSlice fürs HUD; PixelLab-Abo: 2000/Monat
 - Vier Wälder: Schwarzwald (Start), Floresta da Tijuca, Lorbeerwald La Palma, Plänterwald
 
 ## Sprites (PixelLab MCP)

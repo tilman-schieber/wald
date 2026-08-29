@@ -10,8 +10,9 @@ import { SPIRIT } from '../config.js'
 
 export default class Spirit extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, owner, time) {
-    super(scene, owner.x, owner.body.top - 10, 'geist')
+    super(scene, owner.x, owner.body.top - 10, scene.textures.exists('geist-anim') ? 'geist-anim' : 'geist')
     scene.add.existing(this)
+    if (scene.anims.exists('geist-anim')) this.play('geist-anim')
     scene.physics.add.existing(this)
     this.body.setAllowGravity(false)
     this.setDepth(12)

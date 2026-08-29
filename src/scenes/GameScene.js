@@ -18,7 +18,7 @@
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC } from '../config.js'
+import { GAME, TILESET, TILESET2, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC, DEKO, TIERE, UI } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame } from '../save.js'
@@ -59,6 +59,9 @@ export default class GameScene extends Phaser.Scene {
     // ---------- Level ----------
     const map = this.make.tilemap({ key: this.roomKey })
     const tiles = map.addTilesetImage('tiles', TILESET.key)
+    // zweites Material (Stein), falls der Raum es kennt und das Bild da ist
+    const tiles2 = map.tilesets.some((t) => t.name === TILESET2.name) && this.textures.exists(TILESET2.key)
+      ? map.addTilesetImage(TILESET2.name, TILESET2.key) : null
     const objects = map.getObjectLayer('Objekte')?.objects ?? []
 
     // ---------- Parallax: hinten → vorne ----------
@@ -70,25 +73,27 @@ export default class GameScene extends Phaser.Scene {
     const layers = BACKGROUND.layers.filter((l) => this.textures.exists(l.key))
     const fallback = [{ key: 'bg_far', scroll: 0.2 }, { key: 'bg_mid', scroll: 0.5 }]
     for (const [i, l] of (layers.length ? layers : fallback).entries()) {
-      const ts = this.add.tileSprite(0, 0, GAME.width, GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(-39 + i)
+      const ts = this.add.tileSprite(0, l.y ?? 0, GAME.width, l.h ?? GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(l.depth ?? -39 + i)
       if (l.alpha !== undefined) ts.setAlpha(l.alpha)
       if (l.tint !== undefined) ts.setTint(l.tint)
       this.bgLayers.push({ ts, scroll: l.scroll, offsetX: l.offsetX ?? 0 })
     }
     // Dunst: wie in einem echten Wald wird es nach hinten dunkler und blauer
     if (layers.length) this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BACKGROUND.haze).setOrigin(0).setScrollFactor(0).setDepth(-25)
+    // die Büsche-Platzhalter vorne nur, wenn keine echte Farn-Ebene da ist
+    this.hasFgLayer = layers.some((l) => (l.depth ?? 0) > 20)
 
     // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
-    this.groundLayer = map.createLayer('Boden', tiles, 0, 0).setDepth(0)
+    this.groundLayer = map.createLayer('Boden', tiles2 ? [tiles, tiles2] : tiles, 0, 0).setDepth(0)
     this.groundLayer.setCollisionByExclusion([-1])   // jede gesetzte Kachel ist fest
 
     // Mit echtem Tileset: Boden unsichtbar (nur Kollision), hübsche Grafik-Ebene obendrauf
     if (TILESET.file) {
       this.groundLayer.setVisible(DEBUG)
-      this.makeWangLayer(map, tiles)
+      this.makeWangLayer(map, tiles, tiles2)
     }
 
-    this.fgBushes = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'fg_bushes').setOrigin(0).setScrollFactor(0).setDepth(20)
+    this.fgBushes = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'fg_bushes').setOrigin(0).setScrollFactor(0).setDepth(20).setVisible(!this.hasFgLayer)
 
     // ---------- Helden ----------
     const spawn = objects.find((o) => o.type === 'spawn' && o.name === this.spawnName)
@@ -179,11 +184,26 @@ export default class GameScene extends Phaser.Scene {
     this.spiritReadyAt = 0
 
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
+    // haengend = Ankerpunkt oben; glow = pulsiert leicht; anim = Spritesheet-Animation
+    this.glowing = []
     for (const o of objects.filter((o) => o.type === 'deko')) {
       const key = 'deko-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Deko:', o.name); continue }
-      const p = props(o)
-      this.add.image(o.x, o.y, key).setOrigin(0.5, 1).setDepth(p.vorne ? 15 : 2).setFlipX(!!p.spiegeln)
+      const p = props(o), d = DEKO[o.name] ?? {}
+      const img = d.anim ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)
+      img.setOrigin(0.5, d.haengend ? 0 : 1).setDepth(p.vorne ? 15 : 2).setFlipX(!!p.spiegeln)
+      if (d.glow) this.glowing.push(img)
+    }
+
+    // Tiere: friedliche Waldbewohner – sitzen, gucken, hüpfen ab und zu ein Stück
+    this.tiere = []
+    for (const o of objects.filter((o) => o.type === 'tier')) {
+      const key = 'tier-' + o.name
+      if (!this.textures.exists(key)) { console.warn('Unbekanntes Tier:', o.name); continue }
+      const t = TIERE[o.name] ?? {}
+      const spr = t.anim ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)
+      spr.setOrigin(0.5, 1).setDepth(7).setFlipX(Math.random() < 0.5)
+      this.tiere.push({ spr, cfg: t, home: { x: o.x, y: o.y }, next: 0 })
     }
 
     // Waldherz (Ziel)
@@ -207,10 +227,17 @@ export default class GameScene extends Phaser.Scene {
     if (isTouch) this.touchButtons = new TouchButtons(this, this.controls)
 
     // ---------- HUD (fest am Bildschirm) ----------
-    const hudStyle = { fontFamily: 'monospace', fontSize: '8px', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 2, y: 1 } }
-    this.add.text(2, 2, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
-    this.nameText = this.add.text(2, 13, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
-    this.hud = this.add.text(2, 24, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+    const font = this.textures.exists('panel') && document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    const hudStyle = { fontFamily: font, fontSize: font === 'monospace' ? '8px' : '10px', stroke: '#181425', strokeThickness: 2 }
+    if (this.textures.exists('panel')) {
+      // Holz-Rahmen als Neun-Teile-Bild: Ecken bleiben scharf, Mitte wird gestreckt
+      this.add.nineslice(2, 2, 'panel', undefined, 176, 40, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setOrigin(0).setScrollFactor(0).setDepth(99).setAlpha(0.92)
+    } else {
+      hudStyle.backgroundColor = 'rgba(24,20,37,0.7)'; hudStyle.padding = { x: 2, y: 1 }
+    }
+    this.nameText = this.add.text(10, 8, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
+    this.hud = this.add.text(10, 22, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+    this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
     this.updateNameText()
 
     this.pauseText = this.add.text(GAME.width / 2, GAME.height / 2, 'PAUSE\n\nP oder Esc zum Weiterspielen', {
@@ -245,6 +272,10 @@ export default class GameScene extends Phaser.Scene {
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
     this.waitText.setVisible(this.brain.waiting).setPosition(Math.round(this.companion.x), Math.round(this.companion.body.top - 10))
+
+    // 4c. Tiere und leuchtende Deko
+    this.updateTiere(time)
+    for (const g of this.glowing) g.setAlpha(0.85 + Math.sin(time / 300 + g.x) * 0.15)
 
     // 5. Gegner laufen, Schläge treffen, Rätsel prüfen
     for (const e of this.enemies) e.update(time, this.groundLayer, [this.jonas, this.leonel])
@@ -294,21 +325,28 @@ export default class GameScene extends Phaser.Scene {
   // Für jede ECKE zwischen vier Feldern schauen wir, welche der vier fest
   // sind, und wählen die passende Kachel. Die Ebene ist um 8 px verschoben,
   // damit die Kachelmitte genau auf der Ecke liegt.
-  makeWangLayer(map, tiles) {
+  makeWangLayer(map, tiles, tiles2 = null) {
     const W = map.width, H = map.height
-    const solid = (x, y) => {
-      if (y < 0) return false                       // über der Welt: Luft
-      if (y >= H) return true                       // unter der Welt: Erde
+    // Material einer Zelle: 0 = Luft, 1 = Erde, 2 = Stein (gid im zweiten Tileset)
+    const mat = (x, y) => {
+      if (y < 0) return 0                           // über der Welt: Luft
       x = Phaser.Math.Clamp(x, 0, W - 1)            // seitlich: wie am Rand
-      return this.groundLayer.getTileAt(x, y) !== null
+      if (y >= H) return mat(x, H - 1) || 1         // unter der Welt: wie darüber, sonst Erde
+      const t = this.groundLayer.getTileAt(x, y)
+      if (!t) return 0
+      return tiles2 && t.index >= tiles2.firstgid ? 2 : 1
     }
-    const layer = map.createBlankLayer('BodenGrafik', tiles, -GAME.tile / 2, -GAME.tile / 2, W + 1, H + 1)
+    const sets = [null, { ts: tiles, frames: TILESET.wangFrames }, tiles2 && TILESET2.wangFrames ? { ts: tiles2, frames: TILESET2.wangFrames } : null]
+    const layer = map.createBlankLayer('BodenGrafik', tiles2 ? [tiles, tiles2] : tiles, -GAME.tile / 2, -GAME.tile / 2, W + 1, H + 1)
     for (let vy = 0; vy <= H; vy++) {
       for (let vx = 0; vx <= W; vx++) {
-        const idx = (solid(vx, vy) ? 1 : 0) + (solid(vx - 1, vy) ? 2 : 0)
-                  + (solid(vx, vy - 1) ? 4 : 0) + (solid(vx - 1, vy - 1) ? 8 : 0)
+        const m = [mat(vx, vy), mat(vx - 1, vy), mat(vx, vy - 1), mat(vx - 1, vy - 1)]   // SE, SW, NE, NW
+        const idx = (m[0] ? 1 : 0) + (m[1] ? 2 : 0) + (m[2] ? 4 : 0) + (m[3] ? 8 : 0)
         if (idx === 0) continue                       // nur Luft → nichts zeichnen
-        layer.putTileAt(tiles.firstgid + TILESET.wangFrames[idx], vx, vy)
+        // Welches Material zeichnen? Das der unteren Zellen zuerst (da steht man drauf)
+        const which = m.find((v) => v) || 1
+        const set = sets[which] ?? sets[1]
+        layer.putTileAt(set.ts.firstgid + set.frames[idx], vx, vy)
       }
     }
     layer.setDepth(0)
@@ -399,6 +437,30 @@ export default class GameScene extends Phaser.Scene {
     if (!cmd.up && !cmd.crouch) return
     const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= CLIMB.reach && hero.body.bottom > r.top - 4 && hero.body.top < r.bottom)
     if (r) { hero.startClimb(r); this.sfx.play('hook') }
+  }
+
+  // Tiere: alle paar Sekunden ein kleiner Hopser oder ein Blick zur anderen Seite;
+  // Schmetterlinge flattern in Achten um ihren Platz.
+  updateTiere(time) {
+    for (const t of this.tiere) {
+      const { spr, cfg, home } = t
+      if (cfg.flatter) {
+        spr.x = home.x + Math.sin(time / 900 + home.x) * 24
+        spr.y = home.y - 20 + Math.sin(time / 350 + home.y) * 8
+        spr.setFlipX(Math.cos(time / 900 + home.x) < 0)
+        continue
+      }
+      if (time < t.next) continue
+      t.next = time + Phaser.Math.Between(1500, 5000)
+      const r = Math.random()
+      if (r < 0.4) spr.setFlipX(!spr.flipX)                                   // umschauen
+      else if (r < 0.8 && cfg.hop) {                                           // Hopser
+        const dx = Phaser.Math.Between(-14, 14)
+        this.tweens.add({ targets: spr, y: home.y - 10, duration: 160, yoyo: true, ease: 'Quad.Out' })
+        this.tweens.add({ targets: spr, x: Phaser.Math.Clamp(spr.x + dx, home.x - 30, home.x + 30), duration: 320 })
+        spr.setFlipX(dx < 0)
+      }
+    }
   }
 
   // Kurzer Text, der über einer Figur aufsteigt

@@ -23,6 +23,14 @@
 
 Neu bauen: `node tools/import-character.mjs …` (baut das Spritesheet, richtet die Füße aus),
 dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottöne ausschließen).
-Verbrauch bisher: 33 von 40 Trial-Generierungen.
-Parallax-Ebenen: "no_background" liefert bei Szenen oft eine gemalte Fläche statt Transparenz → häufigste Farbe mit colorkey.mjs entfernen.
-Kleine Sprites: `create_image_pixflux` 32×32 mit `no_background` und Paletten-PNG als `color_image_url`, dann `tools/crop.mjs` + `tools/palettize.mjs`.
+## Große Welle (Abo, 29.08.2026)
+- Titelbild: `create_image_pro` 480×270 `8297bda1…` (bg/titel.png, **unpalettisiert** – bewusste Ausnahme) und 688×384 `cc2204f2…` (bg/titel_gross.png), Referenzen: Jonas/Leonel-South-Bilder
+- Schrift: `create_font` "Waldschrift" `f3280c5e…` → fonts/waldschrift.ttf
+- UI: `create_ui_asset` Holzpanel `febcf655…` → ui/holzpanel.png (großes Panel aus dem Sheet geschnitten, 268×59, Neun-Teile-Rand 24)
+- Stein-Tileset: `create_sidescroller_tileset` `e020a554…` (Basis `49c699ba…`) → tiles/schwarzwald_stein.png
+- Helden-Animationen: Jonas attack `233da9e6…` hurt `10e00c2e…`; Leonel attack `6e6fdafe…` hurt `e5512368…` (cross-punch / taking-punch)
+- `animate_image`: Igel laufen `dd740dac…` (6), Eule Flügelschlag `35c0c0be…` (4), Geist schweben `dc123201…` (4) → tools/frames-to-sheet.mjs
+- Deko (pixflux, Palette): holz `bfdcc6c3…`, fels `283387d2…`, busch `f5d3c0d8…`, leuchtpilze `92bee441…`, wurzeln `1d467ba3…`, moos `39a0ab06…`, stamm `4f3d9fbe…`, schild `a78c15b4…`, laterne `7a71c4b4…`, gras `175f42e3…`, blumen `64852263…`, laub `7abbdc41…`, bach `7434a3bd…`, baumhaus `1c45390c…`, hohlbaum `3581bfef…`
+- Tiere: eichhoernchen `1acb2811…`, hase `dcf1244f…`, schmetterling `9874205a…`
+- Vordergrund-Ebenen: kronen `7e51d395…` (weiß freigestellt, unter Zeile 100 gelöscht), farne `7dba52d7…`
+- Gegenstände: blatt `36b527a3…`, waldherz `4d392a56…`

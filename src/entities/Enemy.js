@@ -41,7 +41,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   useTexture(key) {
     if (!this.scene.textures.exists(key)) return
     this.setTexture(key)
-    const f = this.scene.textures.get(key).getSourceImage()
+    const f = this.frame
     this.body.setSize(this.cfg.body.w, this.cfg.body.h)
     this.body.setOffset((f.width - this.cfg.body.w) / 2, f.height - this.cfg.body.h)
   }
@@ -79,6 +79,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       if (this.wanderPause) this.setVelocityX(0)
       else this.walk(ai.healedWanderSpeed ?? 10, groundLayer)
       this.setFlipX(this.dir > 0)
+      this.y += Math.sin(time / 400) * 0.02   // ganz leichtes Atmen
       return
     }
     if (this.isCalm(time)) { this.setVelocityX(0); this.showMark(false); return }
@@ -141,6 +142,12 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.state !== 'roll') this.setFlipX(this.dir > 0)
+    // Lauf-Animation, wenn es eine gibt (nur beim Gehen)
+    const walking = (this.state === 'wander' && !this.wanderPause)
+    if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
+      if (walking) { if (this.anims.currentAnim?.key !== this.cfg.key + '-lauf') { this.play(this.cfg.key + '-lauf'); this.useTexture(this.cfg.key + '-lauf') } }
+      else if (this.anims.isPlaying) { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
+    }
     if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()
     this.mark.setPosition(this.x, this.body.top - 8)
   }

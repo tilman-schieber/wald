@@ -76,6 +76,12 @@ export default class Owl extends Enemy {
         }
         break
     }
+    // Flügelschlag im Flug, wenn es die Animation gibt
+    const flying = this.state === 'swoop' || this.state === 'return'
+    if (this.scene.anims.exists(this.cfg.key + '-flug-anim')) {
+      if (flying) { if (this.anims.currentAnim?.key !== this.cfg.key + '-flug-anim') { this.play(this.cfg.key + '-flug-anim'); this.useTexture(this.cfg.key + '-flug-anim') } }
+      else if (this.anims.isPlaying) { this.anims.stop(); this.useTexture(this.cfg.key) }
+    }
     if (this.body.velocity.x !== 0) this.dir = Math.sign(this.body.velocity.x)
     this.setFlipX(this.dir > 0)
     if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()

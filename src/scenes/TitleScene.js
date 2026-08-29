@@ -2,7 +2,7 @@
 //  TITEL-SZENE — W.A.L.D.
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, COMBAT, BACKGROUND, MUSIC } from '../config.js'
+import { GAME, COMBAT, BACKGROUND, MUSIC, UI } from '../config.js'
 import { P, hex } from '../palette.js'
 import { world } from '../world.js'
 import { hasSave, loadGame, clearSave } from '../save.js'
@@ -21,7 +21,13 @@ export default class TitleScene extends Phaser.Scene {
       const tryPlay = () => { if (!m.isPlaying && !world.musicOff) m.play() }
       tryPlay(); this.input.once('pointerdown', tryPlay); this.input.keyboard.once('keydown', tryPlay)
     }
-    if (this.textures.exists(BACKGROUND.titleKey)) {
+    const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    this.font = font
+    if (this.textures.exists('titelbild')) {
+      // Das gemalte Titelbild (Pro): Figuren sind schon drauf
+      this.add.image(0, 0, 'titelbild').setOrigin(0)
+      this.add.rectangle(0, H - 70, W, 70, P.schwarz, 0.35).setOrigin(0)
+    } else if (this.textures.exists(BACKGROUND.titleKey)) {
       this.add.tileSprite(0, 0, W, H, BACKGROUND.titleKey).setOrigin(0)
       this.add.rectangle(0, 0, W, H, P.nachtBlau, 0.5).setOrigin(0)
     } else {
@@ -29,21 +35,24 @@ export default class TitleScene extends Phaser.Scene {
       this.add.tileSprite(0, 0, W, H, 'bg_far').setOrigin(0)
     }
 
-    this.add.text(W / 2, 70, 'W.A.L.D.', { fontFamily: 'monospace', fontSize: '40px', color: hex(P.hellGelb), stroke: hex(P.schwarz), strokeThickness: 4 }).setOrigin(0.5)
-    this.add.text(W / 2, 100, 'Wächter Aller Lebenden Dinge', { fontFamily: 'monospace', fontSize: '11px', color: hex(P.nebelHell), stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
+    const hasPic = this.textures.exists('titelbild')
+    this.add.text(W / 2, hasPic ? 34 : 70, 'W.A.L.D.', { fontFamily: font, fontSize: font === 'monospace' ? '40px' : '44px', color: hex(P.hellGelb), stroke: hex(P.schwarz), strokeThickness: 5 }).setOrigin(0.5)
+    this.add.text(W / 2, hasPic ? 62 : 100, 'Wächter Aller Lebenden Dinge', { fontFamily: font, fontSize: font === 'monospace' ? '11px' : '13px', color: hex(P.nebelHell), stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
 
-    // Die beiden Helden stehen da und atmen
-    this.add.sprite(W / 2 - 24, 170, 'jonas').play('jonas-idle')
-    this.add.sprite(W / 2 + 24, 172, 'leonel').play('leonel-idle').setFlipX(true)
+    if (!hasPic) {
+      // Die beiden Helden stehen da und atmen
+      this.add.sprite(W / 2 - 24, 170, 'jonas').play('jonas-idle')
+      this.add.sprite(W / 2 + 24, 172, 'leonel').play('leonel-idle').setFlipX(true)
+    }
 
     this.options = []
     if (hasSave()) this.options.push({ label: 'Weiter', action: () => this.continueGame() })
     this.options.push({ label: 'Neues Spiel', action: () => this.newGame() })
     this.selected = 0
     this.optionTexts = this.options.map((o, i) =>
-      this.add.text(W / 2, 205 + i * 16, o.label, { fontFamily: 'monospace', fontSize: '12px', color: '#ffffff', stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
+      this.add.text(W / 2, (hasPic ? 214 : 205) + i * 16, o.label, { fontFamily: font, fontSize: font === 'monospace' ? '12px' : '14px', color: '#ffffff', stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
         .setInteractive({ useHandCursor: true }).on('pointerdown', () => { this.selected = i; this.choose() }))
-    this.hint = this.add.text(W / 2, H - 14, 'Leertaste / Antippen zum Starten', { fontFamily: 'monospace', fontSize: '8px', color: hex(P.nebelHell) }).setOrigin(0.5)
+    this.hint = this.add.text(W / 2, H - 10, 'Leertaste / Antippen zum Starten', { fontFamily: 'monospace', fontSize: '8px', color: hex(P.nebelHell), stroke: hex(P.schwarz), strokeThickness: 2 }).setOrigin(0.5)
     this.refresh()
 
     const kb = this.input.keyboard

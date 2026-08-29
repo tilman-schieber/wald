@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, MUSIC } from '../config.js'
+import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -43,8 +43,25 @@ export default class BootScene extends Phaser.Scene {
     }
     if (MUSIC.file) this.load.audio('musik', [MUSIC.file + '.mp3'])
     for (const [name, d] of Object.entries(DEKO)) {
-      if (d.file) this.load.image('deko-' + name, d.file)
+      if (!d.file) continue
+      if (d.anim) this.load.spritesheet('deko-' + name, d.file, { frameWidth: d.anim.w, frameHeight: d.anim.h })
+      else this.load.image('deko-' + name, d.file)
     }
+    for (const [name, t] of Object.entries(TIERE)) {
+      if (!t.file) continue
+      if (t.anim) this.load.spritesheet('tier-' + name, t.file, { frameWidth: t.anim.w, frameHeight: t.anim.h })
+      else this.load.image('tier-' + name, t.file)
+    }
+    for (const enemy of Object.values(ENEMIES)) {
+      if (enemy.walkSheet) this.load.spritesheet(enemy.key + '-lauf', enemy.walkSheet.file, { frameWidth: enemy.walkSheet.w, frameHeight: enemy.walkSheet.h })
+      if (enemy.flySheet) this.load.spritesheet(enemy.key + '-flug-anim', enemy.flySheet.file, { frameWidth: enemy.flySheet.w, frameHeight: enemy.flySheet.h })
+    }
+    if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
+    if (TILESET2.file) this.load.image(TILESET2.key, TILESET2.file)
+    for (const [name, it] of Object.entries(ITEMS)) if (it.file) this.load.image(name, it.file)
+    if (UI.panelFile) this.load.image('panel', UI.panelFile)
+    if (UI.titleFile) this.load.image('titelbild', UI.titleFile)
+    if (UI.fontFile) this.loadFont()
     if (SPIRIT.file) this.load.image('geist', SPIRIT.file)
 
     // Jeder Raum landet unter seinem Dateinamen im Cache ('schwarzwald_01' …)
@@ -54,7 +71,21 @@ export default class BootScene extends Phaser.Scene {
     }
   }
 
+  // Die Pixel-Schrift (TTF) dem Browser bekannt machen, damit Phaser-Texte sie benutzen können
+  loadFont() {
+    this.fontReady = false
+    const face = new FontFace(UI.fontFamily, `url(${UI.fontFile})`)
+    this.load.rexAwait?.()   // (kein Plugin nötig – wir warten unten in create selbst)
+    this.fontPromise = face.load().then((f) => { document.fonts.add(f); this.fontReady = true }).catch(() => { this.fontReady = false })
+  }
+
   create() {
+    // Schrift abwarten (höchstens kurz), dann weiter
+    if (this.fontPromise && !this.fontReady && !this.fontWaited) {
+      this.fontWaited = true
+      Promise.race([this.fontPromise, new Promise((r) => setTimeout(r, 1500))]).then(() => this.create())
+      return
+    }
     // Für alles, was NICHT geladen wurde: Platzhalter malen.
     for (const hero of Object.values(HEROES)) {
       if (!this.textures.exists(hero.key)) this.makeHeroPlaceholder(hero)
@@ -67,6 +98,7 @@ export default class BootScene extends Phaser.Scene {
     this.makeSlash()
     this.makePuzzlePlaceholders()
     this.makeDekoPlaceholders()
+    this.makeSheetAnimations()
 
     this.makeParallaxPlaceholders()
     this.makeMarker()
@@ -99,6 +131,7 @@ export default class BootScene extends Phaser.Scene {
       const key = `${hero.key}-${name}`
       if (this.anims.exists(key)) continue
       const frames = hero.file ? a.frames : [0]
+      if (hero.file && frames.some((f) => f >= this.textures.get(hero.key).frameTotal)) continue   // Animation noch nicht im Sheet
       this.anims.create({
         key,
         frames: frames.map((f) => ({ key: hero.key, frame: f })),
@@ -235,17 +268,14 @@ export default class BootScene extends Phaser.Scene {
     g.fillStyle(P.blattGruen); g.fillRect(1, 3, 2, 2); g.fillRect(5, 10, 2, 2)
     g.generateTexture('ranke', 8, t); g.destroy()
 
-    // Blatt zum Sammeln
+    // Blatt zum Sammeln (nur wenn kein Bild geladen)
+    if (this.textures.exists('blatt')) return this.makeWaldherzPlaceholder()
     g = this.make.graphics({ x: 0, y: 0, add: false })
     g.fillStyle(P.wiesenGruen); g.fillTriangle(1, 9, 5, 1, 9, 9); g.fillRect(2, 5, 6, 4)
     g.fillStyle(P.blattGruen); g.fillRect(4, 3, 1, 7)
     g.generateTexture('blatt', 10, 10); g.destroy()
 
-    // Waldherz: das Ziel eines Waldes
-    g = this.make.graphics({ x: 0, y: 0, add: false })
-    g.fillStyle(P.rosaHell); g.fillCircle(5, 5, 4); g.fillCircle(11, 5, 4); g.fillTriangle(1, 7, 15, 7, 8, 15)
-    g.fillStyle(P.wiesenGruen); g.fillRect(7, 0, 2, 3)
-    g.generateTexture('waldherz', 16, 16); g.destroy()
+    this.makeWaldherzPlaceholder()
 
     // Waldgeist: leuchtender Tropfen mit Gesicht (nur wenn kein Bild geladen wurde)
     if (this.textures.exists('geist')) return
@@ -254,6 +284,21 @@ export default class BootScene extends Phaser.Scene {
     g.fillStyle(P.eisBlau); g.fillCircle(7, 8, 5); g.fillTriangle(4, 6, 7, 0, 10, 6)
     g.fillStyle(P.weiss); g.fillRect(5, 6, 1, 2); g.fillRect(8, 6, 1, 2)
     g.generateTexture('geist', 14, 16); g.destroy()
+  }
+
+  // Animationen aus Spritesheets (Deko, Tiere, Gegner, Geist)
+  makeSheetAnimations() {
+    const mk = (key, texKey, n, rate) => {
+      if (!this.textures.exists(texKey) || this.anims.exists(key)) return
+      this.anims.create({ key, frames: this.anims.generateFrameNumbers(texKey, { start: 0, end: n - 1 }), frameRate: rate, repeat: -1 })
+    }
+    for (const [name, d] of Object.entries(DEKO)) if (d.anim) mk('deko-' + name, 'deko-' + name, d.anim.n, d.anim.rate ?? 6)
+    for (const [name, t] of Object.entries(TIERE)) if (t.anim) mk('tier-' + name, 'tier-' + name, t.anim.n, t.anim.rate ?? 6)
+    for (const e of Object.values(ENEMIES)) {
+      if (e.walkSheet) mk(e.key + '-lauf', e.key + '-lauf', e.walkSheet.n, e.walkSheet.rate ?? 8)
+      if (e.flySheet) mk(e.key + '-flug-anim', e.key + '-flug-anim', e.flySheet.n, e.flySheet.rate ?? 8)
+    }
+    if (SPIRIT.sheet) mk('geist-anim', 'geist-anim', SPIRIT.sheet.n, SPIRIT.sheet.rate ?? 6)
   }
 
   // Deko-Platzhalter: Farn = grüne Zacken, Pilze = rote Hüte, Stein = grauer Buckel
@@ -265,6 +310,14 @@ export default class BootScene extends Phaser.Scene {
     make('deko-farn', (g) => { g.fillStyle(P.blattGruen); for (let x = 2; x < 22; x += 5) g.fillTriangle(x, 20, x + 2, 4, x + 4, 20) })
     make('deko-pilze', (g) => { g.fillStyle(P.sandHell); g.fillRect(6, 10, 3, 10); g.fillRect(14, 12, 3, 8); g.fillStyle(P.feuerRot); g.fillEllipse(7, 9, 12, 8); g.fillEllipse(15, 11, 9, 6); g.fillStyle(P.weiss); g.fillRect(5, 7, 2, 2); g.fillRect(15, 10, 1, 1) })
     make('deko-stein', (g) => { g.fillStyle(P.steinGrau); g.fillEllipse(12, 15, 20, 10); g.fillStyle(P.moosGruen); g.fillEllipse(9, 11, 10, 5) })
+  }
+
+  makeWaldherzPlaceholder() {
+    if (this.textures.exists('waldherz')) return
+    const g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.rosaHell); g.fillCircle(5, 5, 4); g.fillCircle(11, 5, 4); g.fillTriangle(1, 7, 15, 7, 8, 15)
+    g.fillStyle(P.wiesenGruen); g.fillRect(7, 0, 2, 3)
+    g.generateTexture('waldherz', 16, 16); g.destroy()
   }
 
   // Kleiner Pfeil über dem aktiven Helden

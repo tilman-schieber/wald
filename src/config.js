@@ -56,6 +56,8 @@ export const HEROES = {
       crouch: { frames: [19], rate: 1, repeat: 0 },
       crouchWalk: { frames: [19, 20, 21, 22, 23, 24], rate: 10, repeat: -1 },
       climb: { frames: [25, 26, 27, 28], rate: 6, repeat: -1 },
+      attack: { frames: [29, 30, 31, 32, 33, 34], rate: 20, repeat: 0 },
+      hurt: { frames: [35, 36, 37], rate: 10, repeat: 0 },
     },
   },
   leonel: {
@@ -79,6 +81,8 @@ export const HEROES = {
       fall: { frames: [16], rate: 1, repeat: 0 },
       crouch: { frames: [19], rate: 1, repeat: 0 },
       crouchWalk: { frames: [19, 20, 21, 22, 23, 24], rate: 10, repeat: -1 },
+      attack: { frames: [25, 26, 27, 28, 29, 30], rate: 22, repeat: 0 },
+      hurt: { frames: [31, 32, 33], rate: 10, repeat: 0 },
     },
   },
 }
@@ -124,6 +128,7 @@ export const SPIRIT = {        // Leonel: Waldgeist rufen
   calmMs: 4000,                // so lange bleibt ein beruhigter Gegner friedlich
   damage: 1,
   file: 'assets/sprites/geist.png',   // PixelLab 03264b0c… (16×22); null = Platzhalter
+  sheet: { file: 'assets/sprites/geist_anim.png', w: 16, h: 20, n: 4, rate: 5 },   // animate_image dc123201…
 }
 
 // ------------------------------------------------------------
@@ -156,6 +161,7 @@ export const ENEMIES = {
     file: 'assets/sprites/igel.png',            // PixelLab ccbfcad3… (schaut nach links)
     healedFile: 'assets/sprites/igel_heil.png', // PixelLab 180538dc… (28×26, sitzt zufrieden)
     ballFile: 'assets/sprites/igel_kugel.png',  // PixelLab 40694bf9… (eingerollt)
+    walkSheet: { file: 'assets/sprites/igel_lauf.png', w: 24, h: 20, n: 6, rate: 8 },   // animate_image dd740dac…
     ai: {
       spiky: true,          // nur verwundbar, wenn benommen (oder vom Geist beruhigt)
       wanderSpeed: 25,      // beim Stromern
@@ -180,6 +186,7 @@ export const ENEMIES = {
     accent: P.sonnenGelb,
     file: 'assets/sprites/eule.png',         // PixelLab ffc1d20a… (sitzend)
     flyFile: 'assets/sprites/eule_flug.png', // PixelLab 7e226552… (fliegend)
+    flySheet: { file: 'assets/sprites/eule_flug_anim.png', w: 32, h: 15, n: 4, rate: 10 },  // animate_image 35c0c0be…
     ai: {
       spiky: true,            // nur verwundbar, wenn sie nach dem Sturzflug am Boden sitzt
       sight: { x: 170, y: 160 },
@@ -201,10 +208,57 @@ export const MUSIC = {
 //  Deko – nur Bilder, keine Trefferbox. In Tiled: type "deko", name = Schlüssel,
 //  Eigenschaft vorne = true → wird VOR den Figuren gezeichnet.
 // ------------------------------------------------------------
+//  Optionen je Deko: haengend = Ankerpunkt oben (hängt von einer Kante herab),
+//  anim = { frames, rate } wenn das Bild ein Spritesheet ist (frame = Bildgröße),
+//  glow = leuchtet leicht (pulsierende Helligkeit)
 export const DEKO = {
-  farn:  { file: 'assets/sprites/deko_farn.png' },    // PixelLab 633dedca…
-  pilze: { file: 'assets/sprites/deko_pilze.png' },   // PixelLab 120957ca…
-  stein: { file: 'assets/sprites/deko_stein.png' },   // PixelLab e979ad3d…
+  farn:     { file: 'assets/sprites/deko_farn.png' },       // PixelLab 633dedca…
+  pilze:    { file: 'assets/sprites/deko_pilze.png' },      // PixelLab 120957ca…
+  stein:    { file: 'assets/sprites/deko_stein.png' },      // PixelLab e979ad3d…
+  stamm:    { file: 'assets/sprites/deko_stamm.png' },      // Baumstumpf
+  holz:     { file: 'assets/sprites/deko_holz.png' },       // liegender Baumstamm
+  schild:   { file: 'assets/sprites/deko_schild.png' },     // Wegweiser
+  laterne:  { file: 'assets/sprites/deko_laterne.png', haengend: true, glow: true },
+  gras:     { file: 'assets/sprites/deko_gras.png' },
+  blumen:   { file: 'assets/sprites/deko_blumen.png' },
+  fels:     { file: 'assets/sprites/deko_fels.png' },
+  busch:    { file: 'assets/sprites/deko_busch.png' },
+  leuchtpilze: { file: 'assets/sprites/deko_leuchtpilze.png', glow: true },
+  wurzeln:  { file: 'assets/sprites/deko_wurzeln.png' },
+  laub:     { file: 'assets/sprites/deko_laub.png' },
+  moos:     { file: 'assets/sprites/deko_moos.png', haengend: true },
+  bach:     { file: 'assets/sprites/deko_bach.png' },       // Bachlauf (liegt im Boden, vorne)
+  baumhaus: { file: 'assets/sprites/deko_baumhaus.png' },   // Baumhaus (hinten, groß)
+  hohlbaum: { file: 'assets/sprites/deko_hohlbaum.png' },   // hohler Baumstamm (hinten, groß)
+}
+
+// ------------------------------------------------------------
+//  Tiere – friedliche Waldbewohner, nur Deko mit Leben: sitzen, gucken,
+//  hüpfen manchmal ein Stück. In Tiled: type "tier", name = Schlüssel.
+// ------------------------------------------------------------
+export const TIERE = {
+  eichhoernchen: { file: 'assets/sprites/tier_eichhoernchen.png', hop: true },
+  hase:          { file: 'assets/sprites/tier_hase.png', hop: true },
+  schmetterling: { file: 'assets/sprites/tier_schmetterling.png', flatter: true },
+}
+
+// ------------------------------------------------------------
+//  Gegenstände: Blatt (sammeln) und Waldherz (Ziel)
+// ------------------------------------------------------------
+export const ITEMS = {
+  blatt:    { file: 'assets/sprites/blatt.png' },       // PixelLab 36b527a3…
+  waldherz: { file: 'assets/sprites/waldherz.png' },    // PixelLab 4d392a56…
+}
+
+// ------------------------------------------------------------
+//  Schrift & UI (PixelLab): null = Standard-Monospace / schlichte Kästen
+// ------------------------------------------------------------
+export const UI = {
+  fontFile: 'assets/fonts/waldschrift.ttf',   // PixelLab-Font "Waldschrift"
+  fontFamily: 'Waldschrift',
+  panelFile: 'assets/ui/holzpanel.png',       // PixelLab-UI-Panel, Neun-Teile-Rahmen
+  panelBorder: 24,                            // so breit ist der Rahmen im Panelbild
+  titleFile: 'assets/bg/titel.png',           // Pro-Titelbild 480×270
 }
 
 // ------------------------------------------------------------
@@ -238,6 +292,9 @@ export const BACKGROUND = {
     { key: 'bg_berge',  file: 'assets/bg/schwarzwald_berge.png', scroll: 0.1 },                 // PixelLab 0d73137c…
     { key: 'bg_baeume', file: 'assets/bg/schwarzwald_baeume.png', scroll: 0.3, tint: 0x8fa0c0, alpha: 0.9 }, // PixelLab cc8550f5…, fern = blasser/bläulicher
     { key: 'bg_baeume', scroll: 0.55, offsetX: 300 },                                            // dieselben Bäume nochmal, näher & kräftig
+    // Vordergrund (vor der Spielebene): Baumkronen oben, Farne unten – wandern SCHNELLER als die Kamera
+    { key: 'bg_kronen', file: 'assets/bg/schwarzwald_kronen.png', scroll: 1.2, h: 160, depth: 22, alpha: 0.9 },   // PixelLab 7e51d395…
+    { key: 'bg_farne',  file: 'assets/bg/schwarzwald_farne.png', scroll: 1.1, y: 214, h: 96, depth: 21, alpha: 0.9 },        // PixelLab 7dba52d7…
   ],
   haze: 0.3,                          // dunkler "Dunst" über allem, damit die Figuren vorne bleiben
   titleKey: 'bg_forest',              // Kulisse fürs Titelbild (PixelLab 73621b03…)
@@ -261,4 +318,13 @@ export const TILESET = {
   file: 'assets/tiles/schwarzwald.png',   // PixelLab-Tileset f346a925…
   columns: 4,
   wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
+}
+//  Zweites Material im selben Tiled-Layer "Boden": Kacheln mit gid ab 17 sind Stein.
+//  (In Tiled: zweites Tileset "stein" mit firstgid 17.)
+export const TILESET2 = {
+  key: 'tiles_stein',
+  name: 'stein',
+  file: 'assets/tiles/schwarzwald_stein.png',   // PixelLab-Tileset e020a554…
+  columns: 4,
+  wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],   // gleiche Anordnung wie das Erde-Set
 }

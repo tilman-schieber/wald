@@ -41,6 +41,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.vine = null             // Ranke, an der ich gerade klettere
     this.hopUntil = 0            // kurz nach dem Absprung von der Ranke: Satz nicht überschreiben
     this.slamming = false        // Stampfer läuft (Jonas)
+    this.attackAnimUntil = 0
+    this.hurtAnimUntil = 0
     this.slamReadyAt = 0
     this.slash = scene.add.image(0, 0, 'slash').setVisible(false).setDepth(11)
     this.zzz = scene.add.text(0, 0, 'zzz', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setVisible(false).setDepth(11)
@@ -122,6 +124,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     if (cmd.attack && time >= this.attackReadyAt) {
       this.attackUntil = time + COMBAT.attackMs
       this.attackReadyAt = time + this.cfg.attackCooldownMs
+      this.attackAnimUntil = time + 280
       this.scene.sfx?.play('attack')
       this.hitThisAttack.clear()
     }
@@ -133,7 +136,9 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.setAlpha(this.isInvulnerable(time) && Math.floor(time / 80) % 2 === 0 ? 0.3 : 1)
 
     // --- Animation ---
-    if (this.crouched) this.playIfNew(this.body.velocity.x !== 0 && this.hasAnim('crouchWalk') ? 'crouchWalk' : 'crouch')
+    if (this.hurtAnimUntil > time && this.hasAnim('hurt')) this.playIfNew('hurt')
+    else if (this.attackAnimUntil > time && this.hasAnim('attack')) this.playIfNew('attack')
+    else if (this.crouched) this.playIfNew(this.body.velocity.x !== 0 && this.hasAnim('crouchWalk') ? 'crouchWalk' : 'crouch')
     else if (!this.onGround) this.playIfNew(this.body.velocity.y > 0 && this.hasAnim('fall') ? 'fall' : 'jump')
     else if (this.body.velocity.x !== 0) this.playIfNew('run')
     else this.playIfNew('idle')
@@ -242,6 +247,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     if (this.isInvulnerable(time) || this.isDazed(time)) return null
     this.hp -= 1
     this.invulnUntil = time + COMBAT.invulnMs
+    this.hurtAnimUntil = time + 350
     this.setVelocity(Math.sign(this.x - fromX || 1) * COMBAT.knockback, -COMBAT.knockback * 0.6)
     this.attackUntil = 0
     return this.hp <= 0 ? 'ko' : 'hit'
