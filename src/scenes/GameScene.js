@@ -61,15 +61,18 @@ export default class GameScene extends Phaser.Scene {
     // scrollFactor sagt, wie stark eine Ebene mit der Kamera mitwandert.
     // 0 = bleibt stehen (Himmel), 1 = normal (Spielebene), >1 = schneller (Vordergrund)
     this.add.image(0, 0, 'bg_sky').setOrigin(0).setScrollFactor(0).setDepth(-40)
-    if (this.textures.exists(BACKGROUND.key)) {
-      // Echte Waldkulisse: ein nahtlos wiederholbares Bild, das langsamer als die Kamera wandert
-      this.bgForest = this.add.tileSprite(0, 0, GAME.width, GAME.height, BACKGROUND.key).setOrigin(0).setScrollFactor(0).setDepth(-30)
-      // Dunst: wie in einem echten Wald wird es nach hinten dunkler und blauer
-      this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BACKGROUND.haze).setOrigin(0).setScrollFactor(0).setDepth(-25)
-    } else {
-      this.bgFar = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_far').setOrigin(0).setScrollFactor(0).setDepth(-30)
-      this.bgMid = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_mid').setOrigin(0).setScrollFactor(0).setDepth(-20)
+    // Jede Ebene ist ein nahtlos wiederholbares Bild, das mit eigenem Tempo wandert
+    this.bgLayers = []
+    const layers = BACKGROUND.layers.filter((l) => this.textures.exists(l.key))
+    const fallback = [{ key: 'bg_far', scroll: 0.2 }, { key: 'bg_mid', scroll: 0.5 }]
+    for (const [i, l] of (layers.length ? layers : fallback).entries()) {
+      const ts = this.add.tileSprite(0, 0, GAME.width, GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(-39 + i)
+      if (l.alpha !== undefined) ts.setAlpha(l.alpha)
+      if (l.tint !== undefined) ts.setTint(l.tint)
+      this.bgLayers.push({ ts, scroll: l.scroll, offsetX: l.offsetX ?? 0 })
     }
+    // Dunst: wie in einem echten Wald wird es nach hinten dunkler und blauer
+    if (layers.length) this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BACKGROUND.haze).setOrigin(0).setScrollFactor(0).setDepth(-25)
 
     // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
     this.groundLayer = map.createLayer('Boden', tiles, 0, 0).setDepth(0)
@@ -245,8 +248,7 @@ export default class GameScene extends Phaser.Scene {
 
     // 7. Parallax: Hintergrund langsamer, Vordergrund schneller als die Kamera
     const sx = this.cameras.main.scrollX
-    if (this.bgForest) this.bgForest.tilePositionX = sx * BACKGROUND.scroll
-    else { this.bgFar.tilePositionX = sx * 0.2; this.bgMid.tilePositionX = sx * 0.5 }
+    for (const l of this.bgLayers) l.ts.tilePositionX = sx * l.scroll + l.offsetX
     this.fgBushes.tilePositionX = sx * 1.3
   }
 

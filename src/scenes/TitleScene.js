@@ -2,7 +2,7 @@
 //  TITEL-SZENE — W.A.L.D.
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, COMBAT } from '../config.js'
+import { GAME, COMBAT, BACKGROUND } from '../config.js'
 import { P, hex } from '../palette.js'
 import { world } from '../world.js'
 import { hasSave, loadGame, clearSave } from '../save.js'
@@ -14,8 +14,8 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     const W = GAME.width, H = GAME.height
-    if (this.textures.exists('bg_forest')) {
-      this.add.tileSprite(0, 0, W, H, 'bg_forest').setOrigin(0)
+    if (this.textures.exists(BACKGROUND.titleKey)) {
+      this.add.tileSprite(0, 0, W, H, BACKGROUND.titleKey).setOrigin(0)
       this.add.rectangle(0, 0, W, H, P.nachtBlau, 0.5).setOrigin(0)
     } else {
       this.add.image(0, 0, 'bg_sky').setOrigin(0)

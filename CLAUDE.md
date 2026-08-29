@@ -20,7 +20,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Interne Auflösung **480×270** (16:9, Full-HD = genau 4×), `pixelArt: true`
 - Figuren 32 px hoch, Tiles 16×16
 - **Nur Farben aus `src/palette.js`** (32 Farben, Endesga-32, deutsche Namen)
-- Seitenansicht mit Parallax: Himmel (0) → ferne Tannen (0.2) → nahe Tannen (0.5) → Spielebene (1) → Büsche (1.3)
+- Seitenansicht mit Parallax, Ebenen als Liste in `BACKGROUND.layers` (config.js):
+  Himmel (0) → Berge (0.1) → Bäume fern (0.3, bläulich) → Bäume nah (0.55) → Dunst → Spielebene (1) → Büsche (1.3)
 
 ## Architektur (bitte beibehalten)
 - Alle Zahlen (Tempo, Sprung, Größen) in `src/config.js`, nirgendwo sonst

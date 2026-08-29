@@ -31,9 +31,10 @@ export default class BootScene extends Phaser.Scene {
     if (TILESET.file) {
       this.load.image(TILESET.key, TILESET.file)
     }
-    if (BACKGROUND.file) {
-      this.load.image(BACKGROUND.key, BACKGROUND.file)
+    for (const layer of BACKGROUND.layers) {
+      if (layer.file) this.load.image(layer.key, layer.file)
     }
+    if (BACKGROUND.titleFile) this.load.image(BACKGROUND.titleKey, BACKGROUND.titleFile)
     for (const enemy of Object.values(ENEMIES)) {
       if (enemy.file) this.load.image(enemy.key, enemy.file)
       if (enemy.healedFile) this.load.image(enemy.key + '-heil', enemy.healedFile)

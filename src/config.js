@@ -167,14 +167,22 @@ export const COMPANION = {
 }
 
 // ------------------------------------------------------------
-//  Hintergrund (Parallax). file: null = Dreiecks-Tannen als Platzhalter.
-//  Das Bild ist schon gespiegelt verdoppelt (tools/mirror-tile.mjs) → nahtlos.
+//  Hintergrund (Parallax) – eine Liste von Ebenen, hinten → vorne.
+//  scroll = wie stark die Ebene mit der Kamera mitwandert
+//           (0 = steht still wie der Himmel, 1 = wie die Spielebene).
+//  Je kleiner scroll, desto weiter weg wirkt die Ebene.
+//  Alle Bilder sind gespiegelt verdoppelt (tools/mirror-tile.mjs) → nahtlos.
+//  Leere Liste = Dreiecks-Tannen als Platzhalter.
 // ------------------------------------------------------------
 export const BACKGROUND = {
-  key: 'bg_forest',
-  file: 'assets/bg/wald_fern.png',   // PixelLab-Bild 73621b03…, 800×272
-  scroll: 0.25,                       // wandert mit einem Viertel der Kamerabewegung
-  haze: 0.38,                         // dunkler "Dunst" über der Kulisse, damit die Figuren vorne bleiben
+  layers: [
+    { key: 'bg_berge',  file: 'assets/bg/schwarzwald_berge.png', scroll: 0.1 },                 // PixelLab 0d73137c…
+    { key: 'bg_baeume', file: 'assets/bg/schwarzwald_baeume.png', scroll: 0.3, tint: 0x8fa0c0, alpha: 0.9 }, // PixelLab cc8550f5…, fern = blasser/bläulicher
+    { key: 'bg_baeume', scroll: 0.55, offsetX: 300 },                                            // dieselben Bäume nochmal, näher & kräftig
+  ],
+  haze: 0.3,                          // dunkler "Dunst" über allem, damit die Figuren vorne bleiben
+  titleKey: 'bg_forest',              // Kulisse fürs Titelbild (PixelLab 73621b03…)
+  titleFile: 'assets/bg/wald_fern.png',
 }
 
 // ------------------------------------------------------------
