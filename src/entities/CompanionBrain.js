@@ -27,8 +27,20 @@ export default class CompanionBrain {
     this.leaderPlatform = null
   }
 
-  think(me, leader, time) {
-    const cmd = { left: false, right: false, jump: false, jumpHeld: false, teleport: false }
+  think(me, leader, time, enemies = []) {
+    const cmd = { left: false, right: false, jump: false, jumpHeld: false, attack: false, teleport: false }
+
+    // --- 0. Gegner in Reichweite? Dann hinschauen und zuschlagen (nur Basisangriff) ---
+    const foe = enemies.find((e) => !e.healed
+      && Math.abs(e.x - me.x) <= COMPANION.reach.x + e.body.width / 2
+      && Math.abs(e.body.center.y - me.body.center.y) <= COMPANION.reach.y)
+    if (foe && me.onGround) {
+      const toward = Math.sign(foe.x - me.x)
+      if (toward !== me.facing) { cmd.left = toward < 0; cmd.right = toward > 0 }  // umdrehen
+      else cmd.attack = true
+      cmd.jumpHeld = false
+      return cmd
+    }
 
     // --- 1. Wo sind wir? ---
     if (me.onGround) this.myPlatform = this.graph.platformAt(me)

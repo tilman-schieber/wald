@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME } from '../config.js'
+import { HEROES, TILESET, GAME, ENEMIES, COMBAT } from '../config.js'
 import { P } from '../palette.js'
 import level1 from '../levels/schwarzwald_01.json'
 
@@ -41,6 +41,10 @@ export default class BootScene extends Phaser.Scene {
       this.makeAnimations(hero)
     }
     if (!this.textures.exists(TILESET.key)) this.makeTilesPlaceholder()
+    for (const enemy of Object.values(ENEMIES)) {
+      if (!this.textures.exists(enemy.key)) this.makeEnemyPlaceholder(enemy)
+    }
+    this.makeSlash()
 
     this.makeParallaxPlaceholders()
     this.makeMarker()
@@ -151,6 +155,34 @@ export default class BootScene extends Phaser.Scene {
       g.fillTriangle(x, H, x + w / 2, H - h, x + w, H)
       x += Math.floor(w * 0.7)
     }
+  }
+
+  // Gegner-Platzhalter: flacher Körper mit Stacheln obendrauf, Auge vorne links
+  makeEnemyPlaceholder(enemy) {
+    const { w, h } = enemy.frame
+    const g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(enemy.color)
+    g.fillRect(1, 4, w - 2, h - 4)
+    g.fillStyle(enemy.accent)
+    for (let x = 2; x < w - 2; x += 4) g.fillTriangle(x, 4, x + 2, 0, x + 4, 4)
+    g.fillStyle(P.schwarz)
+    g.fillRect(3, 7, 2, 2)
+    g.generateTexture(enemy.key, w, h)
+    g.destroy()
+  }
+
+  // Der "Schlag": ein heller Halbmond vor der Figur
+  makeSlash() {
+    const { w, h } = COMBAT.attackBox
+    const g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.hellGelb, 0.9)
+    g.slice(2, h / 2, h / 2 - 1, Phaser.Math.DegToRad(-60), Phaser.Math.DegToRad(60), false)
+    g.fillPath()
+    g.fillStyle(P.weiss, 0.6)
+    g.slice(4, h / 2, h / 2 - 5, Phaser.Math.DegToRad(-40), Phaser.Math.DegToRad(40), false)
+    g.fillPath()
+    g.generateTexture('slash', w, h)
+    g.destroy()
   }
 
   // Kleiner Pfeil über dem aktiven Helden

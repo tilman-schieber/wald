@@ -1,7 +1,7 @@
 // ============================================================
 //  TOUCH BUTTONS — Knöpfe fürs Handy
 // ============================================================
-//  Links: ◀ ▶     Rechts: Springen (groß) und Wechseln (klein)
+//  Links: ◀ ▶     Rechts: Springen (groß), Schlagen, Wechseln (klein, oben)
 //
 //  Trick: Wir hören nicht auf "Klick"-Ereignisse, sondern schauen
 //  jeden Frame nach, WO gerade Finger auf dem Bildschirm sind.
@@ -21,7 +21,8 @@ export default class TouchButtons {
       { name: 'left',   x: 34,      y: H - 34, r: 24, label: '◀' },
       { name: 'right',  x: 94,      y: H - 34, r: 24, label: '▶' },
       { name: 'jump',   x: W - 36,  y: H - 36, r: 26, label: '▲' },
-      { name: 'switch', x: W - 96,  y: H - 26, r: 18, label: '⇄' },
+      { name: 'attack', x: W - 94,  y: H - 30, r: 22, label: '✦' },
+      { name: 'switch', x: W - 36,  y: H - 92, r: 16, label: '⇄' },
     ]
 
     for (const b of this.buttons) {

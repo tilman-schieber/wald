@@ -2,12 +2,13 @@
 //  GAME-SZENE — ein Raum im Schwarzwald
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET } from '../config.js'
+import { GAME, TILESET, ENEMIES, COMBAT } from '../config.js'
 import { P } from '../palette.js'
 import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
 import PlatformGraph from '../entities/PlatformGraph.js'
+import Enemy from '../entities/Enemy.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
 
@@ -59,6 +60,21 @@ export default class GameScene extends Phaser.Scene {
 
     this.marker = this.add.image(0, 0, 'marker').setDepth(11)
 
+    // ---------- Gegner ----------
+    this.enemies = []
+    for (const o of map.getObjectLayer('Objekte').objects) {
+      if (o.type !== 'enemy') continue
+      const cfg = ENEMIES[o.name]
+      if (!cfg) { console.warn('Unbekannter Gegner:', o.name); continue }
+      const e = new Enemy(this, o.x, o.y - cfg.frame.h / 2, cfg).setDepth(8)
+      this.physics.add.collider(e, this.groundLayer)
+      this.enemies.push(e)
+    }
+    for (const hero of [this.jonas, this.leonel]) {
+      this.physics.add.overlap(hero, this.enemies, (h, e) => this.onTouchEnemy(h, e))
+    }
+    this.gameOver = false
+
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
     this.physics.world.setBounds(0, 0, worldW, worldH)
@@ -71,11 +87,14 @@ export default class GameScene extends Phaser.Scene {
     if (isTouch) this.touchButtons = new TouchButtons(this, this.controls)
 
     // Hinweistext (fest am Bildschirm)
-    this.add.text(4, 4, 'Pfeile/WASD laufen · Leertaste springen · Tab wechseln', {
+    this.add.text(4, 4, 'Pfeile laufen · Leer springen · X schlagen · Tab wechseln · C Komm!', {
       fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc',
     }).setScrollFactor(0).setDepth(100).setAlpha(0.8)
     this.nameText = this.add.text(4, 14, '', {
       fontFamily: 'monospace', fontSize: '8px', color: '#fee761',
+    }).setScrollFactor(0).setDepth(100)
+    this.hud = this.add.text(4, 24, '', {
+      fontFamily: 'monospace', fontSize: '8px', color: '#ffffff',
     }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
 
@@ -84,20 +103,27 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time) {
+    if (this.gameOver) return
+
     // 1. Finger lesen (setzt controls.touch), dann Kommando bauen
     this.touchButtons?.update()
     const cmd = this.controls.read()
 
     // 2. Wechsel?
-    if (cmd.switch) this.switchHero()
+    if (cmd.switch) this.switchHero(time)
 
     // 3. Der Aktive tut, was der Spieler sagt …
     this.active.applyCommand(cmd, time)
 
     // 4. … der Begleiter tut, was sein Gehirn sagt.
-    const aiCmd = this.brain.think(this.companion, this.active, time)
+    const aiCmd = this.brain.think(this.companion, this.active, time, this.enemies)
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
+
+    // 4b. Gegner laufen, Schläge treffen
+    for (const e of this.enemies) e.update(time, this.groundLayer)
+    this.resolveAttacks(time)
+    this.updateHud()
 
     // 5. Pfeil über dem Aktiven
     this.marker.setPosition(Math.round(this.active.x), Math.round(this.active.body.top - 8))
@@ -135,7 +161,11 @@ export default class GameScene extends Phaser.Scene {
 
   // Wechsel: sofort, ohne Animation. Der neue Begleiter bleibt stehen,
   // die Kamera gleitet weich zum neuen Aktiven.
-  switchHero() {
+  switchHero(time = this.time.now) {
+    if (this.companion.isDazed(time)) {          // zu einem Benommenen kann man nicht wechseln
+      this.tweens.add({ targets: this.nameText, alpha: 0.2, yoyo: true, repeat: 2, duration: 80 })
+      return
+    }
     ;[this.active, this.companion] = [this.companion, this.active]
     this.companion.halt()
     this.brain.reset()
@@ -158,6 +188,50 @@ export default class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: me, scale: 1, duration: 220, ease: 'Back.Out' })
     const ring = this.add.circle(me.x, me.body.center.y, 6, 0, 0).setStrokeStyle(2, P.eisBlau).setDepth(12)
     this.tweens.add({ targets: ring, radius: 22, alpha: 0, duration: 350, onComplete: () => ring.destroy() })
+  }
+
+  // Trifft ein Schlag gerade einen Gegner? Jeder Schlag trifft jeden Gegner nur einmal.
+  resolveAttacks(time) {
+    for (const hero of [this.active, this.companion]) {
+      const rect = hero.attackRect(time)
+      if (!rect) continue
+      const factor = hero === this.active ? 1 : COMBAT.companionDamageFactor
+      const damage = Math.max(1, Math.ceil(hero.cfg.damage * factor))
+      for (const e of this.enemies) {
+        if (e.healed || hero.hitThisAttack.has(e)) continue
+        if (!Phaser.Geom.Rectangle.Overlaps(rect, e.getBounds())) continue
+        hero.hitThisAttack.add(e)
+        e.hit(damage, hero.x, time)
+      }
+    }
+  }
+
+  // Ein Held berührt einen (noch nicht geheilten) Gegner
+  onTouchEnemy(hero, enemy) {
+    if (enemy.healed || this.gameOver) return
+    const time = this.time.now
+    const result = hero.hurt(time, enemy.x)
+    if (result !== 'ko') return
+    if (hero === this.companion) hero.daze(time)   // Begleiter: nur benommen, nie Game Over
+    else this.loseRoom()
+  }
+
+  // Der aktive Held hat keine Herzen mehr → der Raum beginnt von vorn
+  loseRoom() {
+    this.gameOver = true
+    this.active.setVelocity(0, 0)
+    this.companion.setVelocity(0, 0)
+    this.add.text(GAME.width / 2, GAME.height / 2, 'Der Wald ruft euch zurück …', {
+      fontFamily: 'monospace', fontSize: '12px', color: '#fee761',
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(200)
+    this.cameras.main.fadeOut(900, 0, 0, 0)
+    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.restart())
+  }
+
+  updateHud() {
+    const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))
+    const j = this.jonas, l = this.leonel
+    this.hud.setText(`Jonas ${hearts(j)}   Leonel ${hearts(l)}`)
   }
 
   updateNameText() {

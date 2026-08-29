@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 3,
+ "nextobjectid": 5,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1090,6 +1090,30 @@
      "point": true,
      "x": 80,
      "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "igel",
+     "type": "enemy",
+     "point": true,
+     "x": 420,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "igel",
+     "type": "enemy",
+     "point": true,
+     "x": 760,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,

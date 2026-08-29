@@ -39,6 +39,8 @@ export const HEROES = {
     name: 'Jonas',
     speed: 110,          // Pixel pro Sekunde
     jump: 380,           // Absprung-Geschwindigkeit → ca. 4,5 Tiles hoch
+    damage: 2,           // Jonas haut fester …
+    attackCooldownMs: 450, // … aber nicht so schnell hintereinander
     frame: { w: 48, h: 48 },
     body: { w: 12, h: 30 },
     feet: 42,
@@ -56,7 +58,9 @@ export const HEROES = {
     key: 'leonel',
     name: 'Leonel',
     speed: 140,          // schneller als Jonas...
-    jump: 360,           // ...springt aber ein bisschen weniger hoch
+    jump: 370,           // ...springt aber ein bisschen weniger hoch
+    damage: 1,           // Leonel haut weniger fest …
+    attackCooldownMs: 300, // … dafür schneller
     frame: { w: 40, h: 40 },
     body: { w: 10, h: 26 },   // kleiner → passt später durch enge Spalten
     feet: 35,
@@ -84,6 +88,37 @@ export const JUMP = {
 }
 
 // ------------------------------------------------------------
+//  Kampf
+// ------------------------------------------------------------
+export const COMBAT = {
+  heroHp: 3,            // Herzen pro Held
+  invulnMs: 1000,       // nach einem Treffer so lange unverwundbar (blinkt)
+  knockback: 150,       // Rückstoß nach einem Treffer
+  dazedMs: 3000,        // Begleiter sitzt so lange benommen, dann volle Herzen
+  attackMs: 120,        // so lange "wirkt" ein Schlag
+  attackBox: { w: 20, h: 22 },   // Trefferbereich vor der Figur
+  companionDamageFactor: 0.5,    // Begleiter macht halben Schaden (mindestens 1)
+}
+
+// ------------------------------------------------------------
+//  Gegner  (werden nie besiegt, sondern GEHEILT)
+// ------------------------------------------------------------
+export const ENEMIES = {
+  igel: {
+    key: 'igel',
+    name: 'Verwirrter Igel',
+    hp: 4,
+    speed: 30,
+    damage: 1,
+    frame: { w: 20, h: 14 },
+    body: { w: 18, h: 12 },
+    color: P.rindeBraun,
+    accent: P.sandHell,
+    file: null,
+  },
+}
+
+// ------------------------------------------------------------
 //  Begleiter-KI
 // ------------------------------------------------------------
 export const COMPANION = {
@@ -98,6 +133,7 @@ export const COMPANION = {
   maxJumpUpTiles: 4,   // so viele Kacheln hoch schafft ein Sprung
   maxGapUpTiles: 4,    // so breit darf die Lücke sein, wenn es hoch geht
   maxGapDownTiles: 6,  // … und wenn es runter geht (man fällt weiter)
+  reach: { x: 26, y: 24 }, // so nah muss ein Gegner sein, damit der Begleiter zuschlägt
 }
 
 // ------------------------------------------------------------
