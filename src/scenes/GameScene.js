@@ -79,9 +79,10 @@ export default class GameScene extends Phaser.Scene {
       ?? objects.find((o) => o.type === 'spawn')
     const facing = spawn.x < map.widthInPixels / 2 ? 1 : -1       // links rein → nach rechts schauen
     this.jonas = new Jonas(this, spawn.x, spawn.y).placeFeet(spawn.x, spawn.y)
-    this.leonel = new Leonel(this, spawn.x, spawn.y).placeFeet(spawn.x - facing * 20, spawn.y)
+    this.leonel = new Leonel(this, spawn.x, spawn.y).placeFeet(spawn.x, spawn.y)
     this.active = world.active === 'leonel' ? this.leonel : this.jonas
     this.companion = this.active === this.jonas ? this.leonel : this.jonas
+    this.companion.placeFeet(spawn.x + facing * 20, spawn.y)   // Begleiter etwas weiter IM Raum, nie im Ausgang
     this.active.setDepth(10); this.companion.setDepth(9)
     for (const h of [this.jonas, this.leonel]) {
       h.hp = world.hp[h.cfg.key]
@@ -117,6 +118,7 @@ export default class GameScene extends Phaser.Scene {
     // ---------- Ausgänge, Tore, Platten, Hebel ----------
     const zone = (o) => { const z = this.add.zone(o.x + o.width / 2, o.y + o.height / 2, o.width, o.height); this.physics.add.existing(z, true); return z }
     this.exits = objects.filter((o) => o.type === 'ausgang').map((o) => ({ zone: zone(o), ...props(o) }))
+    this.exitsArmed = false   // Ausgänge zählen erst, wenn man nach dem Start einmal keinen berührt
 
     this.gates = {}
     for (const o of objects.filter((o) => o.type === 'tor')) {
@@ -366,9 +368,9 @@ export default class GameScene extends Phaser.Scene {
 
   // Berührt der Aktive einen Ausgang? Dann in den nächsten Raum.
   checkExits() {
-    for (const ex of this.exits) {
-      if (this.physics.overlap(ex.zone, this.active)) { this.goToRoom(ex.ziel, ex.spawn); return }
-    }
+    const touching = this.exits.find((ex) => this.physics.overlap(ex.zone, this.active))
+    if (!this.exitsArmed) { if (!touching) this.exitsArmed = true; return }
+    if (touching) this.goToRoom(touching.ziel, touching.spawn)
   }
 
   goToRoom(room, spawn) {
