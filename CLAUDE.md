@@ -12,7 +12,7 @@ Entscheidungen so, dass Kinder mitlesen können.
   `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)
 - Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause, M Musik
-- Szenen: Boot → Title → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand
+- Szenen: Boot → Title → Intro (Geschichte, `INTRO` in config) → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand
   zwischen Räumen, `save.js` speichert ihn bei jedem Raumeingang in localStorage
 - Sounds werden in `sound.js` synthetisch erzeugt (keine Dateien); Musik: `MUSIC.file` (MP3, mit
   `~/crush.py` im SNES-Stil bearbeitet), läuft über alle Räume durch
@@ -44,6 +44,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), E = Stampfer (macht Gegner
   ringsum benommen). Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
+- Abgründe (Lücken im Boden): ein Herz weniger, zurück auf den letzten sicheren Boden (kein Game Over allein dadurch)
+- Posen/Animationen einer Figur IMMER per `animate_image` aus ihrem Hauptbild ableiten, nie separat generieren (sonst passt es nicht zusammen)
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen →
   benommen (nur dann verwundbar). Igel rollt als Kugel; man hüpft drüber und schlägt danach.
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.

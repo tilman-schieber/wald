@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 29,
+ "nextobjectid": 30,
  "tilesets": [
   {
    "firstgid": 1,
@@ -996,6 +996,8 @@
     2,
     2,
     2,
+    0,
+    0,
     2,
     2,
     2,
@@ -1010,8 +1012,6 @@
     2,
     2,
     2,
-    2,
-    2,
     1,
     1,
     1,
@@ -1056,8 +1056,8 @@
     1,
     1,
     1,
-    1,
-    1,
+    0,
+    0,
     1,
     1,
     1,
@@ -1235,30 +1235,6 @@
      "point": true,
      "x": 560,
      "y": 130
-    },
-    {
-     "name": "blumen",
-     "type": "deko",
-     "point": true,
-     "x": 709,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 11
     },
     {
      "name": "moos",
@@ -1477,30 +1453,6 @@
      "id": 20
     },
     {
-     "name": "busch",
-     "type": "deko",
-     "point": true,
-     "x": 702,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 21
-    },
-    {
      "name": "pilze",
      "type": "deko",
      "point": true,
@@ -1627,6 +1579,25 @@
       },
       {
        "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "bach",
+     "type": "deko",
+     "point": true,
+     "x": 720,
+     "y": 262,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
        "type": "bool",
        "value": false
       }

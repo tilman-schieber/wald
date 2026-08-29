@@ -223,7 +223,8 @@ export default class GameScene extends Phaser.Scene {
 
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
-    this.physics.world.setBounds(0, 0, worldW, worldH)
+    this.physics.world.setBounds(0, 0, worldW, worldH + 64)   // unten offen: man kann in Abgründe fallen
+    this.worldBottom = worldH
     this.cameras.main.setBounds(0, 0, worldW, worldH)
     this.cameras.main.startFollow(this.active, true, 0.12, 0.12)
     this.cameras.main.fadeIn(250, 0, 0, 0)
@@ -258,11 +259,16 @@ export default class GameScene extends Phaser.Scene {
       if (this.textures.exists('blatt')) this.add.image(208, 30, 'blatt').setScale(0.5).setScrollFactor(0).setDepth(101)
       this.hudLeaves = this.add.text(218, 22, '0', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     }
-    this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
+    if (!isTouch) this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
     this.updateNameText()
 
+    const pauseFont = this.textures.exists('panel') && document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    this.pausePanel = this.textures.exists('panel')
+      ? this.add.nineslice(GAME.width / 2, GAME.height / 2, 'panel', undefined, 270, 70, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setScrollFactor(0).setDepth(299).setVisible(false)
+      : null
     this.pauseText = this.add.text(GAME.width / 2, GAME.height / 2, 'PAUSE\n\nP oder Esc zum Weiterspielen', {
-      fontFamily: 'monospace', fontSize: '14px', color: '#fee761', align: 'center', backgroundColor: 'rgba(24,20,37,0.85)', padding: { x: 10, y: 8 },
+      fontFamily: pauseFont, fontSize: pauseFont === 'monospace' ? '14px' : '13px', color: '#fee761', align: 'center', stroke: '#181425', strokeThickness: 3,
+      ...(this.pausePanel ? {} : { backgroundColor: 'rgba(24,20,37,0.85)', padding: { x: 10, y: 8 } }),
     }).setOrigin(0.5).setScrollFactor(0).setDepth(300).setVisible(false)
     // kleiner Pause-Knopf oben rechts (für Touch)
     this.add.text(GAME.width - 4, 3, 'II', { fontFamily: 'monospace', fontSize: '10px', color: '#c0cbdc', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 4, y: 1 } })
@@ -293,6 +299,16 @@ export default class GameScene extends Phaser.Scene {
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
     this.waitText.setVisible(this.brain.waiting).setPosition(Math.round(this.companion.x), Math.round(this.companion.body.top - 10))
+
+    // 4a. Sicherer Boden merken & Abgrund prüfen
+    for (const h of [this.jonas, this.leonel]) {
+      if (h.onGround && h.body.bottom < this.worldBottom - 4) {
+        // nur merken, wenn unter den Füßen wirklich eine Kachel ist (nicht auf einem Tor o.ä.)
+        const t = this.groundLayer.getTileAtWorldXY(h.x, h.body.bottom + 2)
+        if (t) h.lastSafe = { x: h.x, y: h.body.bottom }
+      }
+      if (h.body.top > this.worldBottom) this.fellIntoPit(h, time)
+    }
 
     // 4b. Glühwürmchen
     for (const w of this.fireflies) {
@@ -345,6 +361,7 @@ export default class GameScene extends Phaser.Scene {
     if (this.gameOver || this.leaving) return
     this.paused = !this.paused
     this.pauseText.setVisible(this.paused)
+    this.pausePanel?.setVisible(this.paused)
     if (this.paused) { this.physics.pause(); this.anims.pauseAll(); this.tweens.pauseAll() }
     else { this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll() }
   }
@@ -534,6 +551,18 @@ export default class GameScene extends Phaser.Scene {
       leaf.body.enable = false
     }
     this.leaves = this.leaves.filter((l) => l.active)
+  }
+
+  // In einen Abgrund gefallen: ein Herz weniger, zurück auf den letzten sicheren Boden
+  fellIntoPit(hero, time) {
+    const safe = hero.lastSafe ?? { x: 48, y: 240 }
+    hero.stopClimb?.(); hero.slamming = false
+    hero.placeFeet(safe.x, safe.y)
+    hero.hp -= COMBAT.pitDamage
+    hero.invulnUntil = time + COMBAT.invulnMs
+    this.sfx.play('hurt')
+    this.cameras.main.flash(200, 24, 20, 37)
+    if (hero.hp <= 0) { if (hero === this.companion) hero.daze(time); else this.loseRoom() }
   }
 
   // Ein Held berührt einen (noch nicht geheilten, nicht beruhigten) Gegner

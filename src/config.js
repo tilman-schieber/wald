@@ -136,6 +136,7 @@ export const SPIRIT = {        // Leonel: Waldgeist rufen
 // ------------------------------------------------------------
 export const COMBAT = {
   heroHp: 3,            // Herzen pro Held
+  pitDamage: 1,         // in einen Abgrund gefallen: so viele Herzen, dann zurück auf sicheren Boden
   invulnMs: 1000,       // nach einem Treffer so lange unverwundbar (blinkt)
   knockback: 150,       // Rückstoß nach einem Treffer
   dazedMs: 3000,        // Begleiter sitzt so lange benommen, dann volle Herzen
@@ -162,6 +163,7 @@ export const ENEMIES = {
     healedFile: 'assets/sprites/igel_heil.png', // PixelLab 180538dc… (28×26, sitzt zufrieden)
     ballFile: 'assets/sprites/igel_kugel.png',  // PixelLab 40694bf9… (eingerollt)
     walkSheet: { file: 'assets/sprites/igel_lauf.png', w: 24, h: 20, n: 6, rate: 8 },   // animate_image dd740dac…
+    alertSheet: { file: 'assets/sprites/igel_einrollen.png', w: 24, h: 20, n: 6, rate: 12 }, // animate_image 513fffff… (rollt sich ein; letztes Bild = Kugel)
     ai: {
       spiky: true,          // nur verwundbar, wenn benommen (oder vom Geist beruhigt)
       wanderSpeed: 25,      // beim Stromern
@@ -215,6 +217,7 @@ ENEMIES.wildschwein = {
   healedFile: 'assets/sprites/wildschwein_heil.png', // PixelLab b844a0c9… (schläft)
   ballFile: 'assets/sprites/wildschwein_sturm.png',  // PixelLab 42c3513f… (Sturm-Pose; "Kugel"-Slot)
   walkSheet: { file: 'assets/sprites/wildschwein_lauf.png', w: 30, h: 25, n: 6, rate: 8 },   // animate_image c5eb7d6e…
+  alertSheet: { file: 'assets/sprites/wildschwein_sturm_anim.png', w: 30, h: 25, n: 6, rate: 10 }, // animate_image 2f593a4e… (schnaubt, senkt den Kopf; letztes Bild = Sturm)
   ai: {
     spiky: false,           // immer verwundbar
     rotate: false,          // beim Stürmen nicht drehen (ist ja keine Kugel)
@@ -231,6 +234,15 @@ ENEMIES.wildschwein = {
 
 export const SLASH = { file: 'assets/sprites/schlag.png' }   // PixelLab d47f7c28… (null = gelber Halbmond)
 export const HEARTS = { full: 'assets/sprites/herz.png', empty: 'assets/sprites/herz_leer.png' }   // pixen 3bb1d083… / 5914ab12…
+
+// Geschichte am Anfang (jede Zeile = ein Tastendruck)
+export const INTRO = [
+  'Im Schwarzwald ist es still geworden.',
+  'Kein Vogel singt, kein Igel raschelt im Laub.',
+  'Die Tiere sind verwirrt und haben vergessen, wer sie sind.',
+  'Nur zwei Brüder können den Wald wieder zum Singen bringen …',
+  'Jonas und Leonel – die Wächter Aller Lebenden Dinge!',
+]
 
 export const MUSIC = {
   file: 'assets/music/frozen_sprite_loop',   // .mp3 (mit ~/crush.py im SNES-Stil "zerknirscht")
@@ -293,6 +305,7 @@ export const UI = {
   panelBorder: 24,                            // so breit ist der Rahmen im Panelbild
   titleFile: 'assets/bg/titel.png',           // Pro-Titelbild 480×270
   finishFile: 'assets/bg/schwarzwald_ende.png', // Pro-Jubelbild fürs Waldherz (null = nur Text)
+  introFile: 'assets/bg/schwarzwald_intro.png', // Pro-Bild für die Geschichte am Anfang (null = nur Text)
 }
 
 // ------------------------------------------------------------

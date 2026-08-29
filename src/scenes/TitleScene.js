@@ -45,6 +45,9 @@ export default class TitleScene extends Phaser.Scene {
       this.add.sprite(W / 2 + 24, 172, 'leonel').play('leonel-idle').setFlipX(true)
     }
 
+    if (this.textures.exists('panel')) {
+      this.add.nineslice(W / 2, hasPic ? 228 : 216, 'panel', undefined, 150, 46, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
+    }
     this.options = []
     if (hasSave()) this.options.push({ label: 'Weiter', action: () => this.continueGame() })
     this.options.push({ label: 'Neues Spiel', action: () => this.newGame() })
@@ -80,7 +83,7 @@ export default class TitleScene extends Phaser.Scene {
     world.active = 'jonas'
     world.hp = { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp }
     world.healed = {}; world.gatesOpen = {}; world.collected = {}; world.leaves = 0
-    this.scene.start('Game', { room: 'schwarzwald_01', spawn: 'start' })
+    this.scene.start('Intro')
   }
 
   continueGame() {

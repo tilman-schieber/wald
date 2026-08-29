@@ -103,6 +103,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.dir = Math.sign(seen.x - this.x) || this.dir
             this.setVelocityX(0)
             this.showMark(true, '!')
+            // Einroll-/Schnaub-Animation, wenn es eine gibt (läuft einmal durch)
+            if (this.scene.anims.exists(this.cfg.key + '-alarm')) { this.anims.stop(); this.useTexture(this.cfg.key + '-alarm'); this.play(this.cfg.key + '-alarm') }
           }
         }
         break
@@ -142,11 +144,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.state !== 'roll' || ai.rotate === false) this.setFlipX(this.dir > 0)
-    // Lauf-Animation, wenn es eine gibt (nur beim Gehen)
+    // Lauf-Animation, wenn es eine gibt (nur beim Gehen); im Alarm läuft die Alarm-Animation
     const walking = (this.state === 'wander' && !this.wanderPause)
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
       if (walking) { if (this.anims.currentAnim?.key !== this.cfg.key + '-lauf') { this.play(this.cfg.key + '-lauf'); this.useTexture(this.cfg.key + '-lauf') } }
-      else if (this.anims.isPlaying) { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
+      else if (this.anims.isPlaying && this.state !== 'alert') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
     }
     if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()
     this.mark.setPosition(this.x, this.body.top - 8)
