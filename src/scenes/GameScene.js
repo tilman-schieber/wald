@@ -238,7 +238,7 @@ export default class GameScene extends Phaser.Scene {
     const hudStyle = { fontFamily: font, fontSize: font === 'monospace' ? '8px' : '10px', stroke: '#181425', strokeThickness: 2 }
     if (this.textures.exists('panel')) {
       // Holz-Rahmen als Neun-Teile-Bild: Ecken bleiben scharf, Mitte wird gestreckt
-      this.add.nineslice(2, 2, 'panel', undefined, 214, 40, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setOrigin(0).setScrollFactor(0).setDepth(99).setAlpha(0.92)
+      this.add.nineslice(2, 2, 'panel', undefined, 268, 40, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setOrigin(0).setScrollFactor(0).setDepth(99).setAlpha(0.92)
     } else {
       hudStyle.backgroundColor = 'rgba(24,20,37,0.7)'; hudStyle.padding = { x: 2, y: 1 }
     }
@@ -247,11 +247,16 @@ export default class GameScene extends Phaser.Scene {
     // Herzen als Bilder (wenn vorhanden): je Held 3 Icons hinter dem Namen
     this.heartIcons = null
     if (this.textures.exists('herz')) {
+      // Zeile 2: "Jonas" ♥♥♥   "Leonel" ♥♥♥   🍃 N
       this.heartIcons = { jonas: [], leonel: [] }
+      this.hud.setText('Jonas')
+      this.hudLeonel = this.add.text(104, 22, 'Leonel', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
       for (let i = 0; i < COMBAT.heroHp; i++) {
-        this.heartIcons.jonas.push(this.add.image(58 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
-        this.heartIcons.leonel.push(this.add.image(146 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
+        this.heartIcons.jonas.push(this.add.image(56 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
+        this.heartIcons.leonel.push(this.add.image(160 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
       }
+      if (this.textures.exists('blatt')) this.add.image(208, 30, 'blatt').setScale(0.5).setScrollFactor(0).setDepth(101)
+      this.hudLeaves = this.add.text(218, 22, '0', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     }
     this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
     this.updateNameText()
@@ -611,7 +616,7 @@ export default class GameScene extends Phaser.Scene {
 
   updateHud() {
     if (this.heartIcons) {
-      this.hud.setText(`Jonas            Leonel            ${world.leaves} Blätter`)
+      this.hudLeaves.setText(String(world.leaves))
       for (const [key, icons] of Object.entries(this.heartIcons)) icons.forEach((ic, i) => ic.setTexture(i < this[key].hp ? 'herz' : 'herz_leer'))
       return
     }
