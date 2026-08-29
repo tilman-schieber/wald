@@ -185,8 +185,8 @@ export const ENEMIES = {
     color: P.holzBraun,
     accent: P.sonnenGelb,
     file: 'assets/sprites/eule.png',         // PixelLab ffc1d20a… (sitzend)
-    flyFile: 'assets/sprites/eule_flug.png', // PixelLab 7e226552… (fliegend)
-    flySheet: { file: 'assets/sprites/eule_flug_anim.png', w: 32, h: 15, n: 4, rate: 10 },  // animate_image 35c0c0be…
+    flyFile: 'assets/sprites/eule_flug.png', // erstes Bild der Flug-Animation (aus dem Sitzbild erzeugt)
+    flySheet: { file: 'assets/sprites/eule_flug_anim.png', w: 29, h: 25, n: 6, rate: 10 },  // animate_image 0a8c99eb… (aus dem Sitzbild 4f54d615…)
     ai: {
       spiky: true,            // nur verwundbar, wenn sie nach dem Sturzflug am Boden sitzt
       sight: { x: 170, y: 160 },
