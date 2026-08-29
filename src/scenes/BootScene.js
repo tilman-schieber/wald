@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME, ENEMIES, COMBAT } from '../config.js'
+import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -30,6 +30,9 @@ export default class BootScene extends Phaser.Scene {
     }
     if (TILESET.file) {
       this.load.image(TILESET.key, TILESET.file)
+    }
+    if (BACKGROUND.file) {
+      this.load.image(BACKGROUND.key, BACKGROUND.file)
     }
 
     // Jeder Raum landet unter seinem Dateinamen im Cache ('schwarzwald_01' …)

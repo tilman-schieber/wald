@@ -165,6 +165,17 @@ export const COMPANION = {
 }
 
 // ------------------------------------------------------------
+//  Hintergrund (Parallax). file: null = Dreiecks-Tannen als Platzhalter.
+//  Das Bild ist schon gespiegelt verdoppelt (tools/mirror-tile.mjs) → nahtlos.
+// ------------------------------------------------------------
+export const BACKGROUND = {
+  key: 'bg_forest',
+  file: 'assets/bg/wald_fern.png',   // PixelLab-Bild 73621b03…, 800×272
+  scroll: 0.25,                       // wandert mit einem Viertel der Kamerabewegung
+  haze: 0.38,                         // dunkler "Dunst" über der Kulisse, damit die Figuren vorne bleiben
+}
+
+// ------------------------------------------------------------
 //  Tileset
 // ------------------------------------------------------------
 //  file: null = Platzhalter-Kacheln (0 = Erde, 1 = Gras, 2 = Plattform).

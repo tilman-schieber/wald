@@ -16,7 +16,7 @@
 //    blatt    Punkt: Blatt zum Einsammeln
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT } from '../config.js'
+import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT, BACKGROUND } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import Jonas from '../entities/Jonas.js'
@@ -52,8 +52,15 @@ export default class GameScene extends Phaser.Scene {
     // scrollFactor sagt, wie stark eine Ebene mit der Kamera mitwandert.
     // 0 = bleibt stehen (Himmel), 1 = normal (Spielebene), >1 = schneller (Vordergrund)
     this.add.image(0, 0, 'bg_sky').setOrigin(0).setScrollFactor(0).setDepth(-40)
-    this.bgFar = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_far').setOrigin(0).setScrollFactor(0).setDepth(-30)
-    this.bgMid = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_mid').setOrigin(0).setScrollFactor(0).setDepth(-20)
+    if (this.textures.exists(BACKGROUND.key)) {
+      // Echte Waldkulisse: ein nahtlos wiederholbares Bild, das langsamer als die Kamera wandert
+      this.bgForest = this.add.tileSprite(0, 0, GAME.width, GAME.height, BACKGROUND.key).setOrigin(0).setScrollFactor(0).setDepth(-30)
+      // Dunst: wie in einem echten Wald wird es nach hinten dunkler und blauer
+      this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BACKGROUND.haze).setOrigin(0).setScrollFactor(0).setDepth(-25)
+    } else {
+      this.bgFar = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_far').setOrigin(0).setScrollFactor(0).setDepth(-30)
+      this.bgMid = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'bg_mid').setOrigin(0).setScrollFactor(0).setDepth(-20)
+    }
 
     // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
     this.groundLayer = map.createLayer('Boden', tiles, 0, 0).setDepth(0)
@@ -165,11 +172,10 @@ export default class GameScene extends Phaser.Scene {
     if (isTouch) this.touchButtons = new TouchButtons(this, this.controls)
 
     // ---------- HUD (fest am Bildschirm) ----------
-    this.add.text(4, 4, 'Pfeile laufen/ducken · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm!', {
-      fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc',
-    }).setScrollFactor(0).setDepth(100).setAlpha(0.8)
-    this.nameText = this.add.text(4, 14, '', { fontFamily: 'monospace', fontSize: '8px', color: '#fee761' }).setScrollFactor(0).setDepth(100)
-    this.hud = this.add.text(4, 24, '', { fontFamily: 'monospace', fontSize: '8px', color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+    const hudStyle = { fontFamily: 'monospace', fontSize: '8px', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 2, y: 1 } }
+    this.add.text(2, 2, 'Pfeile laufen/ducken · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm!', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
+    this.nameText = this.add.text(2, 13, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
+    this.hud = this.add.text(2, 24, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
 
     // Zum Nachschauen in der Browser-Konsole: __wald.scene.jonas.x usw.
@@ -211,8 +217,8 @@ export default class GameScene extends Phaser.Scene {
 
     // 7. Parallax: Hintergrund langsamer, Vordergrund schneller als die Kamera
     const sx = this.cameras.main.scrollX
-    this.bgFar.tilePositionX = sx * 0.2
-    this.bgMid.tilePositionX = sx * 0.5
+    if (this.bgForest) this.bgForest.tilePositionX = sx * BACKGROUND.scroll
+    else { this.bgFar.tilePositionX = sx * 0.2; this.bgMid.tilePositionX = sx * 0.5 }
     this.fgBushes.tilePositionX = sx * 1.3
   }
 
