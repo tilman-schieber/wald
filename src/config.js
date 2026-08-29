@@ -199,6 +199,38 @@ export const ENEMIES = {
   },
 }
 
+//  Wildschwein: stürmt geradeaus wie der Igel rollt – aber ohne Stacheln:
+//  man kann es jederzeit treffen, nur beim Sturm nicht im Weg stehen!
+ENEMIES.wildschwein = {
+  key: 'wildschwein',
+  name: 'Verwirrtes Wildschwein',
+  hp: 5,
+  speed: 30,
+  damage: 1,
+  frame: { w: 30, h: 25 },          // wildschwein.png zugeschnitten
+  body: { w: 26, h: 18 },
+  color: P.rindeBraun,
+  accent: P.erdeDunkel,
+  file: 'assets/sprites/wildschwein.png',          // PixelLab 0adf7ee7…
+  healedFile: 'assets/sprites/wildschwein_heil.png', // PixelLab b844a0c9… (schläft)
+  ballFile: 'assets/sprites/wildschwein_sturm.png',  // PixelLab 42c3513f… (Sturm-Pose; "Kugel"-Slot)
+  ai: {
+    spiky: false,           // immer verwundbar
+    rotate: false,          // beim Stürmen nicht drehen (ist ja keine Kugel)
+    wanderSpeed: 30,
+    sight: { x: 170, y: 40 },
+    alertMs: 600,           // schnaubt länger – Zeit zum Ausweichen
+    rollSpeed: 190,         // schneller als beide Helden → drüberhüpfen oder ausweichen
+    rollMaxMs: 1800,
+    dizzyMs: 1400,          // rennt gegen die Wand → benommen
+    cooldownMs: 1500,
+    healedWanderSpeed: 0,   // geheilt schläft es
+  },
+}
+
+export const SLASH = { file: 'assets/sprites/schlag.png' }   // PixelLab d47f7c28… (null = gelber Halbmond)
+export const HEARTS = { full: 'assets/sprites/herz.png', empty: 'assets/sprites/herz_leer.png' }   // pixen 3bb1d083… / 5914ab12…
+
 export const MUSIC = {
   file: 'assets/music/frozen_sprite_loop',   // .mp3 (mit ~/crush.py im SNES-Stil "zerknirscht")
   volume: 0.35,
@@ -259,6 +291,7 @@ export const UI = {
   panelFile: 'assets/ui/holzpanel.png',       // PixelLab-UI-Panel, Neun-Teile-Rahmen
   panelBorder: 24,                            // so breit ist der Rahmen im Panelbild
   titleFile: 'assets/bg/titel.png',           // Pro-Titelbild 480×270
+  finishFile: 'assets/bg/schwarzwald_ende.png', // Pro-Jubelbild fürs Waldherz (null = nur Text)
 }
 
 // ------------------------------------------------------------

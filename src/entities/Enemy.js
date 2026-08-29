@@ -118,7 +118,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         break
       case 'roll': {
         this.setVelocityX(this.dir * ai.rollSpeed)
-        this.angle += this.dir * 14                          // die Kugel dreht sich
+        if (ai.rotate !== false) this.angle += this.dir * 14 // die Kugel dreht sich (Wildschwein nicht)
         const blocked = this.dir < 0 ? this.body.blocked.left : this.body.blocked.right
         const edge = this.onGround && !this.groundAhead(groundLayer)
         if (blocked || edge || time >= this.stateUntil) {
@@ -141,7 +141,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         break
     }
 
-    if (this.state !== 'roll') this.setFlipX(this.dir > 0)
+    if (this.state !== 'roll' || ai.rotate === false) this.setFlipX(this.dir > 0)
     // Lauf-Animation, wenn es eine gibt (nur beim Gehen)
     const walking = (this.state === 'wander' && !this.wanderPause)
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {

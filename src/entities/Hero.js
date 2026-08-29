@@ -44,7 +44,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.attackAnimUntil = 0
     this.hurtAnimUntil = 0
     this.slamReadyAt = 0
-    this.slash = scene.add.image(0, 0, 'slash').setVisible(false).setDepth(11)
+    this.slash = scene.add.image(0, 0, 'slash').setVisible(false).setDepth(11).setAlpha(0.9)
     this.zzz = scene.add.text(0, 0, 'zzz', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setVisible(false).setDepth(11)
 
     this.play(`${cfg.key}-idle`)

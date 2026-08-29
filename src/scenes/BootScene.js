@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS } from '../config.js'
+import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -59,8 +59,11 @@ export default class BootScene extends Phaser.Scene {
     if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
     if (TILESET2.file) this.load.image(TILESET2.key, TILESET2.file)
     for (const [name, it] of Object.entries(ITEMS)) if (it.file) this.load.image(name, it.file)
+    if (SLASH.file) this.load.image('slash', SLASH.file)
+    if (HEARTS.full) { this.load.image('herz', HEARTS.full); this.load.image('herz_leer', HEARTS.empty) }
     if (UI.panelFile) this.load.image('panel', UI.panelFile)
     if (UI.titleFile) this.load.image('titelbild', UI.titleFile)
+    if (UI.finishFile) this.load.image('endebild', UI.finishFile)
     if (UI.fontFile) this.loadFont()
     if (SPIRIT.file) this.load.image('geist', SPIRIT.file)
 
@@ -229,8 +232,9 @@ export default class BootScene extends Phaser.Scene {
     g.destroy()
   }
 
-  // Der "Schlag": ein heller Halbmond vor der Figur
+  // Der "Schlag": ein heller Halbmond vor der Figur (nur ohne Bild)
   makeSlash() {
+    if (this.textures.exists('slash')) return
     const { w, h } = COMBAT.attackBox
     const g = this.make.graphics({ x: 0, y: 0, add: false })
     g.fillStyle(P.hellGelb, 0.9)

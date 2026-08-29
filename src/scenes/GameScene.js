@@ -183,6 +183,13 @@ export default class GameScene extends Phaser.Scene {
     this.spirits = []
     this.spiritReadyAt = 0
 
+    // Glühwürmchen: treiben langsam durch den Raum und blinken
+    this.fireflies = []
+    for (let i = 0; i < 14; i++) {
+      const f = this.add.rectangle(Math.random() * map.widthInPixels, 60 + Math.random() * 160, 2, 2, P.hellGelb).setDepth(14)
+      this.fireflies.push({ f, phase: Math.random() * 100, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 6 })
+    }
+
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
     // haengend = Ankerpunkt oben; glow = pulsiert leicht; anim = Spritesheet-Animation
     this.glowing = []
@@ -237,6 +244,15 @@ export default class GameScene extends Phaser.Scene {
     }
     this.nameText = this.add.text(10, 8, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
     this.hud = this.add.text(10, 22, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+    // Herzen als Bilder (wenn vorhanden): je Held 3 Icons hinter dem Namen
+    this.heartIcons = null
+    if (this.textures.exists('herz')) {
+      this.heartIcons = { jonas: [], leonel: [] }
+      for (let i = 0; i < COMBAT.heroHp; i++) {
+        this.heartIcons.jonas.push(this.add.image(58 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
+        this.heartIcons.leonel.push(this.add.image(146 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
+      }
+    }
     this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
     this.updateNameText()
 
@@ -272,6 +288,13 @@ export default class GameScene extends Phaser.Scene {
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
     this.waitText.setVisible(this.brain.waiting).setPosition(Math.round(this.companion.x), Math.round(this.companion.body.top - 10))
+
+    // 4b. Glühwürmchen
+    for (const w of this.fireflies) {
+      w.f.x += w.vx * 0.016 + Math.sin(time / 700 + w.phase) * 0.15
+      w.f.y += w.vy * 0.016 + Math.cos(time / 900 + w.phase) * 0.12
+      w.f.setAlpha(0.3 + Math.max(0, Math.sin(time / 400 + w.phase)) * 0.7)
+    }
 
     // 4c. Tiere und leuchtende Deko
     this.updateTiere(time)
@@ -397,7 +420,7 @@ export default class GameScene extends Phaser.Scene {
         hero.hitThisAttack.add(e)
         const result = e.hit(damage, hero.x, time)
         if (result === null) { this.floatText(hero, 'Stachelig!'); this.sfx.play('hit'); continue }
-        if (result) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal') }
+        if (result) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal'); this.sparkle(e.x, e.body.center.y, P.rosaHell, 16) }
         else this.sfx.play('hit')
       }
     }
@@ -476,10 +499,19 @@ export default class GameScene extends Phaser.Scene {
     this.sfx.play('heal')
     this.active.halt(); this.companion.halt()
     const W = GAME.width, H = GAME.height
-    this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
-    this.add.text(W / 2, H / 2 - 20, 'Der Schwarzwald singt wieder!', { fontFamily: 'monospace', fontSize: '16px', color: '#fee761', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
-    this.add.text(W / 2, H / 2 + 6, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: 'monospace', fontSize: '10px', color: '#ffffff' }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
-    this.add.text(W / 2, H / 2 + 30, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    if (this.textures.exists('endebild')) {
+      // Das Jubelbild blendet sich langsam ein
+      const pic = this.add.image(0, 0, 'endebild').setOrigin(0).setScrollFactor(0).setDepth(250).setAlpha(0)
+      this.tweens.add({ targets: pic, alpha: 1, duration: 1200 })
+      this.add.rectangle(0, 0, W, 44, P.schwarz, 0.45).setOrigin(0).setScrollFactor(0).setDepth(250)
+      this.add.rectangle(0, H - 40, W, 40, P.schwarz, 0.45).setOrigin(0).setScrollFactor(0).setDepth(250)
+    } else {
+      this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
+    }
+    this.add.text(W / 2, 20, 'Der Schwarzwald singt wieder!', { fontFamily: font, fontSize: '18px', color: '#fee761', stroke: '#181425', strokeThickness: 4 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H - 28, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H - 12, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     const back = () => { world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp; this.scene.start('Title') }
     this.time.delayedCall(800, () => { this.input.keyboard.once('keydown-SPACE', back); this.input.once('pointerdown', back) })
   }
@@ -492,6 +524,7 @@ export default class GameScene extends Phaser.Scene {
       collectedIn(this.roomKey).add(leaf.objectId)
       world.leaves++
       this.sfx.play('collect')
+      this.sparkle(leaf.x, leaf.y, P.wiesenGruen, 8)
       this.tweens.add({ targets: leaf, y: leaf.y - 16, alpha: 0, scale: 1.6, duration: 350, onComplete: () => leaf.destroy() })
       leaf.body.enable = false
     }
@@ -577,8 +610,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   updateHud() {
+    if (this.heartIcons) {
+      this.hud.setText(`Jonas            Leonel            ${world.leaves} Blätter`)
+      for (const [key, icons] of Object.entries(this.heartIcons)) icons.forEach((ic, i) => ic.setTexture(i < this[key].hp ? 'herz' : 'herz_leer'))
+      return
+    }
     const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))
     this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${world.leaves}`)
+  }
+
+  // Funkeln: kleine Punkte, die auseinanderfliegen und verblassen
+  sparkle(x, y, color = P.hellGelb, n = 10) {
+    for (let i = 0; i < n; i++) {
+      const dot = this.add.rectangle(x, y, 2, 2, color).setDepth(16)
+      const a = Math.random() * Math.PI * 2, d = 10 + Math.random() * 18
+      this.tweens.add({ targets: dot, x: x + Math.cos(a) * d, y: y + Math.sin(a) * d - 6, alpha: 0, duration: 400 + Math.random() * 300, onComplete: () => dot.destroy() })
+    }
   }
 
   updateNameText() {

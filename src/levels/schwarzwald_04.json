@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 40,
+ "nextobjectid": 41,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1835,6 +1835,18 @@
      "rotation": 0,
      "visible": true,
      "id": 39
+    },
+    {
+     "id": 40,
+     "rotation": 0,
+     "visible": true,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "name": "wildschwein",
+     "type": "enemy",
+     "x": 600,
+     "y": 240
     }
    ]
   }
