@@ -66,8 +66,16 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.healed = true
     this.hp = 0
     this.clearTint()
-    this.setTint(P.wiesenGruen)                    // friedlich = grünlich
     this.setVelocity(0, 0)
+    const healedKey = this.cfg.key + '-heil'
+    if (this.scene.textures.exists(healedKey)) {
+      // eigenes Bild für "zufrieden": Trefferbox unten mittig neu ausrichten
+      this.setTexture(healedKey)
+      const f = this.scene.textures.get(healedKey).getSourceImage()
+      this.body.setOffset((f.width - this.cfg.body.w) / 2, f.height - this.cfg.body.h)
+    } else {
+      this.setTint(P.wiesenGruen)                  // Platzhalter: friedlich = grünlich
+    }
     if (silent) return
     // ein kleines Herz steigt auf
     const heart = this.scene.add.text(this.x, this.body.top - 4, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a' }).setOrigin(0.5).setDepth(15)

@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 10,
+ "nextobjectid": 12,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1191,6 +1191,41 @@
        "name": "spawn",
        "type": "string",
        "value": "von_rechts"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "rotation": 0,
+     "visible": true,
+     "width": 0,
+     "height": 0,
+     "name": "von_rechts",
+     "type": "spawn",
+     "point": true,
+     "x": 920,
+     "y": 240
+    },
+    {
+     "id": 11,
+     "rotation": 0,
+     "visible": true,
+     "width": 16,
+     "height": 272,
+     "name": "nach_rechts",
+     "type": "ausgang",
+     "x": 944,
+     "y": 0,
+     "properties": [
+      {
+       "name": "ziel",
+       "type": "string",
+       "value": "schwarzwald_04"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "von_links"
       }
      ]
     }

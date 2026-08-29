@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND } from '../config.js'
+import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -34,6 +34,11 @@ export default class BootScene extends Phaser.Scene {
     if (BACKGROUND.file) {
       this.load.image(BACKGROUND.key, BACKGROUND.file)
     }
+    for (const enemy of Object.values(ENEMIES)) {
+      if (enemy.file) this.load.image(enemy.key, enemy.file)
+      if (enemy.healedFile) this.load.image(enemy.key + '-heil', enemy.healedFile)
+    }
+    if (SPIRIT.file) this.load.image('geist', SPIRIT.file)
 
     // Jeder Raum landet unter seinem Dateinamen im Cache ('schwarzwald_01' …)
     for (const [path, data] of Object.entries(LEVELS)) {
@@ -228,7 +233,14 @@ export default class BootScene extends Phaser.Scene {
     g.fillStyle(P.blattGruen); g.fillRect(4, 3, 1, 7)
     g.generateTexture('blatt', 10, 10); g.destroy()
 
-    // Waldgeist: leuchtender Tropfen mit Gesicht
+    // Waldherz: das Ziel eines Waldes
+    g = this.make.graphics({ x: 0, y: 0, add: false })
+    g.fillStyle(P.rosaHell); g.fillCircle(5, 5, 4); g.fillCircle(11, 5, 4); g.fillTriangle(1, 7, 15, 7, 8, 15)
+    g.fillStyle(P.wiesenGruen); g.fillRect(7, 0, 2, 3)
+    g.generateTexture('waldherz', 16, 16); g.destroy()
+
+    // Waldgeist: leuchtender Tropfen mit Gesicht (nur wenn kein Bild geladen wurde)
+    if (this.textures.exists('geist')) return
     g = this.make.graphics({ x: 0, y: 0, add: false })
     g.fillStyle(P.eisBlau, 0.5); g.fillCircle(7, 8, 7)
     g.fillStyle(P.eisBlau); g.fillCircle(7, 8, 5); g.fillTriangle(4, 6, 7, 0, 10, 6)

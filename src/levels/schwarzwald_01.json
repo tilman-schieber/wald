@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 6,
+ "nextobjectid": 7,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1141,6 +1141,17 @@
        "value": "von_links"
       }
      ]
+    },
+    {
+     "id": 6,
+     "rotation": 0,
+     "visible": true,
+     "width": 8,
+     "height": 96,
+     "name": "ranke1",
+     "type": "ranke",
+     "x": 256,
+     "y": 128
     }
    ]
   }

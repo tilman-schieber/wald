@@ -14,6 +14,7 @@
 //    hebel    Rechteck, Eigenschaft oeffnet = Torname; öffnet dauerhaft
 //    ranke    Rechteck (schmal, hoch): Jonas zieht sich mit dem Haken (E) hoch
 //    blatt    Punkt: Blatt zum Einsammeln
+//    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
 // ============================================================
 import Phaser from 'phaser'
 import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT, BACKGROUND } from '../config.js'
@@ -169,6 +170,14 @@ export default class GameScene extends Phaser.Scene {
     this.spirits = []
     this.spiritReadyAt = 0
 
+    // Waldherz (Ziel)
+    this.hearts = objects.filter((o) => o.type === 'waldherz').map((o) => {
+      const img = this.add.image(o.x, o.y - 10, 'waldherz').setDepth(6)
+      this.physics.add.existing(img, true)
+      this.tweens.add({ targets: img, y: o.y - 16, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' })
+      return img
+    })
+
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
     this.physics.world.setBounds(0, 0, worldW, worldH)
@@ -227,6 +236,7 @@ export default class GameScene extends Phaser.Scene {
     this.resolveAttacks(time)
     this.updatePuzzles()
     this.collectLeaves()
+    if (this.hearts.some((h) => this.physics.overlap(h, this.active))) this.finishForest()
     this.checkExits()
     this.updateHud()
 
@@ -328,7 +338,7 @@ export default class GameScene extends Phaser.Scene {
       // Kletterhaken: gibt es eine Ranke in Reichweite, deren oberes Ende über mir ist?
       const r = this.ranken.find((r) => Math.abs(r.x - hero.x) <= HOOK.reach && hero.body.top > r.top && hero.body.bottom <= r.bottom + 40)
       if (r) { hero.startHook(r.x, r.top, r.side); this.sfx.play('hook') }
-      else this.tweens.add({ targets: this.nameText, alpha: 0.2, yoyo: true, duration: 80 })
+      else this.floatText(hero, 'Keine Ranke!')
     } else if (hero.cfg.key === 'leonel') {
       // Waldgeist rufen (mit Pause dazwischen)
       if (time < this.spiritReadyAt) return
@@ -336,6 +346,27 @@ export default class GameScene extends Phaser.Scene {
       this.spirits.push(new Spirit(this, hero, time))
       this.sfx.play('spirit')
     }
+  }
+
+  // Kurzer Text, der über einer Figur aufsteigt
+  floatText(target, text) {
+    const t = this.add.text(target.x, target.body.top - 6, text, { fontFamily: 'monospace', fontSize: '8px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(50)
+    this.tweens.add({ targets: t, y: t.y - 14, alpha: 0, duration: 800, onComplete: () => t.destroy() })
+  }
+
+  // Das Waldherz berührt → dieser Wald ist gerettet
+  finishForest() {
+    if (this.leaving) return
+    this.leaving = true
+    this.sfx.play('heal')
+    this.active.halt(); this.companion.halt()
+    const W = GAME.width, H = GAME.height
+    this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
+    this.add.text(W / 2, H / 2 - 20, 'Der Schwarzwald singt wieder!', { fontFamily: 'monospace', fontSize: '16px', color: '#fee761', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H / 2 + 6, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: 'monospace', fontSize: '10px', color: '#ffffff' }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H / 2 + 30, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    const back = () => { world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp; this.scene.start('Title') }
+    this.time.delayedCall(800, () => { this.input.keyboard.once('keydown-SPACE', back); this.input.once('pointerdown', back) })
   }
 
   // Blätter einsammeln (beide Helden dürfen)

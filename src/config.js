@@ -102,7 +102,7 @@ export const CROUCH = {
 //  Spezialfähigkeiten (Taste E) – nur der AKTIVE Held, nie der Begleiter
 // ------------------------------------------------------------
 export const HOOK = {          // Jonas: Kletterhaken an Ranken
-  reach: 20,                   // so nah (waagerecht) muss eine Ranke sein
+  reach: 28,                   // so nah (waagerecht) muss eine Ranke sein
   speed: 260,                  // Zug-Geschwindigkeit nach oben
   hop: { x: 90, y: 230 },      // kleiner Satz auf die Kante am Ende
 }
@@ -113,6 +113,7 @@ export const SPIRIT = {        // Leonel: Waldgeist rufen
   range: 180,                  // Gegner in dieser Nähe werden beruhigt
   calmMs: 4000,                // so lange bleibt ein beruhigter Gegner friedlich
   damage: 1,
+  file: 'assets/sprites/geist.png',   // PixelLab 03264b0c… (16×22); null = Platzhalter
 }
 
 // ------------------------------------------------------------
@@ -138,11 +139,12 @@ export const ENEMIES = {
     hp: 4,
     speed: 30,
     damage: 1,
-    frame: { w: 20, h: 14 },
+    frame: { w: 23, h: 19 },          // Bildgröße von public/assets/sprites/igel.png
     body: { w: 18, h: 12 },
     color: P.rindeBraun,
     accent: P.sandHell,
-    file: null,
+    file: 'assets/sprites/igel.png',            // PixelLab ccbfcad3… (schaut nach links)
+    healedFile: 'assets/sprites/igel_heil.png', // PixelLab 180538dc… (28×26, sitzt zufrieden)
   },
 }
 
