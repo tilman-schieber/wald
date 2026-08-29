@@ -208,7 +208,7 @@ export default class GameScene extends Phaser.Scene {
 
     // ---------- HUD (fest am Bildschirm) ----------
     const hudStyle = { fontFamily: 'monospace', fontSize: '8px', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 2, y: 1 } }
-    this.add.text(2, 2, 'Pfeile laufen/ducken/klettern · Leer springen · X schlagen · E Fähigkeit · Tab wechseln · C Komm! · M Musik', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
+    this.add.text(2, 2, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { ...hudStyle, color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
     this.nameText = this.add.text(2, 13, '', { ...hudStyle, color: '#fee761' }).setScrollFactor(0).setDepth(100)
     this.hud = this.add.text(2, 24, '', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
