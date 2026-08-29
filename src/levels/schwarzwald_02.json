@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 10,
+ "nextobjectid": 17,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1210,6 +1210,174 @@
      "type": "ranke",
      "x": 624,
      "y": 176
+    },
+    {
+     "name": "stein",
+     "type": "deko",
+     "point": true,
+     "x": 26,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 10
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 76,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 11
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 154,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 12
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 263,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 13
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 326,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 14
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 525,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 15
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 846,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 16
     }
    ]
   }

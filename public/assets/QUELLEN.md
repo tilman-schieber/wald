@@ -10,11 +10,15 @@
 | (nicht benutzt) | Bild `eec3a745-7137-4348-a6ef-8e3c8b09426f` – zwei Comic-Bäume, zu clipart-haft | — |
 | sprites/igel.png | Bild (pixflux, Palette) `ccbfcad3-ae72-4ce5-89e4-fdde198bb55f`, zugeschnitten 23×19 | — |
 | sprites/igel_heil.png | Bild (pixflux, Palette) `180538dc-88e0-4afb-a5c0-069f5d91234a`, zugeschnitten 28×26 | — |
+| sprites/igel_kugel.png | Bild (pixflux, Palette) `40694bf9-8c41-4495-99f3-244ce9e0524b`, zugeschnitten 28×24 | — |
+| sprites/deko_farn.png | Bild (pixflux, Palette) `633dedca-c583-41be-a48e-531ad443ae0e`, 24×28 | — |
+| sprites/deko_pilze.png | Bild (pixflux, Palette) `120957ca-d095-44da-9d9f-03c4dd824166`, 28×26 | — |
+| sprites/deko_stein.png | Bild (pixflux, Palette) `e979ad3d-d7ca-4c8a-a017-49927f7638a6`, 26×20 | — |
 | sprites/geist.png | Bild (pixflux, Palette) `03264b0c-ac52-48f8-9553-e7a3e2832233`, zugeschnitten 16×22 | — |
 | tiles/schwarzwald.png | Sidescroller-Tileset `f346a925-dd3d-4070-9760-f34eaec9e8e0` (Basis-Kachel `a61fed35…` zum Anschließen weiterer Sets) | — |
 
 Neu bauen: `node tools/import-character.mjs …` (baut das Spritesheet, richtet die Füße aus),
 dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottöne ausschließen).
-Verbrauch bisher: 18 von 40 Trial-Generierungen.
+Verbrauch bisher: 22 von 40 Trial-Generierungen.
 Parallax-Ebenen: "no_background" liefert bei Szenen oft eine gemalte Fläche statt Transparenz → häufigste Farbe mit colorkey.mjs entfernen.
 Kleine Sprites: `create_image_pixflux` 32×32 mit `no_background` und Paletten-PNG als `color_image_url`, dann `tools/crop.mjs` + `tools/palettize.mjs`.

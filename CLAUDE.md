@@ -41,6 +41,9 @@ Entscheidungen so, dass Kinder mitlesen können.
   Kamera springt nicht. Begleiter kann nie ein Game Over verursachen.
 - Jonas: älter, stärker, Kletterhaken. Leonel: jünger, schneller, kleiner, ruft Waldgeister.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
+- Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen →
+  benommen (nur dann verwundbar). Igel rollt als Kugel; man hüpft drüber und schlägt danach.
+- Deko (Farn, Pilze, Stein) sind Tiled-Objekte vom Typ `deko` ohne Physik, `vorne=true` = vor den Figuren
 - Vier Wälder: Schwarzwald (Start), Floresta da Tijuca, Lorbeerwald La Palma, Plänterwald
 
 ## Sprites (PixelLab MCP)

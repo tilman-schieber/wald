@@ -41,8 +41,13 @@ export default class CompanionBrain {
     if (distNow > COMPANION.nearX * 2) this.leaderWentAway = true
     if (this.waiting && (called || (nearLeader && this.leaderWentAway))) this.waiting = false
 
-    // --- 0. Gegner in Reichweite? Dann hinschauen und zuschlagen (nur Basisangriff) ---
-    const foe = enemies.find((e) => !e.healed
+    // --- 0a. Rollt eine Kugel auf mich zu? Drüberhüpfen! ---
+    const rolling = enemies.find((e) => e.state === 'roll' && Math.sign(me.x - e.x) === e.dir
+      && Math.abs(e.x - me.x) <= 44 && Math.abs(e.body.bottom - me.body.bottom) <= 24)
+    if (rolling && me.onGround) { cmd.jump = true; cmd.jumpHeld = true; return cmd }
+
+    // --- 0b. Verwundbarer Gegner in Reichweite? Dann hinschauen und zuschlagen (nur Basisangriff) ---
+    const foe = enemies.find((e) => !e.healed && e.isVulnerable(time)
       && Math.abs(e.x - me.x) <= COMPANION.reach.x + e.body.width / 2
       && Math.abs(e.body.center.y - me.body.center.y) <= COMPANION.reach.y)
     if (foe && me.onGround) {

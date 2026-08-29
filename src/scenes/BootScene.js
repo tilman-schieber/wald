@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT } from '../config.js'
+import { HEROES, TILESET, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -38,6 +38,10 @@ export default class BootScene extends Phaser.Scene {
     for (const enemy of Object.values(ENEMIES)) {
       if (enemy.file) this.load.image(enemy.key, enemy.file)
       if (enemy.healedFile) this.load.image(enemy.key + '-heil', enemy.healedFile)
+      if (enemy.ballFile) this.load.image(enemy.key + '-kugel', enemy.ballFile)
+    }
+    for (const [name, d] of Object.entries(DEKO)) {
+      if (d.file) this.load.image('deko-' + name, d.file)
     }
     if (SPIRIT.file) this.load.image('geist', SPIRIT.file)
 
@@ -60,6 +64,7 @@ export default class BootScene extends Phaser.Scene {
     }
     this.makeSlash()
     this.makePuzzlePlaceholders()
+    this.makeDekoPlaceholders()
 
     this.makeParallaxPlaceholders()
     this.makeMarker()
@@ -247,6 +252,17 @@ export default class BootScene extends Phaser.Scene {
     g.fillStyle(P.eisBlau); g.fillCircle(7, 8, 5); g.fillTriangle(4, 6, 7, 0, 10, 6)
     g.fillStyle(P.weiss); g.fillRect(5, 6, 1, 2); g.fillRect(8, 6, 1, 2)
     g.generateTexture('geist', 14, 16); g.destroy()
+  }
+
+  // Deko-Platzhalter: Farn = grüne Zacken, Pilze = rote Hüte, Stein = grauer Buckel
+  makeDekoPlaceholders() {
+    const make = (key, draw) => {
+      if (this.textures.exists(key)) return
+      const g = this.make.graphics({ x: 0, y: 0, add: false }); draw(g); g.generateTexture(key, 24, 20); g.destroy()
+    }
+    make('deko-farn', (g) => { g.fillStyle(P.blattGruen); for (let x = 2; x < 22; x += 5) g.fillTriangle(x, 20, x + 2, 4, x + 4, 20) })
+    make('deko-pilze', (g) => { g.fillStyle(P.sandHell); g.fillRect(6, 10, 3, 10); g.fillRect(14, 12, 3, 8); g.fillStyle(P.feuerRot); g.fillEllipse(7, 9, 12, 8); g.fillEllipse(15, 11, 9, 6); g.fillStyle(P.weiss); g.fillRect(5, 7, 2, 2); g.fillRect(15, 10, 1, 1) })
+    make('deko-stein', (g) => { g.fillStyle(P.steinGrau); g.fillEllipse(12, 15, 20, 10); g.fillStyle(P.moosGruen); g.fillEllipse(9, 11, 10, 5) })
   }
 
   // Kleiner Pfeil über dem aktiven Helden

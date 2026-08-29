@@ -15,6 +15,7 @@
 //    ranke    Rechteck (schmal, hoch): Jonas zieht sich mit dem Haken (E) hoch
 //    blatt    Punkt: Blatt zum Einsammeln
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
+//    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
 // ============================================================
 import Phaser from 'phaser'
 import { GAME, TILESET, ENEMIES, COMBAT, HOOK, SPIRIT, BACKGROUND } from '../config.js'
@@ -173,6 +174,14 @@ export default class GameScene extends Phaser.Scene {
     this.spirits = []
     this.spiritReadyAt = 0
 
+    // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
+    for (const o of objects.filter((o) => o.type === 'deko')) {
+      const key = 'deko-' + o.name
+      if (!this.textures.exists(key)) { console.warn('Unbekannte Deko:', o.name); continue }
+      const p = props(o)
+      this.add.image(o.x, o.y, key).setOrigin(0.5, 1).setDepth(p.vorne ? 15 : 2).setFlipX(!!p.spiegeln)
+    }
+
     // Waldherz (Ziel)
     this.hearts = objects.filter((o) => o.type === 'waldherz').map((o) => {
       const img = this.add.image(o.x, o.y - 10, 'waldherz').setDepth(6)
@@ -233,7 +242,7 @@ export default class GameScene extends Phaser.Scene {
     this.waitText.setVisible(this.brain.waiting).setPosition(Math.round(this.companion.x), Math.round(this.companion.body.top - 10))
 
     // 5. Gegner laufen, Schläge treffen, Rätsel prüfen
-    for (const e of this.enemies) e.update(time, this.groundLayer)
+    for (const e of this.enemies) e.update(time, this.groundLayer, [this.jonas, this.leonel])
     for (const sp of this.spirits) sp.update(time, this.enemies)
     this.spirits = this.spirits.filter((sp) => sp.active)
     this.resolveAttacks(time)
@@ -327,7 +336,9 @@ export default class GameScene extends Phaser.Scene {
         if (e.healed || hero.hitThisAttack.has(e)) continue
         if (!Phaser.Geom.Rectangle.Overlaps(rect, e.getBounds())) continue
         hero.hitThisAttack.add(e)
-        if (e.hit(damage, hero.x, time)) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal') }
+        const result = e.hit(damage, hero.x, time)
+        if (result === null) { this.floatText(hero, 'Stachelig!'); this.sfx.play('hit'); continue }
+        if (result) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal') }
         else this.sfx.play('hit')
       }
     }
@@ -387,9 +398,9 @@ export default class GameScene extends Phaser.Scene {
 
   // Ein Held berührt einen (noch nicht geheilten, nicht beruhigten) Gegner
   onTouchEnemy(hero, enemy) {
-    if (enemy.healed || this.gameOver) return
+    if (this.gameOver) return
     const time = this.time.now
-    if (enemy.isCalm(time)) return
+    if (!enemy.hurtsOnTouch(time)) return
     const result = hero.hurt(time, enemy.x)
     if (result) this.sfx.play('hurt')
     if (result !== 'ko') return

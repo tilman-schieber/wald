@@ -145,7 +145,28 @@ export const ENEMIES = {
     accent: P.sandHell,
     file: 'assets/sprites/igel.png',            // PixelLab ccbfcad3… (schaut nach links)
     healedFile: 'assets/sprites/igel_heil.png', // PixelLab 180538dc… (28×26, sitzt zufrieden)
+    ballFile: 'assets/sprites/igel_kugel.png',  // PixelLab 40694bf9… (eingerollt)
+    ai: {
+      spiky: true,          // nur verwundbar, wenn benommen (oder vom Geist beruhigt)
+      wanderSpeed: 25,      // beim Stromern
+      sight: { x: 150, y: 40 },  // so weit sieht er Helden (waagerecht / Höhenunterschied)
+      alertMs: 450,         // "!" – kurzes Erstarren, damit man reagieren kann
+      rollSpeed: 140,       // Rollgeschwindigkeit (Helden: 110 / 140) → drüberhüpfen!
+      rollMaxMs: 2200,      // spätestens dann hört er auf zu rollen
+      dizzyMs: 1600,        // so lange benommen = Zeitfenster zum Zuschlagen
+      cooldownMs: 1200,     // danach so lange nicht wieder angreifen
+    },
   },
+}
+
+// ------------------------------------------------------------
+//  Deko – nur Bilder, keine Trefferbox. In Tiled: type "deko", name = Schlüssel,
+//  Eigenschaft vorne = true → wird VOR den Figuren gezeichnet.
+// ------------------------------------------------------------
+export const DEKO = {
+  farn:  { file: 'assets/sprites/deko_farn.png' },    // PixelLab 633dedca…
+  pilze: { file: 'assets/sprites/deko_pilze.png' },   // PixelLab 120957ca…
+  stein: { file: 'assets/sprites/deko_stein.png' },   // PixelLab e979ad3d…
 }
 
 // ------------------------------------------------------------
