@@ -3,36 +3,85 @@
 // ============================================================
 //  Der Begleiter ist ein ganz normaler Hero. Nur die Knöpfe drückt
 //  nicht der Spieler, sondern dieses Gehirn. Es schaut jeden Frame:
-//    "Wo ist mein Partner? Muss ich laufen? Muss ich springen?"
-//  und gibt dann ein Kommando zurück, genau wie die Steuerung.
+//    1. Auf welcher Fläche stehe ich, auf welcher der Partner?
+//    2. Welche Fläche ist der nächste Schritt dorthin? (PlatformGraph)
+//    3. Dorthin laufen, bei Bedarf springen.
+//  Klappt das lange nicht, während der Partner wartet → "Teleport".
 // ============================================================
+import Phaser from 'phaser'
 import { COMPANION } from '../config.js'
 
 export default class CompanionBrain {
-  constructor(groundLayer) {
+  constructor(groundLayer, graph) {
     this.groundLayer = groundLayer
+    this.graph = graph
+    this.reset()
+  }
+
+  reset() {
     this.lastJumpTime = 0
-    this.moving = false     // laufe ich gerade hinterher?
-    this.climbing = false   // versuche ich gerade, zum Partner HOCH zu kommen?
+    this.moving = false        // laufe ich gerade?
+    this.climbing = false      // versuche ich gerade, HOCH zu kommen?
+    this.stuckSince = null     // seit wann komme ich nicht zum wartenden Partner?
+    this.myPlatform = null     // zuletzt bekannte Fläche (auch in der Luft)
+    this.leaderPlatform = null
   }
 
   think(me, leader, time) {
-    const cmd = { left: false, right: false, jump: false, jumpHeld: false }
+    const cmd = { left: false, right: false, jump: false, jumpHeld: false, teleport: false }
 
-    const dx = leader.x - me.x
+    // --- 1. Wo sind wir? ---
+    if (me.onGround) this.myPlatform = this.graph.platformAt(me)
+    if (leader.onGround) this.leaderPlatform = this.graph.platformAt(leader)
+
+    // --- 2. Ziel: der Partner – oder die nächste Fläche auf dem Weg zu ihm ---
+    let target = { x: leader.x, bottom: leader.body.bottom, platform: this.leaderPlatform }
+    let hasPath = true
+    if (this.myPlatform && this.leaderPlatform && this.myPlatform !== this.leaderPlatform) {
+      const next = this.graph.nextStep(this.myPlatform, this.leaderPlatform)
+      if (next && next !== this.leaderPlatform) {
+        // Zwischenziel: der Punkt auf der nächsten Fläche, der mir am nächsten ist
+        target = { x: Phaser.Math.Clamp(me.x, next.px0 + 8, next.px1 - 8), bottom: next.py, platform: next }
+      }
+      hasPath = next !== null
+    }
+
+    // --- Stecke ich fest? Uhr läuft nur, wenn der Partner steht und wartet ---
+    const distLeader = Math.abs(leader.x - me.x)
+    const dyLeader = Math.abs(leader.body.bottom - me.body.bottom)
+    const near = distLeader <= COMPANION.nearX && dyLeader <= COMPANION.nearY
+    const leaderWaits = leader.onGround && Math.abs(leader.body.velocity.x) < 5
+    if (near || !leaderWaits) this.stuckSince = null
+    else if (this.stuckSince === null) this.stuckSince = time
+    else if (time - this.stuckSince > COMPANION.stuckMs * (hasPath ? 3 : 1) && me.onGround) {
+      cmd.teleport = true
+      this.stuckSince = null
+      return cmd
+    }
+
+    // --- 3. Zum Ziel bewegen ---
+    const dx = target.x - me.x
     const dist = Math.abs(dx)
     const dir = Math.sign(dx) || 1
-    const leaderAbove = leader.body.bottom < me.body.bottom - 12
-    const leaderBelow = leader.body.bottom > me.body.bottom + 12
+    const targetAbove = target.bottom < me.body.bottom - 12
+    const targetBelow = target.bottom > me.body.bottom + 12
+
+    // In der Luft: immer Richtung Ziel lenken, Sprungtaste halten solange es hochgeht
+    if (!me.onGround) {
+      cmd.left = dx < -4
+      cmd.right = dx > 4
+      cmd.jumpHeld = me.body.velocity.y < 0
+      return cmd
+    }
 
     // Loslaufen erst ab followDistance, anhalten schon bei stopDistance.
     // Zwei verschiedene Zahlen → kein nervöses Hin-und-her-Zappeln.
     if (dist > COMPANION.followDistance) this.moving = true
     if (dist < COMPANION.stopDistance) this.moving = false
 
-    // Partner steht oben? Dann "Klettermodus" (auch mit zwei Zahlen).
-    if (leaderAbove && dist < 80) this.climbing = true
-    if (!leaderAbove || dist > 120) this.climbing = false
+    // Ziel liegt oben? Dann "Klettermodus" (auch mit zwei Zahlen).
+    if (targetAbove && dist < 80) this.climbing = true
+    if (!targetAbove || dist > 120) this.climbing = false
 
     if (this.moving) {
       cmd.left = dir < 0
@@ -41,13 +90,22 @@ export default class CompanionBrain {
 
     let wantJump = false
 
-    if (this.climbing) {
+    // Stehe ich direkt UNTER der Zielfläche? Dann erst zur näheren Kante rauslaufen.
+    // (gleicher Rand wie bei ceilingAbove, sonst gibt es eine Lücke, in der er nichts tut)
+    const tp = target.platform
+    const margin = me.body.width / 2 + 3
+    const underTarget = targetAbove && tp && me.x >= tp.px0 - margin && me.x <= tp.px1 + margin
+    if (underTarget) {
+      const out = (me.x - tp.px0) < (tp.px1 - me.x) ? -1 : 1
+      cmd.left = out < 0
+      cmd.right = out > 0
+    } else if (this.climbing) {
       if (this.ceilingAbove(me)) {
-        // Ich stehe UNTER der Plattform → erst seitlich rauslaufen
-        cmd.left = dir > 0
-        cmd.right = dir < 0
+        // Eine ANDERE Fläche über mir → einfach weiter Richtung Ziel, nicht springen
+        cmd.left = dir < 0
+        cmd.right = dir > 0
       } else {
-        // Freie Bahn nach oben → Richtung Partner springen
+        // Freie Bahn nach oben → Richtung Ziel springen
         cmd.left = dir < 0
         cmd.right = dir > 0
         wantJump = true
@@ -60,8 +118,8 @@ export default class CompanionBrain {
       const blocked = movingDir > 0 ? me.body.blocked.right : movingDir < 0 ? me.body.blocked.left : false
       const gapAhead = movingDir !== 0 && !this.groundAhead(me, movingDir)
 
-      if (blocked) wantJump = true                 // Wand im Weg
-      if (gapAhead && !leaderBelow) wantJump = true // Loch, Partner ist nicht unten
+      if (blocked) wantJump = true                  // Wand im Weg
+      if (gapAhead && !targetBelow) wantJump = true // Loch, Ziel ist nicht unten → rüberspringen
 
       if (wantJump) {
         cmd.jump = true

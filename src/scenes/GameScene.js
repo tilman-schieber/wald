@@ -3,9 +3,11 @@
 // ============================================================
 import Phaser from 'phaser'
 import { GAME, TILESET } from '../config.js'
+import { P } from '../palette.js'
 import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
+import PlatformGraph from '../entities/PlatformGraph.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
 
@@ -51,7 +53,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.active = this.jonas
     this.companion = this.leonel
-    this.brain = new CompanionBrain(this.groundLayer)
+    this.graph = new PlatformGraph(this.groundLayer)     // Landkarte der Stehflächen
+    this.brain = new CompanionBrain(this.groundLayer, this.graph)
+    this.teleports = 0
 
     this.marker = this.add.image(0, 0, 'marker').setDepth(11)
 
@@ -92,7 +96,8 @@ export default class GameScene extends Phaser.Scene {
 
     // 4. … der Begleiter tut, was sein Gehirn sagt.
     const aiCmd = this.brain.think(this.companion, this.active, time)
-    this.companion.applyCommand(aiCmd, time)
+    if (aiCmd.teleport) this.teleportCompanion()
+    else this.companion.applyCommand(aiCmd, time)
 
     // 5. Pfeil über dem Aktiven
     this.marker.setPosition(Math.round(this.active.x), Math.round(this.active.body.top - 8))
@@ -133,11 +138,26 @@ export default class GameScene extends Phaser.Scene {
   switchHero() {
     ;[this.active, this.companion] = [this.companion, this.active]
     this.companion.halt()
-    this.brain.moving = false
+    this.brain.reset()
     this.active.setDepth(10)
     this.companion.setDepth(9)
     this.cameras.main.startFollow(this.active, true, 0.12, 0.12)
     this.updateNameText()
+  }
+
+  // Der Begleiter kommt nicht nach → er "ploppt" neben den Spieler.
+  // Füße auf gleiche Höhe wie die des Spielers, kleiner Blubb-Effekt.
+  teleportCompanion() {
+    this.teleports++
+    const me = this.companion, leader = this.active
+    const feetOffset = me.body.bottom - me.y
+    me.halt()
+    me.setVelocity(0, 0)
+    me.setPosition(leader.x - leader.facing * 10, leader.body.bottom - feetOffset)
+    me.setScale(0.2)
+    this.tweens.add({ targets: me, scale: 1, duration: 220, ease: 'Back.Out' })
+    const ring = this.add.circle(me.x, me.body.center.y, 6, 0, 0).setStrokeStyle(2, P.eisBlau).setDepth(12)
+    this.tweens.add({ targets: ring, radius: 22, alpha: 0, duration: 350, onComplete: () => ring.destroy() })
   }
 
   updateNameText() {

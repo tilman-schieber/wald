@@ -90,6 +90,14 @@ export const COMPANION = {
   followDistance: 40,  // erst ab so viel Abstand läuft der Begleiter los
   stopDistance: 24,    // so nah bleibt er dann stehen
   jumpCooldownMs: 500, // nicht dauernd hüpfen
+  stuckMs: 2500,       // so lange darf er es allein versuchen, während der
+                       // Spieler steht und wartet – dann "ploppt" er herbei
+  nearX: 48,           // "bei dir" heißt: höchstens so weit weg …
+  nearY: 20,           // … und ungefähr auf gleicher Höhe
+  // Wegsuche: von welcher Fläche kommt man auf welche?
+  maxJumpUpTiles: 4,   // so viele Kacheln hoch schafft ein Sprung
+  maxGapUpTiles: 4,    // so breit darf die Lücke sein, wenn es hoch geht
+  maxGapDownTiles: 6,  // … und wenn es runter geht (man fällt weiter)
 }
 
 // ------------------------------------------------------------
