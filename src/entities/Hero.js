@@ -26,6 +26,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.facing = 1              // 1 = rechts, -1 = links
     this.lastGroundTime = 0      // für die Coyote-Zeit
     this.jumpBufferTime = -1     // für den Sprung-Puffer
+    this.jumpCut = false         // wurde dieser Sprung schon abgekürzt?
 
     this.play(`${cfg.key}-idle`)
   }
@@ -61,11 +62,13 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityY(-jump)
       this.jumpBufferTime = -1
       this.lastGroundTime = -9999   // kein Doppelsprung
+      this.jumpCut = false
     }
 
-    // Taste losgelassen, während man noch steigt → Sprung abkürzen
-    if (!cmd.jumpHeld && this.body.velocity.y < 0) {
+    // Taste losgelassen, während man noch steigt → Sprung EINMAL abkürzen
+    if (!cmd.jumpHeld && this.body.velocity.y < 0 && !this.jumpCut) {
       this.setVelocityY(this.body.velocity.y * JUMP.cutFactor)
+      this.jumpCut = true
     }
 
     // --- Animation ---

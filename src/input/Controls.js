@@ -7,6 +7,9 @@
 //  jump und switch sind nur in dem EINEN Frame wahr, in dem die
 //  Taste neu gedrückt wurde. jumpHeld ist wahr, solange man hält.
 // ============================================================
+import Phaser from 'phaser'
+
+const JustDown = Phaser.Input.Keyboard.JustDown
 
 export default class Controls {
   constructor(scene) {
@@ -16,14 +19,16 @@ export default class Controls {
       left: 'A', right: 'D', up: 'W',
       jump: 'SPACE', switch: 'TAB', switch2: 'SHIFT',
     })
-    // Tab soll nicht im Browser "weiterspringen"
+    // Tab soll nicht im Browser "weiterspringen", Leertaste nicht scrollen
     kb.addCapture(['TAB', 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT'])
+
+    this.jumpKeys = [this.cursors.up, this.keys.up, this.keys.jump]
+    this.switchKeys = [this.keys.switch, this.keys.switch2]
 
     // Wird von TouchButtons.js jeden Frame gesetzt
     this.touch = { left: false, right: false, jump: false, switch: false }
-
-    this._prevJump = false
-    this._prevSwitch = false
+    this._prevTouchJump = false
+    this._prevTouchSwitch = false
   }
 
   read() {
@@ -31,13 +36,21 @@ export default class Controls {
 
     const left = c.left.isDown || k.left.isDown || t.left
     const right = c.right.isDown || k.right.isDown || t.right
-    const jumpHeld = c.up.isDown || k.up.isDown || k.jump.isDown || c.space?.isDown || t.jump
-    const switchHeld = k.switch.isDown || k.switch2.isDown || t.switch
 
-    const jump = jumpHeld && !this._prevJump
-    const sw = switchHeld && !this._prevSwitch
-    this._prevJump = jumpHeld
-    this._prevSwitch = switchHeld
+    // Tastatur: JustDown merkt sich jeden Druck, auch ganz kurze.
+    // (Wichtig: für JEDE Taste aufrufen, sonst bleibt ein Druck "hängen".)
+    let jump = false
+    for (const key of this.jumpKeys) if (JustDown(key)) jump = true
+    let sw = false
+    for (const key of this.switchKeys) if (JustDown(key)) sw = true
+
+    // Touch: neu gedrückt = jetzt unten, vorher nicht
+    if (t.jump && !this._prevTouchJump) jump = true
+    if (t.switch && !this._prevTouchSwitch) sw = true
+    this._prevTouchJump = t.jump
+    this._prevTouchSwitch = t.switch
+
+    const jumpHeld = this.jumpKeys.some((key) => key.isDown) || t.jump
 
     return { left, right, jump, jumpHeld, switch: sw }
   }

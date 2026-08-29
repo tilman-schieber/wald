@@ -105,10 +105,11 @@ export default class BootScene extends Phaser.Scene {
   makeParallaxPlaceholders() {
     const W = GAME.width, H = GAME.height
 
-    // Himmel: Verlauf von oben dunkel nach unten heller
+    // Himmel: oben dunkel, unten heller — in Streifen (echte Verläufe gibt es
+    // in Pixel-Art nicht, und Phaser kann sie beim Texturen-Malen sowieso nicht)
     let g = this.make.graphics({ x: 0, y: 0, add: false })
-    g.fillGradientStyle(P.daemmerBlau, P.daemmerBlau, P.schieferGrau, P.schieferGrau, 1)
-    g.fillRect(0, 0, W, H)
+    const bands = [P.nachtBlau, P.daemmerBlau, P.schieferGrau, P.steinGrau]
+    bands.forEach((c, i) => { g.fillStyle(c); g.fillRect(0, Math.floor(H * i / bands.length), W, Math.ceil(H / bands.length)) })
     g.generateTexture('bg_sky', W, H)
     g.destroy()
 

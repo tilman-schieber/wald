@@ -53,8 +53,8 @@ export const HEROES = {
     jump: 360,           // ...springt aber ein bisschen weniger hoch
     frame: { w: 32, h: 32 },
     body: { w: 10, h: 26 },   // kleiner → passt später durch enge Spalten
-    color: P.moosGruen,
-    accent: P.wiesenGruen,
+    color: P.fuchsOrange,
+    accent: P.hellGelb,
     file: null,
     anims: {
       idle: { frames: [0], rate: 6, repeat: -1 },

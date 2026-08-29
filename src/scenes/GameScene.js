@@ -65,6 +65,9 @@ export default class GameScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '8px', color: '#fee761',
     }).setScrollFactor(0).setDepth(100)
     this.updateNameText()
+
+    // Zum Nachschauen in der Browser-Konsole: __wald.scene.jonas.x usw.
+    window.__wald = { scene: this }
   }
 
   update(time) {

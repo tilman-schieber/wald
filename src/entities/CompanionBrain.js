@@ -12,7 +12,8 @@ export default class CompanionBrain {
   constructor(groundLayer) {
     this.groundLayer = groundLayer
     this.lastJumpTime = 0
-    this.moving = false
+    this.moving = false     // laufe ich gerade hinterher?
+    this.climbing = false   // versuche ich gerade, zum Partner HOCH zu kommen?
   }
 
   think(me, leader, time) {
@@ -22,32 +23,47 @@ export default class CompanionBrain {
     const dist = Math.abs(dx)
     const dir = Math.sign(dx) || 1
     const leaderAbove = leader.body.bottom < me.body.bottom - 12
+    const leaderBelow = leader.body.bottom > me.body.bottom + 12
 
     // Loslaufen erst ab followDistance, anhalten schon bei stopDistance.
     // Zwei verschiedene Zahlen → kein nervöses Hin-und-her-Zappeln.
     if (dist > COMPANION.followDistance) this.moving = true
     if (dist < COMPANION.stopDistance) this.moving = false
 
+    // Partner steht oben? Dann "Klettermodus" (auch mit zwei Zahlen).
+    if (leaderAbove && dist < 80) this.climbing = true
+    if (!leaderAbove || dist > 120) this.climbing = false
+
     if (this.moving) {
       cmd.left = dir < 0
       cmd.right = dir > 0
     }
 
+    let wantJump = false
+
+    if (this.climbing) {
+      if (this.ceilingAbove(me)) {
+        // Ich stehe UNTER der Plattform → erst seitlich rauslaufen
+        cmd.left = dir > 0
+        cmd.right = dir < 0
+      } else {
+        // Freie Bahn nach oben → Richtung Partner springen
+        cmd.left = dir < 0
+        cmd.right = dir > 0
+        wantJump = true
+      }
+    }
+
     // Springen? Nur am Boden und nicht zu oft.
     if (me.onGround && time - this.lastJumpTime > COMPANION.jumpCooldownMs) {
-      const blocked = dir < 0 ? me.body.blocked.left : me.body.blocked.right
-      const gapAhead = this.moving && !this.groundAhead(me, dir)
+      const movingDir = cmd.right ? 1 : cmd.left ? -1 : 0
+      const blocked = movingDir > 0 ? me.body.blocked.right : movingDir < 0 ? me.body.blocked.left : false
+      const gapAhead = movingDir !== 0 && !this.groundAhead(me, movingDir)
 
-      let jump = false
-      if (this.moving && blocked) jump = true               // Wand im Weg
-      if (gapAhead && !this.leaderBelow(me, leader)) jump = true  // Loch, Partner nicht unten
-      if (leaderAbove && dist < 60) {                        // Partner steht oben
-        jump = true
-        cmd.left = dir < 0                                   // dabei Richtung Partner
-        cmd.right = dir > 0
-      }
+      if (blocked) wantJump = true                 // Wand im Weg
+      if (gapAhead && !leaderBelow) wantJump = true // Loch, Partner ist nicht unten
 
-      if (jump) {
+      if (wantJump) {
         cmd.jump = true
         this.lastJumpTime = time
       }
@@ -65,7 +81,15 @@ export default class CompanionBrain {
     return this.groundLayer.getTileAtWorldXY(x, y) !== null
   }
 
-  leaderBelow(me, leader) {
-    return leader.body.bottom > me.body.bottom + 12
+  // Ist über meinem Kopf (in Sprunghöhe) irgendwo eine Kachel?
+  // Geprüft wird links, in der Mitte und rechts vom Körper.
+  ceilingAbove(me) {
+    const xs = [me.body.left - 2, me.x, me.body.right + 2]
+    for (const x of xs) {
+      for (let y = me.body.top - 4; y > me.body.top - 72; y -= 16) {
+        if (this.groundLayer.getTileAtWorldXY(x, y) !== null) return true
+      }
+    }
+    return false
   }
 }
