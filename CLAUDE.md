@@ -66,9 +66,14 @@ Entscheidungen so, dass Kinder mitlesen können.
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),
   `hopper` (Hase: hüpft in Sätzen heran), `thrower` (Affe: wirft Jackfrüchte im Bogen),
   `climber` (Nasenbär: verfolgt und klettert auf Plattformen), `dropper` (Faultier: hängt am Ast und lässt sich fallen),
-  `marcher` (Ameisenkolonne: marschiert nur; heilt man die Anführerin, kehrt die ganze Gruppe um – `gruppe` in der Config).
+  `marcher` (Ameisenkolonne: marschiert stur im Gänsemarsch, alle in dieselbe Richtung – dreht eine um,
+  drehen alle um; `gruppe` in der Config). Über verwirrten Ameisen schwebt ein "?", ein Treffer auf
+  IRGENDEINE heilt die ganze Reihe: über jeder erscheint ein Herz und die Kolonne kehrt um.
   Jeder muss mit Springen + Basisangriff zu schaffen sein.
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
+- Hintergrund-Ebenen (`BACKGROUND.layers`): am OBEREN Bildrand darf nichts angeschnitten sein –
+  ein abgeschnittener Baum wirkt im Spiel, als hinge er von der Decke. Zeichen-Marker der Gegner
+  liegen auf Tiefe 25, also vor Deko und Vordergrund-Ebenen.
 - Alles, was auf dem Boden steht, bekommt einen weichen Schatten (`addShadow`) und Deko sitzt 2 px
   im Moos – ohne das wirkt bei diesem Tileset alles schwebend.
 - Beide Fähigkeiten (E) haben einen Cooldown mit Balken im HUD (`hero.specialReadyAt`)

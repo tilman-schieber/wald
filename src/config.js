@@ -341,9 +341,10 @@ ENEMIES.faultier = {
   },
 }
 
-//  Verwirrte Blattschneiderameisen: marschieren im Gänsemarsch.
-//  Sie greifen nie an – man springt drüber oder heilt die Anführerin,
-//  dann kehrt die ganze Kolonne friedlich um.
+//  Verwirrte Blattschneiderameisen: marschieren im Gänsemarsch und haben
+//  ihre Blätter verloren. Sie greifen nie an, aber anrempeln tut weh.
+//  Ein einziger Schlag auf IRGENDEINE Ameise heilt die ganze Reihe:
+//  alle drehen sich um, tragen wieder ein Blatt und marschieren heim.
 ENEMIES.ameise = {
   key: 'ameise', name: 'Verwirrte Blattschneiderameise', hp: 1, speed: 22, damage: 1,
   frame: { w: 26, h: 23 }, body: { w: 18, h: 14 },

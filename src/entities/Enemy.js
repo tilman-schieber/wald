@@ -50,7 +50,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (cfg.ai?.kind === 'dropper') { this.body.setAllowGravity(false); this.state = 'perch' }
     this.wanderPause = false
     this.alertReadyAt = 0
-    this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(9).setVisible(false)
+    this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(25).setVisible(false)   // vor Deko und Farn-Ebene: das Zeichen muss man IMMER sehen
   }
 
   // Bild wechseln und die Trefferbox unten-mittig neu ausrichten
@@ -96,6 +96,19 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       else this.walk(ai.healedWanderSpeed ?? 10, groundLayer)
       this.setFlipX(this.dir > 0)
       this.y += Math.sin(time / 400) * 0.02   // ganz leichtes Atmen
+      // Geheilte Ameisen marschieren weiter – dann sollen die Beinchen auch laufen,
+      // sonst rutscht die Kolonne steif über den Boden. (Nur bei Ameisen: ihr
+      // geheiltes Bild ist dasselbe wie das normale, bei anderen Tieren nicht.)
+      if (ai.kind === 'marcher' && !this.wanderPause && this.scene.anims.exists(this.cfg.key + '-lauf')
+          && (!this.anims.isPlaying || this.anims.currentAnim?.key !== this.cfg.key + '-lauf')) {
+        this.useTexture(this.cfg.key + '-lauf')
+        this.play(this.cfg.key + '-lauf', true)
+      }
+      // Das Herz schwebt noch kurz mit und blendet dann aus
+      if (this.markHideAt) {
+        if (time > this.markHideAt) { this.showMark(false); this.markHideAt = 0 }
+        else this.mark.setPosition(this.x, this.body.top - 8 + Math.sin(time / 200) * 0.8)
+      }
       return
     }
     if (this.isCalm(time)) { this.setVelocityX(0); this.showMark(false); return }
@@ -126,6 +139,15 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         break
       }
       case 'wander': {
+        // Ameisen trödeln nicht herum: sie marschieren stur geradeaus, alle in
+        // dieselbe Richtung – sonst ist von der Kolonne nach kurzer Zeit nichts mehr zu sehen.
+        // Das "?" zeigt, dass sie verwirrt sind (und nicht bloß Deko).
+        if (ai.kind === 'marcher') {
+          this.wanderPause = false
+          this.walk(ai.wanderSpeed, groundLayer)
+          this.showMark(true, '?')
+          break
+        }
         if (time >= this.stateUntil) {                       // neue Laune: laufen oder stehen?
           this.wanderPause = !this.wanderPause
           if (!this.wanderPause) this.dir = Math.random() < 0.5 ? -1 : 1
@@ -142,7 +164,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
 
         // Sieht er einen Helden?
-        if (ai.kind === 'marcher') break            // Ameisen marschieren nur, sie greifen nie an
         if (time >= this.alertReadyAt) {
           const seen = heroes.find((h) => Math.abs(h.x - this.x) <= ai.sight.x && Math.abs(h.body.bottom - this.body.bottom) <= ai.sight.y)
           if (seen) {
@@ -336,7 +357,12 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   // Normales Laufen: an Wand oder Abgrund umdrehen – fällt nie von seiner Plattform
   walk(speed, groundLayer) {
     const blocked = this.dir < 0 ? this.body.blocked.left : this.body.blocked.right
-    if (this.onGround && (blocked || !this.groundAhead(groundLayer))) this.dir = -this.dir
+    if (this.onGround && (blocked || !this.groundAhead(groundLayer))) {
+      this.dir = -this.dir
+      // Ameisen laufen im Gänsemarsch: dreht eine um, drehen alle um.
+      // Sonst löst sich die Reihe nach ein paar Stufen in lauter Einzelgänger auf.
+      if (this.cfg.ai?.kind === 'marcher' && this.groupMates) for (const m of this.groupMates) m.dir = this.dir
+    }
     this.setVelocityX(this.dir * speed)
   }
 
@@ -374,9 +400,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.useTexture(this.cfg.key)
   }
 
-  showMark(on, text) {
+  showMark(on, text, farbe = '#fee761') {
     this.mark.setVisible(on)
-    if (text) this.mark.setText(text).setAngle(0)
+    if (text) this.mark.setText(text).setAngle(0).setColor(farbe)
   }
 
   // Ein Treffer. true = dadurch geheilt, false = getroffen, null = abgeprallt (Stacheln!)
@@ -392,11 +418,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     return false
   }
 
-  heal(silent = false) {
+  heal(vonDerGruppe = false) {
     this.healed = true
     this.body.setAllowGravity(true)
-    // Ameisen: die ganze Kolonne kehrt mit der Anführerin um
-    if (this.groupMates && !silent) for (const m of this.groupMates) if (m !== this && !m.healed) m.heal(true)
+    // Ameisen: es reicht, EINE zu treffen – die ganze Kolonne wacht mit auf
+    if (this.groupMates && !vonDerGruppe) for (const m of this.groupMates) if (m !== this && !m.healed) m.heal(true)
     this.hp = 0
     this.clearTint()
     this.setVelocity(0, 0)
@@ -405,8 +431,18 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.stateUntil = 0
     this.wanderPause = true
     if (this.scene.textures.exists(this.cfg.key + '-heil')) this.useTexture(this.cfg.key + '-heil')
-    if (silent) return
-    // ein kleines Herz steigt auf
+    // Blattschneiderameisen: alle kehren um und tragen wieder ein Blatt nach Hause.
+    // Das Umdrehen und das Blatt sind das Zeichen: die Kolonne ist geheilt.
+    if (this.cfg.ai?.kind === 'marcher') {
+      this.dir = -this.dir
+      this.wanderPause = false
+      this.stateUntil = Number.MAX_SAFE_INTEGER      // kein zufälliges Stehenbleiben mehr
+      // Aus dem "?" wird ein Herz: das sieht man auch im dichten Grün noch.
+      this.showMark(true, '♥', '#f6757a')
+      this.markHideAt = this.scene.time.now + 2500
+    }
+    // Ein Herz steigt auf – bei JEDER Ameise, damit man sofort sieht,
+    // dass die ganze Reihe erlöst ist und nicht nur die eine, die man getroffen hat.
     const heart = this.scene.add.text(this.x, this.body.top - 4, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a' }).setOrigin(0.5).setDepth(15)
     this.scene.tweens.add({ targets: heart, y: heart.y - 20, alpha: 0, duration: 900, onComplete: () => heart.destroy() })
   }
