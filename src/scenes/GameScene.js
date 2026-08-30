@@ -23,7 +23,7 @@
 //             wird HINTER dem Spielfeld gezeichnet und wandert langsamer als die Kamera
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF } from '../config.js'
+import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF, tiefeZuDepth } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame, clearSave } from '../save.js'
@@ -79,14 +79,14 @@ export default class GameScene extends Phaser.Scene {
     // ---------- Parallax: hinten → vorne ----------
     // scrollFactor sagt, wie stark eine Ebene mit der Kamera mitwandert.
     // 0 = bleibt stehen (Himmel), 1 = normal (Spielebene), >1 = schneller (Vordergrund)
-    this.add.image(0, 0, 'bg_sky').setOrigin(0).setScrollFactor(0).setDepth(-40)
+    this.add.image(0, 0, 'bg_sky').setOrigin(0).setScrollFactor(0).setDepth(-100)   // ganz hinten – hinter allen Ebenen
     // Jede Ebene ist ein nahtlos wiederholbares Bild, das mit eigenem Tempo wandert
     this.bgLayers = []
     const BG = this.forest.background
     const layers = (BG?.layers ?? []).filter((l) => this.textures.exists(l.key))
     const fallback = [{ key: 'bg_far', scroll: 0.2 }, { key: 'bg_mid', scroll: 0.5 }]
     for (const [i, l] of (layers.length ? layers : fallback).entries()) {
-      const ts = this.add.tileSprite(0, l.y ?? 0, GAME.width, l.h ?? GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(l.depth ?? -39 + i)
+      const ts = this.add.tileSprite(0, l.y ?? 0, GAME.width, l.h ?? GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(l.depth ?? tiefeZuDepth(l.scroll))
       if (l.alpha !== undefined) ts.setAlpha(l.alpha)
       if (l.tint !== undefined) ts.setTint(l.tint)
       this.bgLayers.push({ ts, scroll: l.scroll, offsetX: l.offsetX ?? 0 })
@@ -228,8 +228,14 @@ export default class GameScene extends Phaser.Scene {
       const key = 'kulisse-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Kulisse:', o.name); continue }
       const tiefe = Number(props(o).tiefe ?? 0.5)
-      const img = this.add.image(o.x * tiefe + (GAME.width / 2) * (1 - tiefe), o.y, key).setOrigin(0.5, 1).setScrollFactor(tiefe, 0).setDepth(-31 + tiefe * 12)   // weit weg = hinter dem Dunst (-25), nah = davor
-      img.setAlpha(0.55 + tiefe * 0.45)   // je weiter weg, desto blasser
+      const k = KULISSEN[o.name] ?? {}
+      // WICHTIG: dieselbe Tiefen-Formel wie für die Hintergrund-Ebenen. Sonst liegt
+      // eine ferne Kulisse VOR den nahen Bäumen und alles wirkt falsch gestapelt.
+      const img = this.add.image(o.x * tiefe + (GAME.width / 2) * (1 - tiefe), k.standY ?? o.y, key)
+        .setOrigin(0.5, 1).setScrollFactor(tiefe, 0).setDepth(tiefeZuDepth(tiefe) + 1)   // knapp VOR der gleich schnellen Ebene, aber hinter der nächsten
+      img.setAlpha(0.85 + tiefe * 0.15)
+      // Fernes wird vom Dunst eingefärbt – genau wie die ferne Baumreihe
+      if (tiefe < 0.5) img.setTint(0x8fa0c0)
       if (props(o).spiegeln) img.setFlipX(true)
     }
 

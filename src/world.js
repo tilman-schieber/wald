@@ -17,6 +17,7 @@ export const world = {
   musicOff: false,
   forest: 'schwarzwald',                         // in welchem Wald wir gerade sind
   finished: {},                                  // welche Wälder schon gerettet sind
+  gesehen: {},                                   // welche Wald-Geschichten schon liefen
 }
 
 export function healedIn(room) {

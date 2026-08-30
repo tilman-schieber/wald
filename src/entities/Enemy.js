@@ -313,7 +313,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     if (this.state !== 'roll' || ai.rotate === false || ai.kind === 'hopper') this.setFlipX(this.dir > 0)
     // Lauf-Animation, wenn es eine gibt (nur beim Gehen); im Alarm läuft die Alarm-Animation
-    const walking = (this.state === 'wander' && !this.wanderPause) || (ai.kind === 'hopper' && this.state === 'roll')
+    // Läuft er gerade? Auch beim Verfolgen/Hüpfen/Marschieren sollen die Beine gehen –
+    // sonst rutscht ein Gegner wie ein Möbelstück über den Boden.
+    const jagt = this.state === 'roll' && ['hopper', 'climber', 'marcher'].includes(ai.kind)
+    const walking = (this.state === 'wander' && !this.wanderPause) || jagt
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
       if (walking) { if (this.anims.currentAnim?.key !== this.cfg.key + '-lauf') { this.play(this.cfg.key + '-lauf'); this.useTexture(this.cfg.key + '-lauf') } }
       else if (this.anims.isPlaying && this.state !== 'alert' && this.state !== 'dizzy') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }

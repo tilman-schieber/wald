@@ -2,7 +2,7 @@
 //  TITEL-SZENE — W.A.L.D.
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, COMBAT, BACKGROUND, MUSIC, UI } from '../config.js'
+import { GAME, COMBAT, BACKGROUND, MUSIC, UI, FORESTS } from '../config.js'
 import { P, hex } from '../palette.js'
 import { world } from '../world.js'
 import { hasSave, loadGame, clearSave } from '../save.js'
@@ -46,17 +46,22 @@ export default class TitleScene extends Phaser.Scene {
       this.add.sprite(W / 2 + 24, 172, 'leonel').play('leonel-idle').setFlipX(true)
     }
 
-    if (this.textures.exists('panel')) {
-      // Panel genau um die Menüzeilen herum (Zeilen bei y0, y0+16, … → Mitte = y0 + 8·(n−1))
-      const y0 = hasPic ? 214 : 205, n = hasSave() ? 2 : 1
-      this.add.nineslice(W / 2, y0 + 8 * (n - 1), 'panel', undefined, 170, 16 * n + 22, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
-    }
     this.options = []
     if (hasSave()) this.options.push({ label: 'Weiter', action: () => this.continueGame() })
     this.options.push({ label: 'Neues Spiel', action: () => this.newGame() })
+    // Direkt in einen Wald springen – praktisch zum Ausprobieren
+    for (const [key, wald] of Object.entries(FORESTS)) {
+      this.options.push({ label: wald.name, action: () => this.starteWald(key) })
+    }
+    // … dann das Holzpanel passend darum legen (Zeilen im Abstand 14, unten am Bild)
+    const n = this.options.length
+    this.menuY0 = H - 32 - (n - 1) * 14
+    if (this.textures.exists('panel')) {
+      this.add.nineslice(W / 2, this.menuY0 + 7 * (n - 1), 'panel', undefined, 200, 14 * n + 18, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
+    }
     this.selected = 0
     this.optionTexts = this.options.map((o, i) =>
-      this.add.text(W / 2, (hasPic ? 214 : 205) + i * 16, o.label, { fontFamily: font, fontSize: font === 'monospace' ? '12px' : '14px', color: '#ffffff', stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
+      this.add.text(W / 2, this.menuY0 + i * 14, o.label, { fontFamily: font, fontSize: font === 'monospace' ? '10px' : '12px', color: '#ffffff', stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
         .setInteractive({ useHandCursor: true }).on('pointerdown', () => { this.selected = i; this.choose() }))
     this.hint = this.add.text(W / 2, H - 10, 'Leertaste / Antippen zum Starten', { fontFamily: 'monospace', fontSize: '8px', color: hex(P.nebelHell), stroke: hex(P.schwarz), strokeThickness: 2 }).setOrigin(0.5)
     this.refresh()
@@ -86,12 +91,27 @@ export default class TitleScene extends Phaser.Scene {
     world.active = 'jonas'
     world.hp = { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp }
     world.healed = {}; world.gatesOpen = {}; world.collected = {}; world.leaves = 0
-    this.scene.start('Intro')
+    this.scene.start('Intro', { forest: 'schwarzwald', room: 'schwarzwald', spawn: 'start' })
+  }
+
+  // Einen Wald direkt starten (frische Herzen, ohne Geschichte)
+  starteWald(key) {
+    world.active = 'jonas'
+    world.hp = { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp }
+    world.healed = {}; world.gatesOpen = {}; world.collected = {}; world.leaves = 0
+    this.scene.start('Game', { room: FORESTS[key].level, spawn: 'start' })
   }
 
   continueGame() {
     const where = loadGame()
-    if (where) this.scene.start('Game', where)
-    else this.newGame()
+    if (!where) return this.newGame()
+    // Beginnt hier ein neuer Wald? Dann erst seine Geschichte zeigen.
+    const wald = Object.keys(FORESTS).find((k) => where.room.startsWith(k))
+    if (wald && where.spawn === 'start' && !world.gesehen?.[wald]) {
+      world.gesehen = world.gesehen ?? {}
+      world.gesehen[wald] = true
+      return this.scene.start('Intro', { forest: wald, room: where.room, spawn: where.spawn })
+    }
+    this.scene.start('Game', where)
   }
 }

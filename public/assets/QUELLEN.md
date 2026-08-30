@@ -47,3 +47,6 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Kulissen: Cascatinha `53e9775d…`, Vista Chinesa `a4858ee5…`, Cristo Redentor `ceffa730…`
 - Gegner: Affe `722b9a21…` (+ beruhigt `b3dec16c…`), Nasenbär `8d2502b2…` (+ Lauf `f7b71e9e…`), Faultier `cf441662…` (+ schlafend `09083a31…`), Ameise `12dcce15…` (+ Lauf `5e30cb70…`), Jackfrucht `61cd7fe8…`
 - Deko: Bromelie `22653618…`, Bambus `095f2e62…`, Liane `60db5b2e…`, Monstera `516084f6…`
+- Nachbesserung: Nasenbär `e6ec27a6…` und Kapuzineraffe `64e3b8e5…` neu (die ersten sahen nicht nach den Tieren aus);
+  Animationen dazu: Nasenbär-Lauf `af1e73b3…`, Affe beruhigt `78ac5772…`, Affe wirft `ab097341…`;
+  Tijuca-Intro: Flug `1fa2d8b4…`, Waldrand `37a215c6…`; Jonas klettert (Rückansicht) `64f53502…`

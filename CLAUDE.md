@@ -51,6 +51,12 @@ Entscheidungen so, dass Kinder mitlesen können.
 - **Keine Abgründe** in den Räumen (Tilman-Wunsch). Der Code dafür (fellIntoPit) bleibt als Sicherheitsnetz.
 - Deko `bach` (Wasserfall) nie direkt auf der Laufebene platzieren (sieht komisch aus) – nur z. B. in Nischen/tiefer
 - Posen/Animationen einer Figur IMMER per `animate_image` aus ihrem Hauptbild ableiten, nie separat generieren (sonst passt es nicht zusammen)
+- `animate_image` malt jedes Bild neu → bei LAUFZYKLEN wandert die Form. Danach immer
+  `node tools/frames-aussortieren.mjs <sheet> <n> <out>` laufen lassen (wirft Ausreißer raus).
+  NICHT bei Verwandlungen (Einrollen, Sprung, Wurf) – dort ist die Änderung gewollt.
+- Hintergrund-Tiefe: `tiefeZuDepth(scroll) = -60 + scroll*20` gilt für Ebenen UND Kulissen
+  (Kulisse +1, damit sie vor der gleich schnellen Ebene liegt). Der Himmel liegt bei -100.
+  Kulissen stehen auf `KULISSEN[name].standY` – Fernes gehört an den Horizont, nicht auf die Bodenlinie.
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen → benommen.
   Drei Arten (`ai.kind`): `roller` (Igel: rollt als Kugel geradeaus, nur benommen verwundbar),
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),

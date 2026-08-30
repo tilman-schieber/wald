@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTRO, FORESTS, WURF } from '../config.js'
+import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTROS, FORESTS, WURF } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -19,6 +19,8 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload() {
+    this.ladeAnzeige()
+
     // Echte Bilder laden — nur wenn in der Config ein Pfad steht.
     for (const hero of Object.values(HEROES)) {
       if (hero.file) {
@@ -70,7 +72,7 @@ export default class BootScene extends Phaser.Scene {
     if (HEARTS.full) { this.load.image('herz', HEARTS.full); this.load.image('herz_leer', HEARTS.empty) }
     if (UI.panelFile) this.load.image('panel', UI.panelFile)
     if (UI.titleFile) this.load.image('titelbild', UI.titleFile)
-    INTRO.forEach((f, i) => { if (f.image) this.load.image('intro' + i, f.image) })
+    for (const [wald, folien] of Object.entries(INTROS)) folien.forEach((f, i) => { if (f.image) this.load.image('intro-' + wald + '-' + i, f.image) })
     for (const [name, k] of Object.entries(KULISSEN)) if (k.file) this.load.image('kulisse-' + name, k.file)
     if (UI.fontFile) this.loadFont()
     if (SPIRIT.file) this.load.image('geist', SPIRIT.file)
@@ -80,6 +82,21 @@ export default class BootScene extends Phaser.Scene {
       const key = path.split('/').pop().replace('.json', '')
       this.cache.tilemap.add(key, { format: Phaser.Tilemaps.Formats.TILED_JSON, data })
     }
+  }
+
+  // Ladebildschirm: ein Balken, der sich füllt. Phaser sagt uns über 'progress',
+  // wie viel schon da ist (0 = nichts, 1 = alles).
+  ladeAnzeige() {
+    const W = GAME.width, H = GAME.height
+    this.add.rectangle(0, 0, W, H, 0x181425).setOrigin(0)
+    this.add.text(W / 2, H / 2 - 34, 'W.A.L.D.', { fontFamily: 'monospace', fontSize: '28px', color: '#fee761' }).setOrigin(0.5)
+    const text = this.add.text(W / 2, H / 2 + 22, 'Der Wald wächst …', { fontFamily: 'monospace', fontSize: '9px', color: '#c0cbdc' }).setOrigin(0.5)
+    const breite = 180
+    this.add.rectangle(W / 2, H / 2, breite + 4, 12, 0x000000, 0).setStrokeStyle(1, 0x5a6988)
+    const balken = this.add.rectangle(W / 2 - breite / 2, H / 2, 1, 8, 0x63c74d).setOrigin(0, 0.5)
+    this.load.on('progress', (v) => { balken.width = Math.max(1, breite * v); text.setText('Der Wald wächst … ' + Math.round(v * 100) + '%') })
+    // Die HTML-Anzeige darf weg, sobald Phaser malt
+    document.getElementById('laden')?.remove()
   }
 
   // Die Pixel-Schrift (TTF) dem Browser bekannt machen, damit Phaser-Texte sie benutzen können

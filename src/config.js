@@ -285,10 +285,11 @@ ENEMIES.hase = {
 //  Nach drei Würfen muss er verschnaufen – dann kommt man an ihn heran.
 ENEMIES.affe = {
   key: 'affe', name: 'Verwirrter Kapuzineraffe', hp: 3, speed: 0, damage: 1,
-  frame: { w: 26, h: 32 }, body: { w: 18, h: 26 },
+  frame: { w: 35, h: 44 }, body: { w: 20, h: 30 },
   color: P.rindeBraun, accent: P.sandHell,
   file: 'assets/sprites/affe.png',            // PixelLab 722b9a21…
   healedFile: 'assets/sprites/affe_heil.png',
+  alertSheet: { file: 'assets/sprites/affe_wurf.png', w: 41, h: 45, n: 6, rate: 10 },   // animate_image ab097341… (holt aus und wirft)
   ai: {
     kind: 'thrower', spiky: false,
     wanderSpeed: 0,                 // er sitzt und schaut sich nur um
@@ -304,11 +305,11 @@ ENEMIES.affe = {
 //  sogar an Wänden hoch. Dafür ist er langsam und immer verwundbar.
 ENEMIES.nasenbaer = {
   key: 'nasenbaer', name: 'Verwirrter Nasenbär', hp: 4, speed: 35, damage: 1,
-  frame: { w: 27, h: 28 }, body: { w: 22, h: 20 },
+  frame: { w: 40, h: 36 }, body: { w: 26, h: 22 },
   color: P.rostRot, accent: P.erdeDunkel,
   file: 'assets/sprites/nasenbaer.png',       // PixelLab 8d2502b2…
   healedFile: 'assets/sprites/nasenbaer.png',
-  walkSheet: { file: 'assets/sprites/nasenbaer_lauf.png', w: 29, h: 28, n: 6, rate: 9 },   // animate_image f7b71e9e…
+  walkSheet: { file: 'assets/sprites/nasenbaer_lauf.png', w: 40, h: 36, n: 4, rate: 8 },   // animate_image f7b71e9e…
   ai: {
     kind: 'climber', spiky: false,
     wanderSpeed: 35,
@@ -349,7 +350,7 @@ ENEMIES.ameise = {
   color: P.rostRot, accent: P.wiesenGruen,
   file: 'assets/sprites/ameise.png',          // PixelLab 12dcce15…
   healedFile: 'assets/sprites/ameise.png',
-  walkSheet: { file: 'assets/sprites/ameise_lauf.png', w: 27, h: 26, n: 6, rate: 10 },   // animate_image 5e30cb70…
+  walkSheet: { file: 'assets/sprites/ameise_lauf.png', w: 27, h: 26, n: 5, rate: 9 },   // animate_image 5e30cb70…
   gruppe: 5,                                  // fünf Ameisen aus einem Tiled-Punkt
   gruppeAbstand: 20,
   ai: { kind: 'marcher', spiky: false, wanderSpeed: 22, sight: { x: 0, y: 0 }, alertMs: 0, dizzyMs: 0, cooldownMs: 0, healedWanderSpeed: 18 },
@@ -361,29 +362,41 @@ export const WURF = { key: 'frucht', file: 'assets/sprites/frucht.png', damage: 
 export const SLASH = { file: 'assets/sprites/schlag.png' }   // PixelLab d47f7c28… (null = gelber Halbmond)
 export const HEARTS = { full: 'assets/sprites/herz.png', empty: 'assets/sprites/herz_leer.png' }   // pixen 3bb1d083… / 5914ab12…
 
-// Geschichte am Anfang: jede Folie = Bild + Sätze (jeder Satz ein Tastendruck)
-export const INTRO = [
-  { image: 'assets/bg/intro_freiburg.png', lines: ['Jonas und Leonel wohnen in Freiburg.', 'Eines Morgens merken sie: Aus dem Schwarzwald kommt kein Vogelruf mehr.'] },
+// Geschichte vor jedem Wald: jede Folie = Bild + Sätze (jeder Satz ein Tastendruck)
+export const INTROS = {
+ schwarzwald: [
+  { image: 'assets/bg/intro_freiburg.png', lines: ['Jonas und Leonel wohnen in Freiburg.', 'Eines Morgens fällt ihnen etwas auf:', 'Aus dem Schwarzwald kommt kein Vogelruf mehr.'] },
   { image: 'assets/bg/intro_titisee_bahn.png', lines: ['Mit der S1 fahren sie hinauf zum Titisee.', 'Am Bahnhof ist es seltsam ruhig.'] },
   { image: 'assets/bg/intro_titisee_wald.png', lines: ['Am See beginnt der Wald.', 'Die beiden nehmen ihren Mut zusammen und gehen hinein.'] },
-  { image: 'assets/bg/schwarzwald_intro.png', lines: ['Im Schwarzwald ist es still geworden.', 'Die Tiere sind verwirrt und haben vergessen, wer sie sind.', 'Nur zwei Brüder können den Wald wieder zum Singen bringen …', 'Jonas und Leonel – die Wächter Aller Lebenden Dinge!'] },
-]
+  { image: 'assets/bg/schwarzwald_intro.png', lines: ['Im Schwarzwald ist es still geworden.', 'Die Tiere sind verwirrt.', 'Sie haben vergessen, wer sie sind.', 'Zwei Brüder können den Wald zurückbringen:', 'Jonas und Leonel – die Wächter Aller Lebenden Dinge!'] },
+ ],
+ tijuca: [
+  { image: 'assets/bg/tijuca_intro_flug.png', lines: ['Ein Brief kommt aus Brasilien.', 'Auch dort ist ein Wald verstummt!', 'Jonas und Leonel fliegen über den Ozean.'] },
+  { image: 'assets/bg/tijuca_intro_wald.png', lines: ['Die Floresta da Tijuca liegt mitten in Rio.', 'Früher war hier alles abgeholzt.', 'Menschen haben sie Baum für Baum zurückgepflanzt.', 'Jetzt braucht sie die beiden.'] },
+ ],
+}
 
 // ------------------------------------------------------------
 //  Kulissen: große Hintergrund-Bilder mit eigener Parallax-Tiefe.
 //  In Tiled: type "kulisse", name = Schlüssel, Eigenschaft tiefe = 0.15 … 0.8
 //  (0 = ganz weit weg, 1 = auf der Spielebene). Ankerpunkt unten-mittig.
 // ------------------------------------------------------------
+//  standY = auf welcher Höhe die Kulisse steht. Weit entferntes gehört an den
+//  Horizont (kleinere Zahl), Nahes auf die Bodenlinie (240).
 export const KULISSEN = {
-  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png' },
-  schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png' },
-  titisee:        { file: 'assets/bg/kulisse_titisee.png' },
-  muenster:       { file: 'assets/bg/kulisse_muenster.png' },
-  hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png' },
-  cristo:         { file: 'assets/bg/kulisse_cristo.png' },       // Floresta da Tijuca
-  cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png' },
-  pavillon:       { file: 'assets/bg/kulisse_pavillon.png' },
+  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', standY: 236 },
+  schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png', standY: 200 },
+  titisee:        { file: 'assets/bg/kulisse_titisee.png', standY: 205 },
+  muenster:       { file: 'assets/bg/kulisse_muenster.png', standY: 190 },
+  hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png', standY: 244 },
+  cristo:         { file: 'assets/bg/kulisse_cristo.png', standY: 150 },        // Floresta da Tijuca
+  cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png', standY: 236 },
+  pavillon:       { file: 'assets/bg/kulisse_pavillon.png', standY: 244 },
 }
+
+//  Wie tief im Bild etwas liegt, hängt allein am Scroll-Tempo:
+//  je langsamer es wandert, desto weiter hinten wird es gezeichnet.
+export const tiefeZuDepth = (scroll) => -60 + scroll * 20
 
 //  Musik je Wald (alle mit ~/crush.py --preset snes bearbeitet). Der Schlüssel ist der
 //  Anfang des Raum-/Level-Namens ("schwarzwald", "tijuca", "la_palma", "plaenterwald").
