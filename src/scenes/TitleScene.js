@@ -47,7 +47,9 @@ export default class TitleScene extends Phaser.Scene {
     }
 
     if (this.textures.exists('panel')) {
-      this.add.nineslice(W / 2, hasPic ? 228 : 216, 'panel', undefined, 150, 46, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
+      // Panel genau um die Menüzeilen herum (Zeilen bei y0, y0+16, … → Mitte = y0 + 8·(n−1))
+      const y0 = hasPic ? 214 : 205, n = hasSave() ? 2 : 1
+      this.add.nineslice(W / 2, y0 + 8 * (n - 1), 'panel', undefined, 170, 16 * n + 22, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
     }
     this.options = []
     if (hasSave()) this.options.push({ label: 'Weiter', action: () => this.continueGame() })

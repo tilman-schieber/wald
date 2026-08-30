@@ -52,7 +52,7 @@ export default class Owl extends Enemy {
           this.state = 'rest'
           this.stateUntil = time + ai.restMs
           this.setVelocity(0, 0)
-          this.useTexture(this.cfg.key)
+          this.useTexture(this.scene.textures.exists(this.cfg.key + '-boden') ? this.cfg.key + '-boden' : this.cfg.key)   // am Boden: ohne Ast
           this.showMark(true, '★')
         }
         break
@@ -80,7 +80,7 @@ export default class Owl extends Enemy {
     const flying = this.state === 'swoop' || this.state === 'return'
     if (this.scene.anims.exists(this.cfg.key + '-flug-anim')) {
       if (flying) { if (this.anims.currentAnim?.key !== this.cfg.key + '-flug-anim') { this.play(this.cfg.key + '-flug-anim'); this.useTexture(this.cfg.key + '-flug-anim') } }
-      else if (this.anims.isPlaying) { this.anims.stop(); this.useTexture(this.cfg.key) }
+      else if (this.anims.isPlaying) { this.anims.stop(); this.useTexture(this.state === 'rest' && this.scene.textures.exists(this.cfg.key + '-boden') ? this.cfg.key + '-boden' : this.cfg.key) }
     }
     if (this.body.velocity.x !== 0) this.dir = Math.sign(this.body.velocity.x)
     this.setFlipX(this.dir > 0)
@@ -90,7 +90,7 @@ export default class Owl extends Enemy {
 
   stun(time, ms) {
     if (this.healed || this.state === 'perch' || this.state === 'return') return   // in der Luft erwischt sie nichts
-    this.state = 'rest'; this.stateUntil = time + ms; this.setVelocity(0, 0); this.useTexture(this.cfg.key); this.showMark(true, '★')
+    this.state = 'rest'; this.stateUntil = time + ms; this.setVelocity(0, 0); this.useTexture(this.scene.textures.exists(this.cfg.key + '-boden') ? this.cfg.key + '-boden' : this.cfg.key); this.showMark(true, '★')
   }
 
   hit(damage, fromX, time) {

@@ -186,7 +186,9 @@ export const ENEMIES = {
     body: { w: 22, h: 25 },
     color: P.holzBraun,
     accent: P.sonnenGelb,
-    file: 'assets/sprites/eule.png',         // PixelLab ffc1d20a… (sitzend)
+    file: 'assets/sprites/eule.png',         // PixelLab 4f54d615… (sitzend, mit Ast – nur auf ihrem Platz)
+    groundFile: 'assets/sprites/eule_boden.png', // dieselbe Eule ohne Ast (am Boden / benommen)
+    healedFile: 'assets/sprites/eule_heil.png',  // schlafend (animate_image 32eea9ef… aus dem Sitzbild, Ast weg)
     flyFile: 'assets/sprites/eule_flug.png', // erstes Bild der Flug-Animation (aus dem Sitzbild erzeugt)
     flySheet: { file: 'assets/sprites/eule_flug_anim.png', w: 29, h: 25, n: 6, rate: 10 },  // animate_image 0a8c99eb… (aus dem Sitzbild 4f54d615…)
     ai: {
