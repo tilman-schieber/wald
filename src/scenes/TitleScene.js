@@ -14,8 +14,9 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     const W = GAME.width, H = GAME.height
-    if (this.cache.audio.exists('musik') && !this.sound.get('musik')) this.sound.add('musik', { loop: true, volume: MUSIC.volume })
-    const m = this.sound.get('musik')
+    const key = 'musik-' + MUSIC.titleTrack
+    if (this.cache.audio.exists(key) && !this.sound.get(key)) this.sound.add(key, { loop: true, volume: MUSIC.volume })
+    const m = this.sound.get(key)
     if (m && !m.isPlaying && !world.musicOff) {
       // Browser erlauben Ton erst nach der ersten Berührung/Taste
       const tryPlay = () => { if (!m.isPlaying && !world.musicOff) m.play() }

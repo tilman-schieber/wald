@@ -244,8 +244,15 @@ export const INTRO = [
   'Jonas und Leonel – die Wächter Aller Lebenden Dinge!',
 ]
 
+//  Musik je Wald (alle mit ~/crush.py --preset snes bearbeitet). Der Schlüssel ist der
+//  Anfang des Raum-/Level-Namens ("schwarzwald", "tijuca", "la_palma", "plaenterwald").
 export const MUSIC = {
-  file: 'assets/music/frozen_sprite_loop',   // .mp3 (mit ~/crush.py im SNES-Stil "zerknirscht")
+  tracks: {
+    schwarzwald: 'assets/music/frozen_sprite_loop.mp3',   // "Frozen Sprite Loop"
+    tijuca:      'assets/music/tijuca.mp3',               // "Maple Mode"
+    la_palma:    'assets/music/la_palma.mp3',             // "Moonlit Save Point"
+  },
+  titleTrack: 'schwarzwald',
   volume: 0.35,
 }
 

@@ -361,18 +361,22 @@ export default class GameScene extends Phaser.Scene {
     this.fgBushes.tilePositionX = sx * 1.3
   }
 
-  // Musik läuft über alle Räume durch (sie gehört zum Spiel, nicht zur Szene)
+  // Musik läuft über das ganze Level durch; jeder Wald hat sein eigenes Stück.
   startMusic() {
-    if (!this.cache.audio.exists('musik')) return
-    const existing = this.sound.get('musik')
-    if (existing) { if (!existing.isPlaying && !world.musicOff) existing.play(); return }
-    const m = this.sound.add('musik', { loop: true, volume: MUSIC.volume })
-    if (!world.musicOff) m.play()
+    const track = Object.keys(MUSIC.tracks).find((k) => this.roomKey.startsWith(k)) ?? MUSIC.titleTrack
+    const key = 'musik-' + track
+    if (!this.cache.audio.exists(key)) return
+    // läuft schon ein anderes Stück? → leise ausblenden
+    for (const other of this.sound.getAllPlaying()) if (other.key !== key && other.key.startsWith('musik-')) { this.tweens.add({ targets: other, volume: 0, duration: 800, onComplete: () => other.stop() }) }
+    let m = this.sound.get(key)
+    if (!m) m = this.sound.add(key, { loop: true, volume: MUSIC.volume })
+    this.music = m
+    if (!m.isPlaying && !world.musicOff) { m.setVolume(MUSIC.volume); m.play() }
   }
 
   toggleMusic() {
     world.musicOff = !world.musicOff
-    const m = this.sound.get('musik')
+    const m = this.music
     if (m) world.musicOff ? m.pause() : m.resume()
     this.floatText(this.active, world.musicOff ? 'Musik aus' : 'Musik an')
   }
