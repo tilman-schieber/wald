@@ -430,6 +430,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.showMark(false)
     this.stateUntil = 0
     this.wanderPause = true
+    // WICHTIG: erst die laufende Animation anhalten! Sonst malt Phaser im
+    // nächsten Bild wieder ein Bild aus dem Hüpf-/Lauf-Film darüber – der Hase
+    // sah dann geheilt immer noch böse aus.
+    this.anims.stop()
     if (this.scene.textures.exists(this.cfg.key + '-heil')) this.useTexture(this.cfg.key + '-heil')
     // Blattschneiderameisen: alle kehren um und tragen wieder ein Blatt nach Hause.
     // Das Umdrehen und das Blatt sind das Zeichen: die Kolonne ist geheilt.
