@@ -3,7 +3,9 @@
 Ein 2D-Pixel-Art-Abenteuer, gebaut von Tilman mit Jonas und Leonel – die beiden sind auch die Helden.
 Der Wald verstummt, und die zwei Brüder bringen ihn zurück: Verwirrte Tiere werden nicht besiegt, sondern **geheilt**.
 
-**Spielen:** https://tilman-schieber.github.io/wald/
+**Spielen:** https://gh.tschieber.de/wald/ (auch https://tilman-schieber.github.io/wald/)
+
+Veröffentlichen: `sh tools/deploy.sh` baut das Spiel und schiebt es auf den Branch `gh-pages`.
 
 - Pfeile/WASD laufen, Leertaste springen, X schlagen, E Fähigkeit (Jonas: Stampfer, Leonel: Waldgeist),
   Tab wechseln, C „Komm!“, ↑ an Ranken klettern (Jonas), ↓ ducken, P Pause, M Musik
