@@ -24,7 +24,7 @@ import Phaser from 'phaser'
 import { GAME, TILESET, TILESET2, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC, DEKO, TIERE, UI, KULISSEN } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
-import { saveGame } from '../save.js'
+import { saveGame, clearSave } from '../save.js'
 import Sfx from '../sound.js'
 import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
@@ -571,6 +571,11 @@ export default class GameScene extends Phaser.Scene {
     this.leaving = true
     this.sfx.play('heal')
     this.active.halt(); this.companion.halt()
+    // Der Wald ist geschafft: Der Spielstand wird gelöscht, sonst würde "Weiter"
+    // durch den fertigen, leeren Wald führen. (Später: "Weiter" → nächster Wald.)
+    world.finished = world.finished ?? {}
+    world.finished[this.roomKey] = true
+    clearSave()
     const W = GAME.width, H = GAME.height
     const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
     if (this.textures.exists('endebild')) {

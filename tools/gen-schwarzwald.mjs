@@ -90,7 +90,6 @@ const kulisse = (name, x, tiefe, spiegeln = false) => objs.push({ name, type: 'k
 kulisse('muenster', 260, 0.15)          // ganz am Anfang: Freiburg liegt hinter uns
 kulisse('schwarzwaldhof', 900, 0.55)
 kulisse('hochsitz', 1700, 0.7)
-kulisse('titisee', 2450, 0.3)
 kulisse('schauinsland', 3300, 0.4)
 kulisse('schwarzwaldhof', 4000, 0.5, true)
 kulisse('hochsitz', 4550, 0.65, true)

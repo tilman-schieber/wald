@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 168,
+ "nextobjectid": 167,
  "tilesets": [
   {
    "firstgid": 1,
@@ -5795,30 +5795,6 @@
      "id": 48
     },
     {
-     "name": "titisee",
-     "type": "kulisse",
-     "point": true,
-     "x": 2450,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "tiefe",
-       "type": "string",
-       "value": "0.3"
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 49
-    },
-    {
      "name": "schauinsland",
      "type": "kulisse",
      "point": true,
@@ -5840,7 +5816,7 @@
        "value": false
       }
      ],
-     "id": 50
+     "id": 49
     },
     {
      "name": "schwarzwaldhof",
@@ -5864,7 +5840,7 @@
        "value": true
       }
      ],
-     "id": 51
+     "id": 50
     },
     {
      "name": "hochsitz",
@@ -5888,7 +5864,7 @@
        "value": true
       }
      ],
-     "id": 52
+     "id": 51
     },
     {
      "name": "speicher2",
@@ -5900,7 +5876,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 53
+     "id": 52
     },
     {
      "name": "speicher3",
@@ -5912,7 +5888,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 54
+     "id": 53
     },
     {
      "name": "speicher4",
@@ -5924,7 +5900,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 55
+     "id": 54
     },
     {
      "name": "speicher5",
@@ -5936,7 +5912,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 56
+     "id": 55
     },
     {
      "name": "farn",
@@ -5960,7 +5936,7 @@
        "value": false
       }
      ],
-     "id": 57
+     "id": 56
     },
     {
      "name": "laub",
@@ -5984,7 +5960,7 @@
        "value": false
       }
      ],
-     "id": 58
+     "id": 57
     },
     {
      "name": "stein",
@@ -6008,7 +5984,7 @@
        "value": false
       }
      ],
-     "id": 59
+     "id": 58
     },
     {
      "name": "schild",
@@ -6032,7 +6008,7 @@
        "value": true
       }
      ],
-     "id": 60
+     "id": 59
     },
     {
      "name": "moos",
@@ -6051,7 +6027,7 @@
        "value": true
       }
      ],
-     "id": 61
+     "id": 60
     },
     {
      "name": "fels",
@@ -6075,7 +6051,7 @@
        "value": true
       }
      ],
-     "id": 62
+     "id": 61
     },
     {
      "name": "moos",
@@ -6094,7 +6070,7 @@
        "value": true
       }
      ],
-     "id": 63
+     "id": 62
     },
     {
      "name": "laterne",
@@ -6113,7 +6089,7 @@
        "value": false
       }
      ],
-     "id": 64
+     "id": 63
     },
     {
      "name": "blumen",
@@ -6137,7 +6113,7 @@
        "value": true
       }
      ],
-     "id": 65
+     "id": 64
     },
     {
      "name": "moos",
@@ -6156,7 +6132,7 @@
        "value": true
       }
      ],
-     "id": 66
+     "id": 65
     },
     {
      "name": "moos",
@@ -6175,7 +6151,7 @@
        "value": false
       }
      ],
-     "id": 67
+     "id": 66
     },
     {
      "name": "moos",
@@ -6194,7 +6170,7 @@
        "value": false
       }
      ],
-     "id": 68
+     "id": 67
     },
     {
      "name": "gras",
@@ -6218,7 +6194,7 @@
        "value": true
       }
      ],
-     "id": 69
+     "id": 68
     },
     {
      "name": "moos",
@@ -6237,7 +6213,7 @@
        "value": false
       }
      ],
-     "id": 70
+     "id": 69
     },
     {
      "name": "laterne",
@@ -6256,7 +6232,7 @@
        "value": false
       }
      ],
-     "id": 71
+     "id": 70
     },
     {
      "name": "pilze",
@@ -6280,7 +6256,7 @@
        "value": false
       }
      ],
-     "id": 72
+     "id": 71
     },
     {
      "name": "gras",
@@ -6304,7 +6280,7 @@
        "value": false
       }
      ],
-     "id": 73
+     "id": 72
     },
     {
      "name": "moos",
@@ -6323,7 +6299,7 @@
        "value": false
       }
      ],
-     "id": 74
+     "id": 73
     },
     {
      "name": "moos",
@@ -6342,7 +6318,7 @@
        "value": false
       }
      ],
-     "id": 75
+     "id": 74
     },
     {
      "name": "schild",
@@ -6366,7 +6342,7 @@
        "value": false
       }
      ],
-     "id": 76
+     "id": 75
     },
     {
      "name": "moos",
@@ -6385,7 +6361,7 @@
        "value": false
       }
      ],
-     "id": 77
+     "id": 76
     },
     {
      "name": "pilze",
@@ -6409,7 +6385,7 @@
        "value": false
       }
      ],
-     "id": 78
+     "id": 77
     },
     {
      "name": "stein",
@@ -6433,7 +6409,7 @@
        "value": false
       }
      ],
-     "id": 79
+     "id": 78
     },
     {
      "name": "moos",
@@ -6452,7 +6428,7 @@
        "value": false
       }
      ],
-     "id": 80
+     "id": 79
     },
     {
      "name": "laterne",
@@ -6471,7 +6447,7 @@
        "value": true
       }
      ],
-     "id": 81
+     "id": 80
     },
     {
      "name": "farn",
@@ -6495,7 +6471,7 @@
        "value": true
       }
      ],
-     "id": 82
+     "id": 81
     },
     {
      "name": "schild",
@@ -6519,7 +6495,7 @@
        "value": false
       }
      ],
-     "id": 83
+     "id": 82
     },
     {
      "name": "blumen",
@@ -6543,7 +6519,7 @@
        "value": false
       }
      ],
-     "id": 84
+     "id": 83
     },
     {
      "name": "gras",
@@ -6567,7 +6543,7 @@
        "value": false
       }
      ],
-     "id": 85
+     "id": 84
     },
     {
      "name": "stamm",
@@ -6591,7 +6567,7 @@
        "value": false
       }
      ],
-     "id": 86
+     "id": 85
     },
     {
      "name": "stamm",
@@ -6615,7 +6591,7 @@
        "value": false
       }
      ],
-     "id": 87
+     "id": 86
     },
     {
      "name": "moos",
@@ -6634,7 +6610,7 @@
        "value": true
       }
      ],
-     "id": 88
+     "id": 87
     },
     {
      "name": "laterne",
@@ -6653,7 +6629,7 @@
        "value": false
       }
      ],
-     "id": 89
+     "id": 88
     },
     {
      "name": "moos",
@@ -6672,7 +6648,7 @@
        "value": false
       }
      ],
-     "id": 90
+     "id": 89
     },
     {
      "name": "moos",
@@ -6691,7 +6667,7 @@
        "value": true
       }
      ],
-     "id": 91
+     "id": 90
     },
     {
      "name": "moos",
@@ -6710,7 +6686,7 @@
        "value": false
       }
      ],
-     "id": 92
+     "id": 91
     },
     {
      "name": "farn",
@@ -6734,7 +6710,7 @@
        "value": true
       }
      ],
-     "id": 93
+     "id": 92
     },
     {
      "name": "moos",
@@ -6753,7 +6729,7 @@
        "value": true
       }
      ],
-     "id": 94
+     "id": 93
     },
     {
      "name": "leuchtpilze",
@@ -6777,7 +6753,7 @@
        "value": true
       }
      ],
-     "id": 95
+     "id": 94
     },
     {
      "name": "stamm",
@@ -6801,7 +6777,7 @@
        "value": false
       }
      ],
-     "id": 96
+     "id": 95
     },
     {
      "name": "farn",
@@ -6825,7 +6801,7 @@
        "value": true
       }
      ],
-     "id": 97
+     "id": 96
     },
     {
      "name": "busch",
@@ -6849,7 +6825,7 @@
        "value": true
       }
      ],
-     "id": 98
+     "id": 97
     },
     {
      "name": "stein",
@@ -6873,7 +6849,7 @@
        "value": true
       }
      ],
-     "id": 99
+     "id": 98
     },
     {
      "name": "pilze",
@@ -6897,7 +6873,7 @@
        "value": false
       }
      ],
-     "id": 100
+     "id": 99
     },
     {
      "name": "pilze",
@@ -6921,7 +6897,7 @@
        "value": false
       }
      ],
-     "id": 101
+     "id": 100
     },
     {
      "name": "moos",
@@ -6940,7 +6916,7 @@
        "value": false
       }
      ],
-     "id": 102
+     "id": 101
     },
     {
      "name": "busch",
@@ -6964,7 +6940,7 @@
        "value": false
       }
      ],
-     "id": 103
+     "id": 102
     },
     {
      "name": "moos",
@@ -6983,7 +6959,7 @@
        "value": false
       }
      ],
-     "id": 104
+     "id": 103
     },
     {
      "name": "holz",
@@ -7007,7 +6983,7 @@
        "value": true
       }
      ],
-     "id": 105
+     "id": 104
     },
     {
      "name": "moos",
@@ -7026,7 +7002,7 @@
        "value": false
       }
      ],
-     "id": 106
+     "id": 105
     },
     {
      "name": "blumen",
@@ -7050,7 +7026,7 @@
        "value": true
       }
      ],
-     "id": 107
+     "id": 106
     },
     {
      "name": "pilze",
@@ -7074,7 +7050,7 @@
        "value": true
       }
      ],
-     "id": 108
+     "id": 107
     },
     {
      "name": "moos",
@@ -7093,7 +7069,7 @@
        "value": true
       }
      ],
-     "id": 109
+     "id": 108
     },
     {
      "name": "moos",
@@ -7112,7 +7088,7 @@
        "value": false
       }
      ],
-     "id": 110
+     "id": 109
     },
     {
      "name": "moos",
@@ -7131,7 +7107,7 @@
        "value": false
       }
      ],
-     "id": 111
+     "id": 110
     },
     {
      "name": "pilze",
@@ -7155,7 +7131,7 @@
        "value": true
       }
      ],
-     "id": 112
+     "id": 111
     },
     {
      "name": "moos",
@@ -7174,7 +7150,7 @@
        "value": true
       }
      ],
-     "id": 113
+     "id": 112
     },
     {
      "name": "gras",
@@ -7198,7 +7174,7 @@
        "value": false
       }
      ],
-     "id": 114
+     "id": 113
     },
     {
      "name": "farn",
@@ -7222,7 +7198,7 @@
        "value": true
       }
      ],
-     "id": 115
+     "id": 114
     },
     {
      "name": "leuchtpilze",
@@ -7246,7 +7222,7 @@
        "value": true
       }
      ],
-     "id": 116
+     "id": 115
     },
     {
      "name": "leuchtpilze",
@@ -7270,7 +7246,7 @@
        "value": true
       }
      ],
-     "id": 117
+     "id": 116
     },
     {
      "name": "leuchtpilze",
@@ -7294,7 +7270,7 @@
        "value": false
       }
      ],
-     "id": 118
+     "id": 117
     },
     {
      "name": "moos",
@@ -7313,7 +7289,7 @@
        "value": true
       }
      ],
-     "id": 119
+     "id": 118
     },
     {
      "name": "moos",
@@ -7332,7 +7308,7 @@
        "value": false
       }
      ],
-     "id": 120
+     "id": 119
     },
     {
      "name": "stein",
@@ -7356,7 +7332,7 @@
        "value": true
       }
      ],
-     "id": 121
+     "id": 120
     },
     {
      "name": "fels",
@@ -7380,7 +7356,7 @@
        "value": false
       }
      ],
-     "id": 122
+     "id": 121
     },
     {
      "name": "farn",
@@ -7404,7 +7380,7 @@
        "value": false
       }
      ],
-     "id": 123
+     "id": 122
     },
     {
      "name": "moos",
@@ -7423,7 +7399,7 @@
        "value": true
       }
      ],
-     "id": 124
+     "id": 123
     },
     {
      "name": "gras",
@@ -7447,7 +7423,7 @@
        "value": false
       }
      ],
-     "id": 125
+     "id": 124
     },
     {
      "name": "farn",
@@ -7471,7 +7447,7 @@
        "value": false
       }
      ],
-     "id": 126
+     "id": 125
     },
     {
      "name": "fels",
@@ -7495,7 +7471,7 @@
        "value": true
       }
      ],
-     "id": 127
+     "id": 126
     },
     {
      "name": "holz",
@@ -7519,7 +7495,7 @@
        "value": false
       }
      ],
-     "id": 128
+     "id": 127
     },
     {
      "name": "pilze",
@@ -7543,7 +7519,7 @@
        "value": false
       }
      ],
-     "id": 129
+     "id": 128
     },
     {
      "name": "fels",
@@ -7567,7 +7543,7 @@
        "value": true
       }
      ],
-     "id": 130
+     "id": 129
     },
     {
      "name": "gras",
@@ -7591,7 +7567,7 @@
        "value": true
       }
      ],
-     "id": 131
+     "id": 130
     },
     {
      "name": "holz",
@@ -7615,7 +7591,7 @@
        "value": true
       }
      ],
-     "id": 132
+     "id": 131
     },
     {
      "name": "holz",
@@ -7639,7 +7615,7 @@
        "value": true
       }
      ],
-     "id": 133
+     "id": 132
     },
     {
      "name": "laub",
@@ -7663,7 +7639,7 @@
        "value": true
       }
      ],
-     "id": 134
+     "id": 133
     },
     {
      "name": "busch",
@@ -7687,7 +7663,7 @@
        "value": true
       }
      ],
-     "id": 135
+     "id": 134
     },
     {
      "name": "blumen",
@@ -7711,7 +7687,7 @@
        "value": false
       }
      ],
-     "id": 136
+     "id": 135
     },
     {
      "name": "stamm",
@@ -7735,7 +7711,7 @@
        "value": true
       }
      ],
-     "id": 137
+     "id": 136
     },
     {
      "name": "fels",
@@ -7759,7 +7735,7 @@
        "value": false
       }
      ],
-     "id": 138
+     "id": 137
     },
     {
      "name": "fels",
@@ -7783,7 +7759,7 @@
        "value": false
       }
      ],
-     "id": 139
+     "id": 138
     },
     {
      "name": "stein",
@@ -7807,7 +7783,7 @@
        "value": false
       }
      ],
-     "id": 140
+     "id": 139
     },
     {
      "name": "pilze",
@@ -7831,7 +7807,7 @@
        "value": false
       }
      ],
-     "id": 141
+     "id": 140
     },
     {
      "name": "wurzeln",
@@ -7855,7 +7831,7 @@
        "value": false
       }
      ],
-     "id": 142
+     "id": 141
     },
     {
      "name": "farn",
@@ -7879,7 +7855,7 @@
        "value": false
       }
      ],
-     "id": 143
+     "id": 142
     },
     {
      "name": "wurzeln",
@@ -7903,7 +7879,7 @@
        "value": true
       }
      ],
-     "id": 144
+     "id": 143
     },
     {
      "name": "schild",
@@ -7927,7 +7903,7 @@
        "value": false
       }
      ],
-     "id": 145
+     "id": 144
     },
     {
      "name": "laub",
@@ -7951,7 +7927,7 @@
        "value": true
       }
      ],
-     "id": 146
+     "id": 145
     },
     {
      "name": "pilze",
@@ -7975,7 +7951,7 @@
        "value": false
       }
      ],
-     "id": 147
+     "id": 146
     },
     {
      "name": "wurzeln",
@@ -7999,7 +7975,7 @@
        "value": false
       }
      ],
-     "id": 148
+     "id": 147
     },
     {
      "name": "schild",
@@ -8023,7 +7999,7 @@
        "value": true
       }
      ],
-     "id": 149
+     "id": 148
     },
     {
      "name": "stamm",
@@ -8047,7 +8023,7 @@
        "value": false
       }
      ],
-     "id": 150
+     "id": 149
     },
     {
      "name": "pilze",
@@ -8071,7 +8047,7 @@
        "value": true
       }
      ],
-     "id": 151
+     "id": 150
     },
     {
      "name": "gras",
@@ -8095,7 +8071,7 @@
        "value": false
       }
      ],
-     "id": 152
+     "id": 151
     },
     {
      "name": "holz",
@@ -8119,7 +8095,7 @@
        "value": true
       }
      ],
-     "id": 153
+     "id": 152
     },
     {
      "name": "farn",
@@ -8143,7 +8119,7 @@
        "value": false
       }
      ],
-     "id": 154
+     "id": 153
     },
     {
      "name": "farn",
@@ -8167,7 +8143,7 @@
        "value": true
       }
      ],
-     "id": 155
+     "id": 154
     },
     {
      "name": "farn",
@@ -8191,7 +8167,7 @@
        "value": true
       }
      ],
-     "id": 156
+     "id": 155
     },
     {
      "name": "busch",
@@ -8215,7 +8191,7 @@
        "value": false
       }
      ],
-     "id": 157
+     "id": 156
     },
     {
      "name": "gras",
@@ -8239,7 +8215,7 @@
        "value": false
       }
      ],
-     "id": 158
+     "id": 157
     },
     {
      "name": "hase",
@@ -8251,7 +8227,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 159
+     "id": 158
     },
     {
      "name": "schmetterling",
@@ -8263,7 +8239,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 160
+     "id": 159
     },
     {
      "name": "schmetterling",
@@ -8275,7 +8251,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 161
+     "id": 160
     },
     {
      "name": "hase",
@@ -8287,7 +8263,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 162
+     "id": 161
     },
     {
      "name": "hase",
@@ -8299,7 +8275,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 163
+     "id": 162
     },
     {
      "name": "hase",
@@ -8311,7 +8287,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 164
+     "id": 163
     },
     {
      "name": "hase",
@@ -8323,7 +8299,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 165
+     "id": 164
     },
     {
      "name": "hase",
@@ -8335,7 +8311,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 166
+     "id": 165
     },
     {
      "name": "schmetterling",
@@ -8347,7 +8323,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 167
+     "id": 166
     }
    ]
   }
