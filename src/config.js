@@ -385,7 +385,7 @@ export const INTROS = {
 //  standY = auf welcher Höhe die Kulisse steht. Weit entferntes gehört an den
 //  Horizont (kleinere Zahl), Nahes auf die Bodenlinie (240).
 export const KULISSEN = {
-  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', standY: 236 },
+  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', standY: 190 },
   schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png', standY: 200 },
   titisee:        { file: 'assets/bg/kulisse_titisee.png', standY: 205 },
   muenster:       { file: 'assets/bg/kulisse_muenster.png', standY: 190 },

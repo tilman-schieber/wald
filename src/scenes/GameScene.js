@@ -242,6 +242,7 @@ export default class GameScene extends Phaser.Scene {
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
     // haengend = Ankerpunkt oben; glow = pulsiert leicht; anim = Spritesheet-Animation
     this.glowing = []
+    this.vorneDeko = []                 // Deko VOR den Figuren – wird durchsichtig, wenn jemand dahintersteht
     for (const o of objects.filter((o) => o.type === 'deko')) {
       const key = 'deko-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Deko:', o.name); continue }
@@ -250,7 +251,8 @@ export default class GameScene extends Phaser.Scene {
       const img = d.anim ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)
       img.setOrigin(0.5, d.haengend ? 0 : 1).setDepth(p.vorne ? 15 : 2).setFlipX(!!p.spiegeln)
       if (!d.haengend) { img.y += 2; if (img.width >= 20) this.addShadow(img, Math.min(30, img.width * 0.8), false).setPosition(img.x, img.y - 1) }
-      if (d.glow) this.glowing.push(img)
+      if (d.glow) { img.istGlow = true; this.glowing.push(img) }
+      if (p.vorne) { img.durchsicht = 1; this.vorneDeko.push(img) }
     }
 
     // Tiere: friedliche Waldbewohner – sitzen, gucken, hüpfen ab und zu ein Stück
@@ -327,7 +329,12 @@ export default class GameScene extends Phaser.Scene {
       this.abilityBar = this.add.rectangle(232, 30, 20, 3, P.eisBlau).setOrigin(0, 0.5).setScrollFactor(0).setDepth(101)
       this.add.text(232, 18, 'E', { ...hudStyle, fontSize: '9px', color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
     }
-    if (!isTouch) this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
+    // Tastenhilfe: am Anfang gut sichtbar, nach 15 Sekunden blendet sie weg,
+    // damit sie nicht dauernd im Wald herumliegt.
+    if (!isTouch) {
+      const hilfe = this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
+      this.tweens.add({ targets: hilfe, alpha: 0, delay: 15000, duration: 1500, onComplete: () => hilfe.destroy() })
+    }
     this.updateNameText()
 
     const pauseFont = this.textures.exists('panel') && document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
@@ -391,7 +398,16 @@ export default class GameScene extends Phaser.Scene {
     // 4c. Schatten, Tiere und leuchtende Deko
     this.updateShadows()
     this.updateTiere(time)
-    for (const g of this.glowing) g.setAlpha(0.85 + Math.sin(time / 300 + g.x) * 0.15)
+    // Deko im Vordergrund wird durchsichtig, sobald ein Held dahintersteht –
+    // sonst verschwinden Jonas und Leonel hinter Baumstämmen und Büschen.
+    for (const d of this.vorneDeko) {
+      const b = d.getBounds()
+      const dahinter = Phaser.Geom.Rectangle.Overlaps(b, this.active.getBounds())
+        || Phaser.Geom.Rectangle.Overlaps(b, this.companion.getBounds())
+      d.durchsicht += ((dahinter ? 0.5 : 1) - d.durchsicht) * 0.18      // weich überblenden
+      if (!d.istGlow) d.setAlpha(d.durchsicht)
+    }
+    for (const g of this.glowing) g.setAlpha((0.85 + Math.sin(time / 300 + g.x) * 0.15) * (g.durchsicht ?? 1))
 
     // 5. Gegner laufen, Schläge treffen, Rätsel prüfen
     for (const e of this.enemies) e.update(time, this.groundLayer, [this.jonas, this.leonel])

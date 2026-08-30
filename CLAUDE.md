@@ -80,7 +80,13 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Deko sind Tiled-Objekte vom Typ `deko` ohne Physik (`DEKO` in config: haengend/glow/anim), `vorne=true` = vor den Figuren;
   Tiere (`tier`) sind lebendige Deko (hüpfen, flattern); Stein-Material: gids ab 17 im selben Layer `Boden`
 - Kulissen (`kulisse`-Objekte, `KULISSEN` in config): große Hintergrundbilder mit eigener Parallax-Tiefe
-  (`tiefe` 0.15–0.8), x wird umgerechnet: bild.x = x·tiefe + 240·(1−tiefe); Intro = Folien `INTRO` (Bild + Sätze)
+  (`tiefe` 0.15–0.8), x wird umgerechnet: bild.x = x·tiefe + 240·(1−tiefe); Intro = Folien `INTRO` (Bild + Sätze).
+  Weil Kulissen langsamer wandern als der Boden, schieben sie sich im Lauf des Levels über JEDE Bodenhöhe.
+  Darum muss `standY` knapp über der höchsten Bodenkante liegen, die vor der Kulisse vorkommt – sonst versinkt
+  sie im Hügel (Schwarzwaldhof steckte bis zum Fenster im Boden). Und Kulissen brauchen freigestellte Ränder:
+  ein rechteckiges Bild klebt sonst als Kachel im Wald (`node tools/rand-weich.mjs <ein> <aus> [l r o u]`
+  blendet die Ränder weich aus)
+- Deko mit `vorne=true` wird automatisch halb durchsichtig, sobald ein Held dahintersteht (`vorneDeko` in GameScene)
 - Schrift "Waldschrift" (TTF, FontFace in BootScene), Holz-Panel als NineSlice fürs HUD; PixelLab-Abo: 2000/Monat
 - Vier Wälder: Schwarzwald (fertig), Floresta da Tijuca (fertig), Lorbeerwald La Palma, Plänterwald.
   Jeder Wald steht in `FORESTS` (config.js) mit Level, Kacheln, Hintergrund, Musik, Schlusssatz und `weiter`.
