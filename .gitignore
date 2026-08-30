@@ -5,3 +5,4 @@ dist
 # Original-Musikdateien bleiben lokal
 *.mp3
 !public/assets/music/*.mp3
+.gh-pages-tmp
