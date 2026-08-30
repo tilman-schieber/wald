@@ -15,6 +15,7 @@
 //    ranke    Rechteck (schmal, hoch): Jonas klettert daran (Pfeil hoch/runter)
 //    blatt    Punkt: Blatt zum Einsammeln
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
+//    checkpoint Punkt: Speicherpunkt (Wegweiser) – berühren = ab hier geht's nach einem Game Over weiter
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
 // ============================================================
 import Phaser from 'phaser'
@@ -43,7 +44,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.roomKey = data.room ?? 'schwarzwald_01'
+    this.roomKey = data.room ?? 'schwarzwald'
     this.spawnName = data.spawn ?? 'start'
   }
 
@@ -96,7 +97,7 @@ export default class GameScene extends Phaser.Scene {
     this.fgBushes = this.add.tileSprite(0, 0, GAME.width, GAME.height, 'fg_bushes').setOrigin(0).setScrollFactor(0).setDepth(20).setVisible(!this.hasFgLayer)
 
     // ---------- Helden ----------
-    const spawn = objects.find((o) => o.type === 'spawn' && o.name === this.spawnName)
+    const spawn = objects.find((o) => (o.type === 'spawn' || o.type === 'checkpoint') && o.name === this.spawnName)
       ?? objects.find((o) => o.type === 'spawn')
     const facing = spawn.x < map.widthInPixels / 2 ? 1 : -1       // links rein → nach rechts schauen
     this.jonas = new Jonas(this, spawn.x, spawn.y).placeFeet(spawn.x, spawn.y)
@@ -212,6 +213,14 @@ export default class GameScene extends Phaser.Scene {
       spr.setOrigin(0.5, 1).setDepth(7).setFlipX(Math.random() < 0.5)
       this.tiere.push({ spr, cfg: t, home: { x: o.x, y: o.y }, next: 0 })
     }
+
+    // Speicherpunkte: Wegweiser, die beim Berühren den Stand sichern
+    this.checkpoints = objects.filter((o) => o.type === 'checkpoint').map((o) => {
+      const img = this.add.image(o.x, o.y, 'deko-schild').setOrigin(0.5, 1).setDepth(6)
+      this.physics.add.existing(img, true)
+      if (o.name === this.spawnName) img.setTint(P.hellGelb)
+      return { img, name: o.name, x: o.x, y: o.y }
+    })
 
     // Waldherz (Ziel)
     this.hearts = objects.filter((o) => o.type === 'waldherz').map((o) => {
@@ -329,6 +338,17 @@ export default class GameScene extends Phaser.Scene {
     this.updatePuzzles()
     this.collectLeaves()
     if (this.hearts.some((h) => this.physics.overlap(h, this.active))) this.finishForest()
+    for (const cp of this.checkpoints) {
+      if (cp.name === this.spawnName || !this.physics.overlap(cp.img, this.active)) continue
+      this.spawnName = cp.name
+      world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp
+      saveGame(this.roomKey, cp.name)
+      for (const c of this.checkpoints) c.img.clearTint()
+      cp.img.setTint(P.hellGelb)
+      this.sparkle(cp.x, cp.y - 16, P.hellGelb, 12)
+      this.sfx.play('room')
+      this.floatText(this.active, 'Gespeichert!')
+    }
     this.checkExits()
     this.updateHud()
 

@@ -112,7 +112,7 @@ export default class BootScene extends Phaser.Scene {
     this.makeParallaxPlaceholders()
     this.makeMarker()
 
-    // ?raum=schwarzwald_02 an die URL → direkt in diesen Raum (zum Testen)
+    // ?raum=schwarzwald_02 an die URL → direkt in diesen (Einzel-)Raum (zum Testen); ?raum=schwarzwald = das ganze Level
     const raum = new URLSearchParams(location.search).get('raum')
     if (raum) this.scene.start('Game', { room: raum, spawn: 'start' })
     else this.scene.start('Title')

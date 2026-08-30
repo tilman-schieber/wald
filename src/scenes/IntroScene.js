@@ -44,6 +44,6 @@ export default class IntroScene extends Phaser.Scene {
     if (this.starting) return
     this.starting = true
     this.cameras.main.fadeOut(400, 0, 0, 0)
-    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Game', { room: 'schwarzwald_01', spawn: 'start' }))
+    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Game', { room: 'schwarzwald', spawn: 'start' }))
   }
 }
