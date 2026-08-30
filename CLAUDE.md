@@ -44,8 +44,9 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Kein Blut, keine Grausamkeit; besiegte Gegner werden geheilt
 - Zwei Helden, immer einer aktiv, der andere KI-Begleiter. Wechsel sofort, ohne Animation,
   Kamera springt nicht. Begleiter kann nie ein Game Over verursachen.
-- Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), E = Stampfer (macht Gegner
-  ringsum benommen). Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
+- Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), schwingt an Lianen (springt im Flug
+  automatisch hin, Leertaste lässt los – echtes Pendel in `Hero.updateSwing`), E = Stampfer.
+  Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
 - **Keine Abgründe** in den Räumen (Tilman-Wunsch). Der Code dafür (fellIntoPit) bleibt als Sicherheitsnetz.
 - Deko `bach` (Wasserfall) nie direkt auf der Laufebene platzieren (sieht komisch aus) – nur z. B. in Nischen/tiefer
@@ -53,7 +54,10 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen → benommen.
   Drei Arten (`ai.kind`): `roller` (Igel: rollt als Kugel geradeaus, nur benommen verwundbar),
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),
-  `hopper` (verwirrter Hase: hüpft in Sätzen heran). Jeder muss mit Springen + Basisangriff zu schaffen sein.
+  `hopper` (Hase: hüpft in Sätzen heran), `thrower` (Affe: wirft Jackfrüchte im Bogen),
+  `climber` (Nasenbär: verfolgt und klettert auf Plattformen), `dropper` (Faultier: hängt am Ast und lässt sich fallen),
+  `marcher` (Ameisenkolonne: marschiert nur; heilt man die Anführerin, kehrt die ganze Gruppe um – `gruppe` in der Config).
+  Jeder muss mit Springen + Basisangriff zu schaffen sein.
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
 - Alles, was auf dem Boden steht, bekommt einen weichen Schatten (`addShadow`) und Deko sitzt 2 px
   im Moos – ohne das wirkt bei diesem Tileset alles schwebend.
@@ -63,7 +67,9 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Kulissen (`kulisse`-Objekte, `KULISSEN` in config): große Hintergrundbilder mit eigener Parallax-Tiefe
   (`tiefe` 0.15–0.8), x wird umgerechnet: bild.x = x·tiefe + 240·(1−tiefe); Intro = Folien `INTRO` (Bild + Sätze)
 - Schrift "Waldschrift" (TTF, FontFace in BootScene), Holz-Panel als NineSlice fürs HUD; PixelLab-Abo: 2000/Monat
-- Vier Wälder: Schwarzwald (Start), Floresta da Tijuca, Lorbeerwald La Palma, Plänterwald
+- Vier Wälder: Schwarzwald (fertig), Floresta da Tijuca (fertig), Lorbeerwald La Palma, Plänterwald.
+  Jeder Wald steht in `FORESTS` (config.js) mit Level, Kacheln, Hintergrund, Musik, Schlusssatz und `weiter`.
+  Levels bauen: `node tools/gen-schwarzwald.mjs` bzw. `node tools/gen-tijuca.mjs`.
 
 ## Sprites (PixelLab MCP)
 - Trial: 40 Generierungen, **sehr sparsam** – Stand in `public/assets/QUELLEN.md`

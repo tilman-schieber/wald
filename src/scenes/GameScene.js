@@ -13,6 +13,8 @@
 //    platte   Rechteck, Eigenschaft oeffnet = Torname; offen, solange jemand draufsteht
 //    hebel    Rechteck, Eigenschaft oeffnet = Torname; öffnet dauerhaft
 //    ranke    Rechteck (schmal, hoch): Jonas klettert daran (Pfeil hoch/runter)
+//    schwinge Rechteck (schmal, hoch): Liane zum Schwingen – Jonas greift im Sprung
+//             automatisch zu, mit Leertaste lässt er wieder los
 //    blatt    Punkt: Blatt zum Einsammeln
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
 //    checkpoint Punkt: Speicherpunkt (Wegweiser) – berühren = ab hier geht's nach einem Game Over weiter
@@ -21,7 +23,7 @@
 //             wird HINTER dem Spielfeld gezeichnet und wandert langsamer als die Kamera
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, TILESET2, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC, DEKO, TIERE, UI, KULISSEN } from '../config.js'
+import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame, clearSave } from '../save.js'
@@ -33,6 +35,7 @@ import PlatformGraph from '../entities/PlatformGraph.js'
 import Enemy from '../entities/Enemy.js'
 import Owl from '../entities/Owl.js'
 import Spirit from '../entities/Spirit.js'
+import Projectile from '../entities/Projectile.js'
 import Controls from '../input/Controls.js'
 import TouchButtons from '../ui/TouchButtons.js'
 
@@ -48,6 +51,10 @@ export default class GameScene extends Phaser.Scene {
   init(data) {
     this.roomKey = data.room ?? 'schwarzwald'
     this.spawnName = data.spawn ?? 'start'
+    // Welcher Wald ist das? (Der Levelname beginnt mit dem Wald-Schlüssel.)
+    this.forestKey = Object.keys(FORESTS).find((k) => this.roomKey.startsWith(k)) ?? 'schwarzwald'
+    this.forest = FORESTS[this.forestKey]
+    world.forest = this.forestKey
   }
 
   create() {
@@ -62,10 +69,11 @@ export default class GameScene extends Phaser.Scene {
 
     // ---------- Level ----------
     const map = this.make.tilemap({ key: this.roomKey })
-    const tiles = map.addTilesetImage('tiles', TILESET.key)
+    const T1 = this.forest.tiles, T2 = this.forest.tiles2
+    const tiles = map.addTilesetImage('tiles', T1.key)
     // zweites Material (Stein), falls der Raum es kennt und das Bild da ist
-    const tiles2 = map.tilesets.some((t) => t.name === TILESET2.name) && this.textures.exists(TILESET2.key)
-      ? map.addTilesetImage(TILESET2.name, TILESET2.key) : null
+    const tiles2 = map.tilesets.some((t) => t.name === (T2?.name ?? 'stein')) && T2 && this.textures.exists(T2.key)
+      ? map.addTilesetImage(T2.name, T2.key) : null
     const objects = map.getObjectLayer('Objekte')?.objects ?? []
 
     // ---------- Parallax: hinten → vorne ----------
@@ -74,7 +82,8 @@ export default class GameScene extends Phaser.Scene {
     this.add.image(0, 0, 'bg_sky').setOrigin(0).setScrollFactor(0).setDepth(-40)
     // Jede Ebene ist ein nahtlos wiederholbares Bild, das mit eigenem Tempo wandert
     this.bgLayers = []
-    const layers = BACKGROUND.layers.filter((l) => this.textures.exists(l.key))
+    const BG = this.forest.background
+    const layers = (BG?.layers ?? []).filter((l) => this.textures.exists(l.key))
     const fallback = [{ key: 'bg_far', scroll: 0.2 }, { key: 'bg_mid', scroll: 0.5 }]
     for (const [i, l] of (layers.length ? layers : fallback).entries()) {
       const ts = this.add.tileSprite(0, l.y ?? 0, GAME.width, l.h ?? GAME.height, l.key).setOrigin(0).setScrollFactor(0).setDepth(l.depth ?? -39 + i)
@@ -83,7 +92,7 @@ export default class GameScene extends Phaser.Scene {
       this.bgLayers.push({ ts, scroll: l.scroll, offsetX: l.offsetX ?? 0 })
     }
     // Dunst: wie in einem echten Wald wird es nach hinten dunkler und blauer
-    if (layers.length) this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BACKGROUND.haze).setOrigin(0).setScrollFactor(0).setDepth(-25)
+    if (layers.length) this.add.rectangle(0, 0, GAME.width, GAME.height, P.nachtBlau, BG.haze ?? 0.3).setOrigin(0).setScrollFactor(0).setDepth(-25)
     // die Büsche-Platzhalter vorne nur, wenn keine echte Farn-Ebene da ist
     this.hasFgLayer = layers.some((l) => (l.depth ?? 0) > 20)
 
@@ -92,7 +101,7 @@ export default class GameScene extends Phaser.Scene {
     this.groundLayer.setCollisionByExclusion([-1])   // jede gesetzte Kachel ist fest
 
     // Mit echtem Tileset: Boden unsichtbar (nur Kollision), hübsche Grafik-Ebene obendrauf
-    if (TILESET.file) {
+    if (T1.file) {
       this.groundLayer.setVisible(DEBUG)
       this.makeWangLayer(map, tiles, tiles2)
     }
@@ -130,12 +139,19 @@ export default class GameScene extends Phaser.Scene {
       const cfg = ENEMIES[o.name]
       if (!cfg) { console.warn('Unbekannter Gegner:', o.name); continue }
       const Klasse = cfg.kind === 'flyer' ? Owl : Enemy
-      const e = new Klasse(this, o.x, o.y - cfg.frame.h / 2, cfg).setDepth(8)
-      e.objectId = o.id
-      if (healedIn(this.roomKey).has(o.id)) e.heal(true)
-      this.physics.add.collider(e, this.groundLayer)
-      this.addShadow(e, Math.max(12, cfg.body.w))
-      this.enemies.push(e)
+      // Manche Gegner kommen als Gruppe (Ameisenkolonne) aus EINEM Tiled-Punkt
+      const anzahl = cfg.gruppe ?? 1
+      const gruppe = []
+      for (let i = 0; i < anzahl; i++) {
+        const e = new Klasse(this, o.x - i * (cfg.gruppeAbstand ?? 20), o.y - cfg.frame.h / 2, cfg).setDepth(8)
+        e.objectId = o.id
+        e.isLeader = i === 0
+        if (anzahl > 1) { e.groupMates = gruppe; gruppe.push(e) }
+        if (healedIn(this.roomKey).has(o.id)) e.heal(true)
+        this.physics.add.collider(e, this.groundLayer)
+        this.addShadow(e, Math.max(12, cfg.body.w))
+        this.enemies.push(e)
+      }
     }
     for (const hero of [this.jonas, this.leonel]) {
       this.physics.add.overlap(hero, this.enemies, (h, e) => this.onTouchEnemy(h, e))
@@ -176,6 +192,13 @@ export default class GameScene extends Phaser.Scene {
       return { x, top: o.y, bottom: o.y + o.height, side }
     })
 
+    // Lianen zum Schwingen (nur Jonas): Bild hängt vom Ankerpunkt herab
+    this.schwingen = objects.filter((o) => o.type === 'schwinge').map((o) => {
+      const x = o.x + o.width / 2
+      if (this.textures.exists('deko-liane')) this.add.tileSprite(x, o.y, 12, o.height, 'deko-liane').setOrigin(0.5, 0).setDepth(3)
+      return { x, top: o.y, len: o.height, zone: this.add.zone(x, o.y + o.height, 26, 30) }
+    })
+
     // Blätter zum Sammeln (schon eingesammelte fehlen)
     this.leaves = []
     for (const o of objects.filter((o) => o.type === 'blatt')) {
@@ -187,6 +210,7 @@ export default class GameScene extends Phaser.Scene {
       this.leaves.push(img)
     }
     this.spirits = []
+    this.projectiles = []
     this.jonas.specialCooldownMs = SLAM.cooldownMs
     this.leonel.specialCooldownMs = SPIRIT.cooldownMs
 
@@ -328,6 +352,7 @@ export default class GameScene extends Phaser.Scene {
 
     // 3. Der Aktive tut, was der Spieler sagt … (E = Spezialfähigkeit, nur der Aktive!)
     if (cmd.special) this.useSpecial(this.active, time)
+    this.checkSwings(time)
     this.checkVines(cmd, time)
     this.active.applyCommand(cmd, time)
 
@@ -366,6 +391,8 @@ export default class GameScene extends Phaser.Scene {
     for (const e of this.enemies) e.update(time, this.groundLayer, [this.jonas, this.leonel])
     for (const sp of this.spirits) sp.update(time, this.enemies)
     this.spirits = this.spirits.filter((sp) => sp.active)
+    for (const pr of this.projectiles) pr.update(time)
+    this.projectiles = this.projectiles.filter((pr) => pr.active)
     this.resolveAttacks(time)
     this.updatePuzzles()
     this.collectLeaves()
@@ -396,7 +423,7 @@ export default class GameScene extends Phaser.Scene {
 
   // Musik läuft über das ganze Level durch; jeder Wald hat sein eigenes Stück.
   startMusic() {
-    const track = Object.keys(MUSIC.tracks).find((k) => this.roomKey.startsWith(k)) ?? MUSIC.titleTrack
+    const track = this.forest.musik ?? MUSIC.titleTrack
     const key = 'musik-' + track
     if (!this.cache.audio.exists(key)) return
     // läuft schon ein anderes Stück? → leise ausblenden
@@ -438,7 +465,7 @@ export default class GameScene extends Phaser.Scene {
       if (!t) return 0
       return tiles2 && t.index >= tiles2.firstgid ? 2 : 1
     }
-    const sets = [null, { ts: tiles, frames: TILESET.wangFrames }, tiles2 && TILESET2.wangFrames ? { ts: tiles2, frames: TILESET2.wangFrames } : null]
+    const sets = [null, { ts: tiles, frames: this.forest.tiles.wangFrames }, tiles2 && this.forest.tiles2?.wangFrames ? { ts: tiles2, frames: this.forest.tiles2.wangFrames } : null]
     const layer = map.createBlankLayer('BodenGrafik', tiles2 ? [tiles, tiles2] : tiles, -GAME.tile / 2, -GAME.tile / 2, W + 1, H + 1)
     for (let vy = 0; vy <= H; vy++) {
       for (let vx = 0; vx <= W; vx++) {
@@ -513,6 +540,28 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
+  // Der verwirrte Affe wirft eine Jackfrucht im Bogen auf ein Ziel.
+  // Sie fliegt wie ein geworfener Ball: nach vorn und oben, dann zieht sie die
+  // Schwerkraft herunter. Trifft sie den Boden oder einen Helden, zerplatzt sie.
+  wirfFrucht(affe, ziel) {
+    if (!this.textures.exists(WURF.key)) return
+    const dir = ziel ? Math.sign(ziel.x - affe.x) || 1 : affe.dir
+    const w = affe.cfg.ai.wurf ?? { x: 130, y: -190 }
+    const p = new Projectile(this, affe.x + dir * 8, affe.body.center.y, WURF.key, dir * w.x, w.y)
+    this.physics.add.collider(p, this.groundLayer, () => p.zerplatzen())
+    for (const held of [this.jonas, this.leonel]) {
+      this.physics.add.overlap(p, held, () => {
+        if (!p.active) return
+        const treffer = held.hurt(this.time.now, p.x)
+        if (treffer) this.sfx.play('hurt')
+        if (treffer === 'ko') { if (held === this.companion) held.daze(this.time.now); else this.loseRoom() }
+        p.zerplatzen()
+      })
+    }
+    this.projectiles.push(p)
+    this.sfx.play('attack')
+  }
+
   // Spezialfähigkeit des aktiven Helden (Taste E)
   useSpecial(hero, time) {
     if (hero.isDazed(time) || hero.vine) return
@@ -542,6 +591,17 @@ export default class GameScene extends Phaser.Scene {
       if (e.healed || Math.abs(e.x - hero.x) > SLAM.radius || Math.abs(e.body.bottom - hero.body.bottom) > 24) continue
       if (this.gateBetween(hero.x, e.x, e.body.center.y)) continue   // Tore halten die Erschütterung auf
       e.stun(time, SLAM.dizzyMs)
+    }
+  }
+
+  // Springt Jonas gerade in eine Liane? Dann greift er automatisch zu.
+  checkSwings(time) {
+    const hero = this.active
+    if (hero.cfg.key !== 'jonas' || hero.swing || hero.vine || hero.slamming || hero.onGround) return
+    for (const sw of this.schwingen) {
+      if (Math.abs(hero.x - sw.zone.x) > 20 || Math.abs(hero.body.center.y - sw.zone.y) > 22) continue
+      if (hero.startSwing(sw, time)) { this.sfx.play('climb'); this.floatText(hero, 'Halt dich fest!') }
+      return
     }
   }
 
@@ -620,21 +680,29 @@ export default class GameScene extends Phaser.Scene {
     // Der Wald ist geschafft: Der Spielstand wird gelöscht, sonst würde "Weiter"
     // durch den fertigen, leeren Wald führen. (Später: "Weiter" → nächster Wald.)
     world.finished = world.finished ?? {}
-    world.finished[this.roomKey] = true
-    clearSave()
+    world.finished[this.forestKey] = true
+    // Gibt es noch einen Wald? Dann zeigt "Weiter" im Titel dorthin.
+    const naechster = this.forest.weiter && FORESTS[this.forest.weiter]
+    if (naechster) {
+      world.hp.jonas = COMBAT.heroHp; world.hp.leonel = COMBAT.heroHp
+      saveGame(naechster.level, 'start')
+    } else clearSave()
+    this.naechsterWald = naechster
     const W = GAME.width, H = GAME.height
     const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
-    if (this.textures.exists('endebild')) {
+    const endeKey = 'ende-' + this.forest.level
+    if (this.textures.exists(endeKey)) {
       // Das Jubelbild blendet sich langsam ein
-      const pic = this.add.image(0, 0, 'endebild').setOrigin(0).setScrollFactor(0).setDepth(250).setAlpha(0)
+      const pic = this.add.image(0, 0, endeKey).setOrigin(0).setScrollFactor(0).setDepth(250).setAlpha(0)
       this.tweens.add({ targets: pic, alpha: 1, duration: 1200 })
       this.add.rectangle(0, 0, W, 44, P.schwarz, 0.45).setOrigin(0).setScrollFactor(0).setDepth(250)
       this.add.rectangle(0, H - 40, W, 40, P.schwarz, 0.45).setOrigin(0).setScrollFactor(0).setDepth(250)
     } else {
       this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
     }
-    this.add.text(W / 2, 20, 'Der Schwarzwald singt wieder!', { fontFamily: font, fontSize: '18px', color: '#fee761', stroke: '#181425', strokeThickness: 4 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, 20, this.forest.endeText, { fontFamily: font, fontSize: '18px', color: '#fee761', stroke: '#181425', strokeThickness: 4 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     this.add.text(W / 2, H - 28, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    if (this.naechsterWald) this.add.text(W / 2, H - 42, `Weiter geht es in die ${this.naechsterWald.name}!`, { fontFamily: font, fontSize: '11px', color: '#63c74d', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     this.add.text(W / 2, H - 12, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     const back = () => { world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp; this.scene.start('Title') }
     this.time.delayedCall(800, () => { this.input.keyboard.once('keydown-SPACE', back); this.input.once('pointerdown', back) })

@@ -9,7 +9,7 @@
 //  Genau deshalb ist der Wechsel zwischen den Helden so einfach.
 // ============================================================
 import Phaser from 'phaser'
-import { JUMP, COMBAT, CROUCH, CLIMB, SLAM } from '../config.js'
+import { JUMP, COMBAT, CROUCH, CLIMB, SLAM, SWING } from '../config.js'
 import { P } from '../palette.js'
 
 export default class Hero extends Phaser.Physics.Arcade.Sprite {
@@ -39,6 +39,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.hitThisAttack = new Set()   // wen dieser Schlag schon getroffen hat
     this.crouched = false
     this.vine = null             // Ranke, an der ich gerade klettere
+    this.swing = null            // Liane, an der ich gerade schwinge
+    this.swingReadyAt = 0
     this.hopUntil = 0            // kurz nach dem Absprung von der Ranke: Satz nicht überschreiben
     this.slamming = false        // Stampfer läuft (Jonas)
     this.attackAnimUntil = 0
@@ -76,6 +78,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   applyCommand(cmd, time) {
     const { jump } = this.cfg
 
+    // An der Liane: schwingen (wie an einem Seil über dem Fluss)
+    if (this.swing) { this.updateSwing(cmd, time); return }
     // An der Ranke: klettern statt laufen
     if (this.vine) { this.updateClimb(cmd, time); return }
     // Stampfer: fällt mit Wucht, bis er aufkommt
@@ -212,6 +216,56 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.anims.resume()
   }
 
+  // --- Schwingen an Lianen (Jonas) ---
+  // Die Liane ist ein Pendel: Oben hängt sie fest, unten hängt Jonas.
+  // Je weiter er ausschwingt, desto stärker zieht ihn die Schwerkraft zurück –
+  // genau wie auf einer Schaukel. Mit Links/Rechts kann er "anschubsen".
+  startSwing(liane, time) {
+    if (time < this.swingReadyAt) return false
+    this.swing = { x: liane.x, y: liane.top, len: liane.len }
+    this.setCrouched(false)
+    this.body.setAllowGravity(false)
+    const dx = this.x - liane.x
+    this.swing.ang = Math.asin(Phaser.Math.Clamp(dx / liane.len, -0.9, 0.9))   // 0 = senkrecht unten
+    this.swing.vel = this.body.velocity.x / liane.len                          // Schwung mitnehmen
+    this.setVelocity(0, 0)
+    this.attackUntil = 0
+    this.slash.setVisible(false)
+    return true
+  }
+
+  updateSwing(cmd, time) {
+    const s = this.swing
+    const dt = Math.min(0.05, (this.scene.game.loop.delta ?? 16) / 1000)
+    // Pendelgleichung: je schräger, desto stärker zieht die Schwerkraft zurück
+    s.vel += -(1000 / s.len) * Math.sin(s.ang) * dt
+    if (cmd.left) s.vel -= SWING.pump * dt
+    if (cmd.right) s.vel += SWING.pump * dt
+    s.vel *= SWING.daempfung
+    s.ang += s.vel * dt
+    const bodyOffset = this.body.center.y - this.y
+    this.setPosition(s.x + Math.sin(s.ang) * s.len, s.y + Math.cos(s.ang) * s.len - bodyOffset)
+    this.setVelocity(0, 0)
+    this.facing = s.vel >= 0 ? 1 : -1
+    this.setFlipX(this.facing < 0)
+    this.playIfNew('climb')
+    if (cmd.jump) {
+      // Loslassen: der Schwung geht in Bewegung über (quer zur Liane)
+      const v = s.vel * s.len
+      this.stopSwing(time)
+      this.setVelocity(Math.cos(s.ang) * v, -Math.abs(Math.sin(s.ang) * v) - SWING.absprungBonus)
+      this.lastGroundTime = -9999
+      this.hopUntil = time + 350
+      this.scene.sfx?.play('jump')
+    }
+  }
+
+  stopSwing(time = 0) {
+    this.swing = null
+    this.body.setAllowGravity(true)
+    this.swingReadyAt = time + SWING.greifPause
+  }
+
   // --- Stampfer (Jonas) ---
   startSlam(time) {
     if (!this.specialReady(time) || this.vine) return false
@@ -288,7 +342,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
   // Beim Verlassen des Raums die Extras wegräumen
   destroy(fromScene) {
-    this.slash?.destroy(); this.zzz?.destroy()
+    this.slash?.destroy(); this.zzz?.destroy(); this.seil?.destroy()
     super.destroy(fromScene)
   }
 }

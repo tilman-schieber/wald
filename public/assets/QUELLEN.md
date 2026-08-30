@@ -40,3 +40,10 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Musik: "Maple Mode.mp3" → music/tijuca.mp3, "Moonlit Save Point.mp3" → music/la_palma.mp3 (beide `~/crush.py --preset snes`, ffmpeg → MP3). Zuordnung in `MUSIC.tracks` (Schlüssel = Anfang des Levelnamens).
 - Runde 4: Intro-Folien (Pro, unpalettisiert, Rand per tools/edge-fill.mjs): Freiburg `71cf3ca3…`, S1 Titisee `e14a8aab…` (ersetzt `ff459aae…`, Kinder statt Teenager), Titisee-Wald `77bbe80c…`; Kulissen (pixflux, Palette): schwarzwaldhof `d84d321d…`, schauinsland `c0170a03…`, titisee `45d3d9df…` (Wolken per colorkey weg), muenster `039d9fd1…`, hochsitz `e3992daf…`
 - Runde 5: verwirrter Hase `8865748f…` (img2img aus `tier_hase.png`, strength 200) + Hüpf-Animation `a90366a3…`; Wildschwein schnaufend `a2a6b7c7…`
+
+## Floresta da Tijuca (30.08.2026)
+- Kacheln: `create_sidescroller_tileset` Lehmboden `c35edd34…` → tiles/tijuca.png, Aquädukt-Quader `db7bb68f…` → tiles/tijuca_stein.png
+- Hintergrund: Berge/Zuckerhut `156c065e…` (erster Versuch `70402aa9…` sah nach Schwarzwald aus), Bäume `fc80e03f…` (Versuch `19c6e885…` hatte Wasserzeichen; hellblau per colorkey freigestellt), Farne `1e0bd52a…`, Kronen `82362121…`
+- Kulissen: Cascatinha `53e9775d…`, Vista Chinesa `a4858ee5…`, Cristo Redentor `ceffa730…`
+- Gegner: Affe `722b9a21…` (+ beruhigt `b3dec16c…`), Nasenbär `8d2502b2…` (+ Lauf `f7b71e9e…`), Faultier `cf441662…` (+ schlafend `09083a31…`), Ameise `12dcce15…` (+ Lauf `5e30cb70…`), Jackfrucht `61cd7fe8…`
+- Deko: Bromelie `22653618…`, Bambus `095f2e62…`, Liane `60db5b2e…`, Monstera `516084f6…`

@@ -15,6 +15,8 @@ export const world = {
   leaves: 0,                                     // gesammelte Blätter
   collected: {},                                 // { raumKey: Set(blattId) }
   musicOff: false,
+  forest: 'schwarzwald',                         // in welchem Wald wir gerade sind
+  finished: {},                                  // welche Wälder schon gerettet sind
 }
 
 export function healedIn(room) {

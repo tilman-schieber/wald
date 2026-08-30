@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTRO } from '../config.js'
+import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTRO, FORESTS, WURF } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -28,11 +28,11 @@ export default class BootScene extends Phaser.Scene {
         })
       }
     }
-    if (TILESET.file) {
-      this.load.image(TILESET.key, TILESET.file)
-    }
-    for (const layer of BACKGROUND.layers) {
-      if (layer.file) this.load.image(layer.key, layer.file)
+    // Kacheln und Hintergrund-Ebenen ALLER Wälder
+    for (const wald of Object.values(FORESTS)) {
+      for (const t of [wald.tiles, wald.tiles2]) if (t?.file) this.load.image(t.key, t.file)
+      for (const l of wald.background?.layers ?? []) if (l.file) this.load.image(l.key, l.file)
+      if (wald.endeBild) this.load.image('ende-' + wald.level, wald.endeBild)
     }
     if (BACKGROUND.titleFile) this.load.image(BACKGROUND.titleKey, BACKGROUND.titleFile)
     for (const enemy of Object.values(ENEMIES)) {
@@ -60,17 +60,16 @@ export default class BootScene extends Phaser.Scene {
       if (enemy.tiredSheet) this.load.spritesheet(enemy.key + '-muede', enemy.tiredSheet.file, { frameWidth: enemy.tiredSheet.w, frameHeight: enemy.tiredSheet.h })
     }
     if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
-    if (TILESET2.file) this.load.image(TILESET2.key, TILESET2.file)
     for (const [name, it] of Object.entries(ITEMS)) {
       if (!it.file) continue
       if (it.anim) this.load.spritesheet(name, it.file, { frameWidth: it.anim.w, frameHeight: it.anim.h })
       else this.load.image(name, it.file)
     }
     if (SLASH.file) this.load.image('slash', SLASH.file)
+    if (WURF.file) this.load.image(WURF.key, WURF.file)
     if (HEARTS.full) { this.load.image('herz', HEARTS.full); this.load.image('herz_leer', HEARTS.empty) }
     if (UI.panelFile) this.load.image('panel', UI.panelFile)
     if (UI.titleFile) this.load.image('titelbild', UI.titleFile)
-    if (UI.finishFile) this.load.image('endebild', UI.finishFile)
     INTRO.forEach((f, i) => { if (f.image) this.load.image('intro' + i, f.image) })
     for (const [name, k] of Object.entries(KULISSEN)) if (k.file) this.load.image('kulisse-' + name, k.file)
     if (UI.fontFile) this.loadFont()

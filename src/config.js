@@ -113,6 +113,13 @@ export const CLIMB = {         // Jonas: klettert an Ranken (Pfeil hoch/runter a
   speed: 70,                   // Klettergeschwindigkeit
   hop: { x: 90, y: 230 },      // Satz auf die Kante, wenn man oben ankommt
 }
+export const SWING = {        // Jonas: an Lianen schwingen (Floresta da Tijuca)
+  pump: 2.2,                  // wie stark Links/Rechts das Schwingen verstärkt
+  daempfung: 0.995,           // ganz leichte Bremse, sonst schwingt es ewig
+  absprungBonus: 120,         // zusätzlicher Schwung nach oben beim Loslassen
+  greifPause: 350,            // so lange kann man nach dem Loslassen nicht neu greifen
+}
+
 export const SLAM = {          // Jonas: Stampfer (E) – springt hoch und knallt auf den Boden
   jump: 260,                   // Absprung nach oben
   fall: 520,                   // dann mit Wucht nach unten
@@ -271,6 +278,86 @@ ENEMIES.hase = {
   },
 }
 
+// ------------------------------------------------------------
+//  Die Gegner der Floresta da Tijuca
+// ------------------------------------------------------------
+//  Verwirrter Kapuzineraffe: sitzt oben und wirft Jackfrüchte im Bogen.
+//  Nach drei Würfen muss er verschnaufen – dann kommt man an ihn heran.
+ENEMIES.affe = {
+  key: 'affe', name: 'Verwirrter Kapuzineraffe', hp: 3, speed: 0, damage: 1,
+  frame: { w: 26, h: 32 }, body: { w: 18, h: 26 },
+  color: P.rindeBraun, accent: P.sandHell,
+  file: 'assets/sprites/affe.png',            // PixelLab 722b9a21…
+  healedFile: 'assets/sprites/affe_heil.png',
+  ai: {
+    kind: 'thrower', spiky: false,
+    wanderSpeed: 0,                 // er sitzt und schaut sich nur um
+    sight: { x: 210, y: 140 },
+    alertMs: 500,
+    throws: 2, throwEveryMs: 1300,  // zwei Würfe mit Pause (fair auch für kleine Spieler)
+    wurf: { x: 130, y: -190 },      // Anfangsgeschwindigkeit der Frucht
+    dizzyMs: 2000, cooldownMs: 1600, healedWanderSpeed: 0,
+  },
+}
+
+//  Verwirrter Nasenbär: gibt nie auf. Läuft hinterher und klettert
+//  sogar an Wänden hoch. Dafür ist er langsam und immer verwundbar.
+ENEMIES.nasenbaer = {
+  key: 'nasenbaer', name: 'Verwirrter Nasenbär', hp: 4, speed: 35, damage: 1,
+  frame: { w: 27, h: 28 }, body: { w: 22, h: 20 },
+  color: P.rostRot, accent: P.erdeDunkel,
+  file: 'assets/sprites/nasenbaer.png',       // PixelLab 8d2502b2…
+  healedFile: 'assets/sprites/nasenbaer.png',
+  walkSheet: { file: 'assets/sprites/nasenbaer_lauf.png', w: 29, h: 28, n: 6, rate: 9 },   // animate_image f7b71e9e…
+  ai: {
+    kind: 'climber', spiky: false,
+    wanderSpeed: 35,
+    sight: { x: 200, y: 150 },
+    alertMs: 350,
+    rollSpeed: 75,                  // Verfolgungstempo (langsamer als die Helden)
+    climbSpeed: 70,                 // so schnell hangelt er sich hoch
+    climbWidth: 34,                 // so genau muss er unter dem Ziel stehen
+    rollMaxMs: 7000,                // so lange bleibt er dran
+    dizzyMs: 1500, cooldownMs: 1200, healedWanderSpeed: 12,
+  },
+}
+
+//  Verwirrtes Faultier: hängt am Ast. Läuft jemand darunter durch,
+//  lässt es sich fallen. Am Boden braucht es ewig – da heilt man es.
+ENEMIES.faultier = {
+  key: 'faultier', name: 'Verwirrtes Faultier', hp: 3, speed: 0, damage: 1,
+  frame: { w: 30, h: 23 }, body: { w: 22, h: 18 },
+  color: P.steinGrau, accent: P.sandHell,
+  file: 'assets/sprites/faultier.png',        // PixelLab cf441662…
+  healedFile: 'assets/sprites/faultier_heil.png',
+  ai: {
+    kind: 'dropper', spiky: false,
+    dropWidth: 24,                  // so nah muss man darunter sein
+    alertMs: 600,                   // es merkt es erst … langsam
+    dizzyMs: 3200,                  // liegt lange am Boden
+    climbSpeed: 22,                 // und klettert im Schneckentempo zurück
+    cooldownMs: 2000, wanderSpeed: 0, sight: { x: 0, y: 0 }, healedWanderSpeed: 0,
+  },
+}
+
+//  Verwirrte Blattschneiderameisen: marschieren im Gänsemarsch.
+//  Sie greifen nie an – man springt drüber oder heilt die Anführerin,
+//  dann kehrt die ganze Kolonne friedlich um.
+ENEMIES.ameise = {
+  key: 'ameise', name: 'Verwirrte Blattschneiderameise', hp: 1, speed: 22, damage: 1,
+  frame: { w: 26, h: 23 }, body: { w: 18, h: 14 },
+  color: P.rostRot, accent: P.wiesenGruen,
+  file: 'assets/sprites/ameise.png',          // PixelLab 12dcce15…
+  healedFile: 'assets/sprites/ameise.png',
+  walkSheet: { file: 'assets/sprites/ameise_lauf.png', w: 27, h: 26, n: 6, rate: 10 },   // animate_image 5e30cb70…
+  gruppe: 5,                                  // fünf Ameisen aus einem Tiled-Punkt
+  gruppeAbstand: 20,
+  ai: { kind: 'marcher', spiky: false, wanderSpeed: 22, sight: { x: 0, y: 0 }, alertMs: 0, dizzyMs: 0, cooldownMs: 0, healedWanderSpeed: 18 },
+}
+
+//  Die Jackfrucht, die der Affe wirft
+export const WURF = { key: 'frucht', file: 'assets/sprites/frucht.png', damage: 1 }
+
 export const SLASH = { file: 'assets/sprites/schlag.png' }   // PixelLab d47f7c28… (null = gelber Halbmond)
 export const HEARTS = { full: 'assets/sprites/herz.png', empty: 'assets/sprites/herz_leer.png' }   // pixen 3bb1d083… / 5914ab12…
 
@@ -293,6 +380,9 @@ export const KULISSEN = {
   titisee:        { file: 'assets/bg/kulisse_titisee.png' },
   muenster:       { file: 'assets/bg/kulisse_muenster.png' },
   hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png' },
+  cristo:         { file: 'assets/bg/kulisse_cristo.png' },       // Floresta da Tijuca
+  cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png' },
+  pavillon:       { file: 'assets/bg/kulisse_pavillon.png' },
 }
 
 //  Musik je Wald (alle mit ~/crush.py --preset snes bearbeitet). Der Schlüssel ist der
@@ -333,6 +423,10 @@ export const DEKO = {
   bach:     { file: 'assets/sprites/deko_bach.png' },       // Bachlauf (liegt im Boden, vorne)
   baumhaus: { file: 'assets/sprites/deko_baumhaus.png' },   // Baumhaus (hinten, groß)
   hohlbaum: { file: 'assets/sprites/deko_hohlbaum.png' },   // hohler Baumstamm (hinten, groß)
+  bromelie: { file: 'assets/sprites/deko_bromelie.png' },   // ab hier: Floresta da Tijuca
+  bambus:   { file: 'assets/sprites/deko_bambus.png' },
+  liane:    { file: 'assets/sprites/deko_liane.png', haengend: true },
+  monstera: { file: 'assets/sprites/deko_monstera.png' },
 }
 
 // ------------------------------------------------------------
@@ -432,4 +526,57 @@ export const TILESET2 = {
   file: 'assets/tiles/schwarzwald_stein.png',   // PixelLab-Tileset e020a554…
   columns: 4,
   wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],   // gleiche Anordnung wie das Erde-Set
+}
+
+// ------------------------------------------------------------
+//  DIE WÄLDER
+// ------------------------------------------------------------
+//  Jeder Wald bringt mit, was ihn ausmacht: sein Level, seine Kacheln,
+//  seine Hintergrund-Ebenen, seine Musik und seinen Schlusssatz.
+//  Der Schlüssel ist zugleich der Anfang des Levelnamens.
+//  `weiter` = welcher Wald danach kommt (null = das Spiel ist durch).
+// ------------------------------------------------------------
+export const FORESTS = {
+  schwarzwald: {
+    name: 'Schwarzwald',
+    level: 'schwarzwald',
+    tiles: TILESET,
+    tiles2: TILESET2,
+    background: BACKGROUND,
+    musik: 'schwarzwald',
+    endeText: 'Der Schwarzwald singt wieder!',
+    endeBild: 'assets/bg/schwarzwald_ende.png',
+    weiter: 'tijuca',
+  },
+  tijuca: {
+    name: 'Floresta da Tijuca',
+    level: 'tijuca',
+    tiles: {
+      key: 'tiles_tijuca',
+      file: 'assets/tiles/tijuca.png',            // PixelLab c35edd34…
+      columns: 4,
+      wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
+    },
+    tiles2: {
+      key: 'tiles_tijuca2',
+      name: 'stein',
+      file: 'assets/tiles/tijuca_stein.png',      // PixelLab db7bb68f… (Aquädukt-Quader)
+      columns: 4,
+      wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
+    },
+    background: {
+      layers: [
+        { key: 'tj_berge',  file: 'assets/bg/tijuca_berge.png', scroll: 0.1 },
+        { key: 'tj_baeume', file: 'assets/bg/tijuca_baeume.png', scroll: 0.3, tint: 0x8fa0c0, alpha: 0.9 },
+        { key: 'tj_baeume', scroll: 0.55, offsetX: 300 },
+        { key: 'tj_kronen', file: 'assets/bg/tijuca_kronen.png', scroll: 1.2, h: 160, depth: 22, alpha: 0.9 },
+        { key: 'tj_farne',  file: 'assets/bg/tijuca_farne.png', scroll: 1.1, y: 214, h: 96, depth: 21, alpha: 0.9 },
+      ],
+      haze: 0.22,      // in Rio ist es heller als im Schwarzwald
+    },
+    musik: 'tijuca',
+    endeText: 'Die Floresta da Tijuca lebt wieder!',
+    endeBild: null,
+    weiter: null,
+  },
 }

@@ -2,6 +2,7 @@
 
 Ein 2D-Pixel-Art-Abenteuer, gebaut von Tilman mit Jonas und Leonel – die beiden sind auch die Helden.
 Der Wald verstummt, und die zwei Brüder bringen ihn zurück: Verwirrte Tiere werden nicht besiegt, sondern **geheilt**.
+Zwei Wälder sind spielbar: der **Schwarzwald** bei Freiburg und die **Floresta da Tijuca** in Rio de Janeiro.
 
 **Spielen:** https://gh.tschieber.de/wald/ (auch https://tilman-schieber.github.io/wald/)
 

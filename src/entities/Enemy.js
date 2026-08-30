@@ -12,6 +12,10 @@
 //              roller  (Igel):        rollt als Kugel geradeaus (drüberhüpfen!)
 //              charger (Wildschwein): stürmt, dreht um, stürmt nochmal (mehrmals)
 //              hopper  (Hase):        hüpft in großen Sätzen heran
+//              thrower (Affe):        sitzt oben und wirft Früchte im Bogen
+//              climber (Nasenbär):    läuft hinterher und klettert Wände hoch
+//              dropper (Faultier):    hängt am Ast und lässt sich fallen
+//              marcher (Ameise):      marschiert nur, greift nie an
 //    turn    nur beim Wildschwein: Pause zwischen zwei Sturmläufen
 //    dizzy   danach benommen/außer Puste → tut nicht weh, gut zu treffen
 // ============================================================
@@ -39,6 +43,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.chargesLeft = 0
     this.hopsLeft = 0
     this.nextHopAt = 0
+    this.throwsLeft = 0
+    this.nextThrowAt = 0
+    this.target = null
+    this.perch = { x, y: this.y }        // Ausgangsplatz (für Faultier)
+    if (cfg.ai?.kind === 'dropper') { this.body.setAllowGravity(false); this.state = 'perch' }
     this.wanderPause = false
     this.alertReadyAt = 0
     this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(9).setVisible(false)
@@ -92,6 +101,30 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.isCalm(time)) { this.setVelocityX(0); this.showMark(false); return }
 
     switch (this.state) {
+      case 'perch': {
+        // Faultier: hängt am Ast und wartet, bis jemand darunter durchläuft
+        this.setVelocity(0, 0)
+        this.y = this.perch.y + Math.sin(time / 900) * 1.5
+        const unten = heroes.find((h) => Math.abs(h.x - this.x) <= (ai.dropWidth ?? 22) && h.body.top > this.body.bottom - 6)
+        if (unten && time >= this.alertReadyAt) {
+          this.state = 'alert'
+          this.stateUntil = time + ai.alertMs
+          this.showMark(true, '!')
+        }
+        break
+      }
+      case 'return': {
+        // langsam zurück an den Ast klettern
+        this.body.setAllowGravity(false)
+        this.scene.physics.moveTo(this, this.perch.x, this.perch.y, ai.climbSpeed ?? 30)
+        if (Phaser.Math.Distance.Between(this.x, this.y, this.perch.x, this.perch.y) < 4) {
+          this.setPosition(this.perch.x, this.perch.y)
+          this.setVelocity(0, 0)
+          this.state = 'perch'
+          this.alertReadyAt = time + ai.cooldownMs
+        }
+        break
+      }
       case 'wander': {
         if (time >= this.stateUntil) {                       // neue Laune: laufen oder stehen?
           this.wanderPause = !this.wanderPause
@@ -109,9 +142,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
 
         // Sieht er einen Helden?
+        if (ai.kind === 'marcher') break            // Ameisen marschieren nur, sie greifen nie an
         if (time >= this.alertReadyAt) {
           const seen = heroes.find((h) => Math.abs(h.x - this.x) <= ai.sight.x && Math.abs(h.body.bottom - this.body.bottom) <= ai.sight.y)
           if (seen) {
+            this.target = seen
             this.state = 'alert'
             this.stateUntil = time + ai.alertMs
             this.dir = Math.sign(seen.x - this.x) || this.dir
@@ -130,12 +165,86 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           this.stateUntil = time + (ai.rollMaxMs ?? 2000)
           this.chargesLeft = ai.charges ?? 0
           this.hopsLeft = ai.hops ?? 0
+          this.throwsLeft = ai.throws ?? 0
           this.nextHopAt = 0
-          if (ai.kind !== 'hopper') this.useTexture(this.cfg.key + '-kugel')
+          this.nextThrowAt = 0
+          if (ai.kind === 'dropper') this.body.setAllowGravity(true)     // loslassen!
+          if (!['hopper', 'thrower', 'climber', 'dropper'].includes(ai.kind)) this.useTexture(this.cfg.key + '-kugel')
           this.showMark(false)
         }
         break
       case 'roll': {
+        if (ai.kind === 'thrower') {
+          // --- Affe: sitzt und wirft Früchte im Bogen ---
+          this.setVelocityX(0)
+          if (this.target) { this.dir = Math.sign(this.target.x - this.x) || this.dir }
+          if (this.throwsLeft > 0 && time >= this.nextThrowAt) {
+            this.throwsLeft--
+            this.nextThrowAt = time + (ai.throwEveryMs ?? 700)
+            this.scene.wirfFrucht?.(this, this.target)
+          } else if (this.throwsLeft <= 0 && time >= this.nextThrowAt) {
+            this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs; this.showMark(true, '★')
+          }
+          break
+        }
+        if (ai.kind === 'dropper') {
+          // --- Faultier: fällt herunter, bis es aufkommt ---
+          this.setVelocityX(0)
+          if (this.onGround) { this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs; this.showMark(true, '★'); this.scene.sfx?.play('slam') }
+          break
+        }
+        if (ai.kind === 'climber') {
+          // --- Nasenbär: läuft hinterher und klettert hoch, wenn das Ziel oben ist.
+          // Klettern in drei einfachen Schritten:
+          //   'hoch'    – gerade nach oben (nicht zur Seite ziehen lassen!)
+          //   'seite'   – stößt er unten gegen eine Plattform, geht er zur freien Kante
+          //   angekommen – auf gleicher Höhe hüpft er auf die Kante
+          const ziel = this.target ?? heroes[0]
+          const dx = ziel ? ziel.x - this.x : 0
+          const zielOben = ziel && ziel.body.bottom < this.body.bottom - 12
+          if (!this.klettert) this.dir = Math.sign(dx) || this.dir
+
+          if (!this.klettert && zielOben && Math.abs(dx) <= (ai.climbWidth ?? 34)) {
+            this.klettert = true
+            this.kletterPhase = 'hoch'
+          }
+
+          // Erst hinüberhangeln, wenn er WIRKLICH über der Kante ist – sonst
+          // stößt er von der Seite gegen die Plattform und kommt nicht weiter.
+          if (this.klettert && ziel && this.kletterPhase !== 'rueber' && this.body.bottom <= ziel.body.bottom - 3) {
+            this.kletterPhase = 'rueber'
+            this.dir = Math.sign(dx) || this.dir
+          }
+          if (this.klettert) {
+            this.body.setAllowGravity(false)
+            const deckeFrei = groundLayer.getTileAtWorldXY(this.x, this.body.top - 6) === null
+            if (this.kletterPhase === 'hoch') {
+              if (!deckeFrei || this.body.blocked.up) { this.kletterPhase = 'seite'; this.ausweichen = this.freieSeite(groundLayer) }
+              else this.setVelocity(0, -(ai.climbSpeed ?? 60))
+              if (ziel && this.body.bottom < ziel.body.bottom - 60) { this.kletterPhase = 'rueber'; this.dir = Math.sign(dx) || this.dir }   // nicht endlos hoch
+            }
+            if (this.kletterPhase === 'seite') {
+              this.setVelocity(this.ausweichen * 70, 0)
+              if (deckeFrei && !this.body.blocked.up) this.kletterPhase = 'hoch'
+            }
+            if (this.kletterPhase === 'rueber') {
+              // hangelt sich seitlich, bis unter ihm fester Boden ist – dann loslassen
+              this.setVelocity(this.dir * 70, 0)
+              // stößt er dabei seitlich an, muss er noch ein Stück höher
+              if (this.dir < 0 ? this.body.blocked.left : this.body.blocked.right) this.kletterPhase = 'hoch'
+              if (groundLayer.getTileAtWorldXY(this.x, this.body.bottom + 4) !== null) {
+                this.klettert = false
+                this.body.setAllowGravity(true)
+                this.setVelocity(0, 0)
+              }
+            }
+          } else {
+            this.body.setAllowGravity(true)
+            this.setVelocityX(this.dir * (ai.rollSpeed ?? 70))
+          }
+          if (time >= this.stateUntil) { this.klettert = false; this.body.setAllowGravity(true); this.setVelocityX(0); this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs; this.showMark(true, '★') }
+          break
+        }
         if (ai.kind === 'hopper') {
           // --- Hase: große Sätze. Am Boden abspringen, in der Luft nur fliegen ---
           if (this.onGround) {
@@ -194,7 +303,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         // schnaufende Animation, wenn es eine gibt (Wildschwein)
         if (this.scene.anims.exists(this.cfg.key + '-muede') && this.anims.currentAnim?.key !== this.cfg.key + '-muede') { this.play(this.cfg.key + '-muede'); this.useTexture(this.cfg.key + '-muede') }
         if (time >= this.stateUntil) {
-          this.state = 'wander'
+          this.state = ai.kind === 'dropper' ? 'return' : 'wander'
           this.stateUntil = time
           this.alertReadyAt = time + ai.cooldownMs
           this.showMark(false)
@@ -222,6 +331,24 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   // Ist vor mir Boden? Auch eine oder zwei Stufen tiefer zählt – sonst bleibt
   // ein rollender Igel an jeder kleinen Geländestufe stehen.
+  // Nach welcher Seite ist der Weg nach oben frei? (für kletternde Gegner)
+  // Wir schauen links und rechts nach der ersten Spalte ohne Decke über uns.
+  freieSeite(groundLayer, weite = 6) {
+    for (let i = 1; i <= weite; i++) {
+      for (const s of [1, -1]) {
+        const x = this.x + s * i * 16
+        if (groundLayer.getTileAtWorldXY(x, this.body.top - 8) === null) return s
+      }
+    }
+    return 1
+  }
+
+  // Steht direkt vor mir (auf Bauchhöhe) eine feste Kachel?
+  wallAhead(groundLayer) {
+    const x = this.x + this.dir * (this.body.width / 2 + 3)
+    return groundLayer.getTileAtWorldXY(x, this.body.center.y) !== null
+  }
+
   groundAhead(groundLayer, tiefe = 1) {
     const aheadX = this.x + this.dir * (this.body.width / 2 + 2)
     for (let i = 0; i < tiefe; i++) {
@@ -256,6 +383,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   heal(silent = false) {
     this.healed = true
+    this.body.setAllowGravity(true)
+    // Ameisen: die ganze Kolonne kehrt mit der Anführerin um
+    if (this.groupMates && !silent) for (const m of this.groupMates) if (m !== this && !m.healed) m.heal(true)
     this.hp = 0
     this.clearTint()
     this.setVelocity(0, 0)
