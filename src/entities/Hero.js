@@ -250,12 +250,17 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.setFlipX(this.facing < 0)
     this.playIfNew('climb')
     if (cmd.jump) {
-      // Loslassen: der Schwung geht in Bewegung über (quer zur Liane)
+      // Loslassen: Jonas fliegt genau so weiter, wie er sich gerade bewegt –
+      // wie beim Loslassen einer Schaukel. Für einen Punkt auf dem Kreis mit
+      // Winkel a gilt: Geschwindigkeit = Kreisgeschwindigkeit · (cos a, −sin a).
       const v = s.vel * s.len
+      const vx = Math.cos(s.ang) * v
+      const vy = -Math.sin(s.ang) * v
       this.stopSwing(time)
-      this.setVelocity(Math.cos(s.ang) * v, -Math.abs(Math.sin(s.ang) * v) - SWING.absprungBonus)
+      // ein kleiner Schubs nach oben, damit man auch aus dem Stand abspringen kann
+      this.setVelocity(vx, vy - SWING.absprungBonus)
       this.lastGroundTime = -9999
-      this.hopUntil = time + 350
+      this.hopUntil = time + 200
       this.scene.sfx?.play('jump')
     }
   }

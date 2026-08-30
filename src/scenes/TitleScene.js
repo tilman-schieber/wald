@@ -99,7 +99,8 @@ export default class TitleScene extends Phaser.Scene {
     world.active = 'jonas'
     world.hp = { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp }
     world.healed = {}; world.gatesOpen = {}; world.collected = {}; world.leaves = 0
-    this.scene.start('Game', { room: FORESTS[key].level, spawn: 'start' })
+    // mit Geschichte starten (Esc überspringt sie)
+    this.scene.start('Intro', { forest: key, room: FORESTS[key].level, spawn: 'start' })
   }
 
   continueGame() {

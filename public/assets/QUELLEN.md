@@ -50,3 +50,7 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Nachbesserung: Nasenbär `e6ec27a6…` und Kapuzineraffe `64e3b8e5…` neu (die ersten sahen nicht nach den Tieren aus);
   Animationen dazu: Nasenbär-Lauf `af1e73b3…`, Affe beruhigt `78ac5772…`, Affe wirft `ab097341…`;
   Tijuca-Intro: Flug `1fa2d8b4…`, Waldrand `37a215c6…`; Jonas klettert (Rückansicht) `64f53502…`
+- Nachbesserung 2: böser Hase `388ff465…` (img2img aus dem freundlichen Hasen, strength 110) + Hüpfen `34893bc5…`;
+  kleinerer Kapuzineraffe `829cc473…` (32×32 statt 44×48) + Wurf `beeeaf04…` + beruhigt `975ef13d…`;
+  Nasenbär-Bilder mit `tools/spiegeln.mjs` nach links gedreht (er war als einziger nach rechts gezeichnet);
+  Tijuca-Musik: "Frozen Sprite Loop (1).mp3" durch `~/crush.py --preset snes`

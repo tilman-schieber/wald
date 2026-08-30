@@ -122,7 +122,8 @@ for (const run of runs) {
 }
 // Tiere (keine Eichhörnchen – die sind Speicherpunkte)
 const wide = runs.filter((r) => r.x1 - r.x0 >= 64)
-for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point(pick(['hase', 'schmetterling', 'hase']), 'tier', Math.round(tx), r.top) }
+// Friedliche Tiere: im Schwarzwald sind Hasen GEGNER, deshalb hier nur Schmetterlinge
+for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }
 
 const map = {
   compressionlevel: -1, height: H, width: W, infinite: false, orientation: 'orthogonal', renderorder: 'right-down',

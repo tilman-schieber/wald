@@ -50,6 +50,10 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
 - **Keine Abgründe** in den Räumen (Tilman-Wunsch). Der Code dafür (fellIntoPit) bleibt als Sicherheitsnetz.
 - Deko `bach` (Wasserfall) nie direkt auf der Laufebene platzieren (sieht komisch aus) – nur z. B. in Nischen/tiefer
+- **Alle Gegner-Sprites schauen nach LINKS** (der Code spiegelt bei Blickrichtung rechts).
+  Schaut ein neues Bild nach rechts: `node tools/spiegeln.mjs <datei> <ziel> <anzahlBilder>`.
+- Gegner sollen kleiner sein als die Helden (Jonas ~36 px sichtbar) – lieber gleich klein generieren
+  als hinterher verkleinern.
 - Posen/Animationen einer Figur IMMER per `animate_image` aus ihrem Hauptbild ableiten, nie separat generieren (sonst passt es nicht zusammen)
 - `animate_image` malt jedes Bild neu → bei LAUFZYKLEN wandert die Form. Danach immer
   `node tools/frames-aussortieren.mjs <sheet> <n> <out>` laufen lassen (wirft Ausreißer raus).

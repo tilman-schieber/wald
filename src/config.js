@@ -254,13 +254,13 @@ ENEMIES.hase = {
   hp: 3,
   speed: 40,
   damage: 1,
-  frame: { w: 22, h: 31 },
-  body: { w: 16, h: 22 },
+  frame: { w: 24, h: 30 },
+  body: { w: 18, h: 22 },
   color: P.hautHell,
   accent: P.sandHell,
   file: 'assets/sprites/hase_wirr.png',        // PixelLab 8865748f… (aus dem Tier-Hasen abgeleitet)
   ballFile: 'assets/sprites/hase_sprung.png',  // Sprung-Pose (Bild 4 der Hüpf-Animation)
-  walkSheet: { file: 'assets/sprites/hase_hop.png', w: 24, h: 32, n: 6, rate: 9 },   // animate_image a90366a3…
+  walkSheet: { file: 'assets/sprites/hase_hop.png', w: 26, h: 32, n: 6, rate: 9 },   // animate_image a90366a3…
   healedFile: 'assets/sprites/tier_hase.png',  // geheilt = wieder der friedliche Hase
   ai: {
     kind: 'hopper',
@@ -285,11 +285,11 @@ ENEMIES.hase = {
 //  Nach drei Würfen muss er verschnaufen – dann kommt man an ihn heran.
 ENEMIES.affe = {
   key: 'affe', name: 'Verwirrter Kapuzineraffe', hp: 3, speed: 0, damage: 1,
-  frame: { w: 35, h: 44 }, body: { w: 20, h: 30 },
+  frame: { w: 21, h: 30 }, body: { w: 13, h: 24 },
   color: P.rindeBraun, accent: P.sandHell,
   file: 'assets/sprites/affe.png',            // PixelLab 722b9a21…
   healedFile: 'assets/sprites/affe_heil.png',
-  alertSheet: { file: 'assets/sprites/affe_wurf.png', w: 41, h: 45, n: 6, rate: 10 },   // animate_image ab097341… (holt aus und wirft)
+  alertSheet: { file: 'assets/sprites/affe_wurf.png', w: 24, h: 30, n: 6, rate: 10 },   // animate_image ab097341… (holt aus und wirft)
   ai: {
     kind: 'thrower', spiky: false,
     wanderSpeed: 0,                 // er sitzt und schaut sich nur um
@@ -371,8 +371,8 @@ export const INTROS = {
   { image: 'assets/bg/schwarzwald_intro.png', lines: ['Im Schwarzwald ist es still geworden.', 'Die Tiere sind verwirrt.', 'Sie haben vergessen, wer sie sind.', 'Zwei Brüder können den Wald zurückbringen:', 'Jonas und Leonel – die Wächter Aller Lebenden Dinge!'] },
  ],
  tijuca: [
-  { image: 'assets/bg/tijuca_intro_flug.png', lines: ['Ein Brief kommt aus Brasilien.', 'Auch dort ist ein Wald verstummt!', 'Jonas und Leonel fliegen über den Ozean.'] },
-  { image: 'assets/bg/tijuca_intro_wald.png', lines: ['Die Floresta da Tijuca liegt mitten in Rio.', 'Früher war hier alles abgeholzt.', 'Menschen haben sie Baum für Baum zurückgepflanzt.', 'Jetzt braucht sie die beiden.'] },
+  { image: 'assets/bg/tijuca_intro_flug.png', lines: ['In den Sommerferien geht es weit weg:', 'Jonas und Leonel fliegen nach Rio de Janeiro.', 'Unten liegt das Meer – und mitten in der Stadt ein Wald.'] },
+  { image: 'assets/bg/tijuca_intro_wald.png', lines: ['Die Floresta da Tijuca ist der größte Stadtwald der Welt.', 'Früher war hier alles abgeholzt.', 'Menschen haben sie Baum für Baum zurückgepflanzt.', 'Doch auch hier ruft jetzt kein Vogel mehr …'] },
  ],
 }
 
