@@ -85,6 +85,15 @@ plats.filter((p, i) => i % 3 === 1).forEach((p) => { const gx = p.x0 - 1; if (to
 // Igel auf Boden-Plateaus, Blätter auf Plattformen
 for (let c = 20; c < 260; c += between(22, 34)) { if (isFlat(c) && c > 12) continue; point('igel', 'enemy', c * T, top(c)) }
 plats.forEach((p, i) => { if (i % 2 === 0) point('blatt', 'blatt', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T - 20) })
+// Kulissen im Hintergrund (Schwarzwald bei Freiburg): weit weg = kleine tiefe
+const kulisse = (name, x, tiefe, spiegeln = false) => objs.push({ name, type: 'kulisse', point: true, x, y: 240, width: 0, height: 0, rotation: 0, visible: true, properties: [{ name: 'tiefe', type: 'string', value: String(tiefe) }, { name: 'spiegeln', type: 'bool', value: spiegeln }] })
+kulisse('muenster', 260, 0.15)          // ganz am Anfang: Freiburg liegt hinter uns
+kulisse('schwarzwaldhof', 900, 0.55)
+kulisse('hochsitz', 1700, 0.7)
+kulisse('titisee', 2450, 0.3)
+kulisse('schauinsland', 3300, 0.4)
+kulisse('schwarzwaldhof', 4000, 0.5, true)
+kulisse('hochsitz', 4550, 0.65, true)
 // Speicherpunkte (Eichhörnchen) am Anfang jeder Zone
 for (const [i, c] of [[2, 62], [3, 118], [4, 172], [5, 240]]) point('speicher' + i, 'checkpoint', c * T, top(c))
 

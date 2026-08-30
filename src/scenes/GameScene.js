@@ -17,9 +17,11 @@
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
 //    checkpoint Punkt: Speicherpunkt (Wegweiser) – berühren = ab hier geht's nach einem Game Over weiter
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
+//    kulisse  Punkt (Fuß), name = Schlüssel aus KULISSEN, Eigenschaft tiefe = Parallax (0.15 … 0.8):
+//             wird HINTER dem Spielfeld gezeichnet und wandert langsamer als die Kamera
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, TILESET, TILESET2, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC, DEKO, TIERE, UI } from '../config.js'
+import { GAME, TILESET, TILESET2, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, BACKGROUND, MUSIC, DEKO, TIERE, UI, KULISSEN } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame } from '../save.js'
@@ -189,6 +191,18 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 14; i++) {
       const f = this.add.rectangle(Math.random() * map.widthInPixels, 60 + Math.random() * 160, 2, 2, P.hellGelb).setDepth(14)
       this.fireflies.push({ f, phase: Math.random() * 100, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 6 })
+    }
+
+    // Kulissen: große Hintergrundbilder mit eigener Parallax-Tiefe. Damit ein Objekt an
+    // seiner Welt-Position erscheint, wenn die Kamera dort steht, wird x umgerechnet:
+    //   bild.x = x·tiefe + halbeBildschirmbreite·(1 − tiefe)
+    for (const o of objects.filter((o) => o.type === 'kulisse')) {
+      const key = 'kulisse-' + o.name
+      if (!this.textures.exists(key)) { console.warn('Unbekannte Kulisse:', o.name); continue }
+      const tiefe = Number(props(o).tiefe ?? 0.5)
+      const img = this.add.image(o.x * tiefe + (GAME.width / 2) * (1 - tiefe), o.y, key).setOrigin(0.5, 1).setScrollFactor(tiefe, 0).setDepth(-31 + tiefe * 12)   // weit weg = hinter dem Dunst (-25), nah = davor
+      img.setAlpha(0.55 + tiefe * 0.45)   // je weiter weg, desto blasser
+      if (props(o).spiegeln) img.setFlipX(true)
     }
 
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).

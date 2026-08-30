@@ -237,14 +237,26 @@ ENEMIES.wildschwein = {
 export const SLASH = { file: 'assets/sprites/schlag.png' }   // PixelLab d47f7c28… (null = gelber Halbmond)
 export const HEARTS = { full: 'assets/sprites/herz.png', empty: 'assets/sprites/herz_leer.png' }   // pixen 3bb1d083… / 5914ab12…
 
-// Geschichte am Anfang (jede Zeile = ein Tastendruck)
+// Geschichte am Anfang: jede Folie = Bild + Sätze (jeder Satz ein Tastendruck)
 export const INTRO = [
-  'Im Schwarzwald ist es still geworden.',
-  'Kein Vogel singt, kein Igel raschelt im Laub.',
-  'Die Tiere sind verwirrt und haben vergessen, wer sie sind.',
-  'Nur zwei Brüder können den Wald wieder zum Singen bringen …',
-  'Jonas und Leonel – die Wächter Aller Lebenden Dinge!',
+  { image: 'assets/bg/intro_freiburg.png', lines: ['Jonas und Leonel wohnen in Freiburg.', 'Eines Morgens merken sie: Aus dem Schwarzwald kommt kein Vogelruf mehr.'] },
+  { image: 'assets/bg/intro_titisee_bahn.png', lines: ['Mit der S1 fahren sie hinauf zum Titisee.', 'Am Bahnhof ist es seltsam ruhig.'] },
+  { image: 'assets/bg/intro_titisee_wald.png', lines: ['Am See beginnt der Wald.', 'Die beiden nehmen ihren Mut zusammen und gehen hinein.'] },
+  { image: 'assets/bg/schwarzwald_intro.png', lines: ['Im Schwarzwald ist es still geworden.', 'Die Tiere sind verwirrt und haben vergessen, wer sie sind.', 'Nur zwei Brüder können den Wald wieder zum Singen bringen …', 'Jonas und Leonel – die Wächter Aller Lebenden Dinge!'] },
 ]
+
+// ------------------------------------------------------------
+//  Kulissen: große Hintergrund-Bilder mit eigener Parallax-Tiefe.
+//  In Tiled: type "kulisse", name = Schlüssel, Eigenschaft tiefe = 0.15 … 0.8
+//  (0 = ganz weit weg, 1 = auf der Spielebene). Ankerpunkt unten-mittig.
+// ------------------------------------------------------------
+export const KULISSEN = {
+  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png' },
+  schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png' },
+  titisee:        { file: 'assets/bg/kulisse_titisee.png' },
+  muenster:       { file: 'assets/bg/kulisse_muenster.png' },
+  hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png' },
+}
 
 //  Musik je Wald (alle mit ~/crush.py --preset snes bearbeitet). Der Schlüssel ist der
 //  Anfang des Raum-/Level-Namens ("schwarzwald", "tijuca", "la_palma", "plaenterwald").
