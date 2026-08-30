@@ -1610,30 +1610,6 @@
      "rotation": 0,
      "visible": true,
      "id": 26
-    },
-    {
-     "id": 27,
-     "rotation": 0,
-     "visible": true,
-     "width": 0,
-     "height": 0,
-     "point": true,
-     "type": "deko",
-     "name": "bach",
-     "x": 700,
-     "y": 246,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ]
     }
    ]
   }

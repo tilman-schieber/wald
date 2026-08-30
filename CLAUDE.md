@@ -44,7 +44,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), E = Stampfer (macht Gegner
   ringsum benommen). Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
-- Abgründe (Lücken im Boden): ein Herz weniger, zurück auf den letzten sicheren Boden (kein Game Over allein dadurch)
+- **Keine Abgründe** in den Räumen (Tilman-Wunsch). Der Code dafür (fellIntoPit) bleibt als Sicherheitsnetz.
+- Deko `bach` (Wasserfall) nie direkt auf der Laufebene platzieren (sieht komisch aus) – nur z. B. in Nischen/tiefer
 - Posen/Animationen einer Figur IMMER per `animate_image` aus ihrem Hauptbild ableiten, nie separat generieren (sonst passt es nicht zusammen)
 - Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen →
   benommen (nur dann verwundbar). Igel rollt als Kugel; man hüpft drüber und schlägt danach.

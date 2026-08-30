@@ -302,7 +302,7 @@ export const UI = {
   fontFile: 'assets/fonts/waldschrift.ttf',   // PixelLab-Font "Waldschrift"
   fontFamily: 'Waldschrift',
   panelFile: 'assets/ui/holzpanel.png',       // PixelLab-UI-Panel, Neun-Teile-Rahmen
-  panelBorder: 24,                            // so breit ist der Rahmen im Panelbild
+  panelBorder: 7,                             // so breit ist der Rahmen im Panelbild (95×25-Panel aus dem Sheet)
   titleFile: 'assets/bg/titel.png',           // Pro-Titelbild 480×270
   finishFile: 'assets/bg/schwarzwald_ende.png', // Pro-Jubelbild fürs Waldherz (null = nur Text)
   introFile: 'assets/bg/schwarzwald_intro.png', // Pro-Bild für die Geschichte am Anfang (null = nur Text)

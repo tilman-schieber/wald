@@ -223,7 +223,7 @@ export default class GameScene extends Phaser.Scene {
 
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
-    this.physics.world.setBounds(0, 0, worldW, worldH + 64)   // unten offen: man kann in Abgründe fallen
+    this.physics.world.setBounds(0, 0, worldW, worldH + 64)   // unten offen (Abgründe gibt es aktuell keine – Tilman will keine)
     this.worldBottom = worldH
     this.cameras.main.setBounds(0, 0, worldW, worldH)
     this.cameras.main.startFollow(this.active, true, 0.12, 0.12)

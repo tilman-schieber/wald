@@ -996,8 +996,6 @@
     2,
     2,
     2,
-    0,
-    0,
     2,
     2,
     2,
@@ -1012,6 +1010,8 @@
     2,
     2,
     2,
+    2,
+    2,
     1,
     1,
     1,
@@ -1056,8 +1056,8 @@
     1,
     1,
     1,
-    0,
-    0,
+    1,
+    1,
     1,
     1,
     1,
@@ -1579,25 +1579,6 @@
       },
       {
        "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ]
-    },
-    {
-     "id": 29,
-     "name": "bach",
-     "type": "deko",
-     "point": true,
-     "x": 720,
-     "y": 262,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
        "type": "bool",
        "value": false
       }
