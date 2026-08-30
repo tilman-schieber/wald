@@ -8,8 +8,12 @@
 //  Verhalten (Zustände, siehe cfg.ai in config.js):
 //    wander  stromert herum: läuft, bleibt stehen, dreht um
 //    alert   hat einen Helden gesehen → "!" und kurz erstarren
-//    roll    rollt als Kugel schnell auf ihn zu (drüberhüpfen!)
-//    dizzy   danach benommen → NUR JETZT verwundbar, tut nicht weh
+//    attack  der Angriff – je nach ai.kind:
+//              roller  (Igel):        rollt als Kugel geradeaus (drüberhüpfen!)
+//              charger (Wildschwein): stürmt, dreht um, stürmt nochmal (mehrmals)
+//              hopper  (Hase):        hüpft in großen Sätzen heran
+//    turn    nur beim Wildschwein: Pause zwischen zwei Sturmläufen
+//    dizzy   danach benommen/außer Puste → tut nicht weh, gut zu treffen
 // ============================================================
 import Phaser from 'phaser'
 import { P } from '../palette.js'
@@ -32,6 +36,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.calmUntil = 0           // vom Waldgeist beruhigt: bleibt stehen, tut nicht weh
     this.state = 'wander'
     this.stateUntil = 0
+    this.chargesLeft = 0
+    this.hopsLeft = 0
+    this.nextHopAt = 0
     this.wanderPause = false
     this.alertReadyAt = 0
     this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(9).setVisible(false)
@@ -49,9 +56,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   get onGround() { return this.body.blocked.down }
   isCalm(time) { return time < this.calmUntil }
   // Kann man ihn gerade treffen?
-  isVulnerable(time) { return !this.cfg.ai.spiky || this.state === 'dizzy' || this.isCalm(time) }
+  isVulnerable(time) { return !this.cfg.ai.spiky || this.state === 'dizzy' || this.state === 'turn' || this.isCalm(time) }
   // Tut er gerade weh, wenn man ihn berührt?
-  hurtsOnTouch(time) { return !this.healed && !this.isCalm(time) && this.state !== 'dizzy' }
+  hurtsOnTouch(time) { return !this.healed && !this.isCalm(time) && this.state !== 'dizzy' && this.state !== 'turn' }
 
   // Vom Stampfer erwischt → sofort benommen (verwundbar)
   stun(time, ms) {
@@ -92,7 +99,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           this.stateUntil = time + (this.wanderPause ? rand(400, 1800) : rand(700, 2500))
         }
         if (this.wanderPause) this.setVelocityX(0)
-        else this.walk(ai.wanderSpeed, groundLayer)
+        else {
+          this.walk(ai.wanderSpeed, groundLayer)
+          // Hase: hüpft auch beim Stromern statt zu laufen
+          if (ai.wanderHopMs && this.onGround && time >= this.nextHopAt) {
+            this.nextHopAt = time + ai.wanderHopMs
+            this.setVelocityY(-150)
+          }
+        }
 
         // Sieht er einen Helden?
         if (time >= this.alertReadyAt) {
@@ -113,17 +127,51 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityX(0)
         if (time >= this.stateUntil) {
           this.state = 'roll'
-          this.stateUntil = time + ai.rollMaxMs
-          this.useTexture(this.cfg.key + '-kugel')
+          this.stateUntil = time + (ai.rollMaxMs ?? 2000)
+          this.chargesLeft = ai.charges ?? 0
+          this.hopsLeft = ai.hops ?? 0
+          this.nextHopAt = 0
+          if (ai.kind !== 'hopper') this.useTexture(this.cfg.key + '-kugel')
           this.showMark(false)
         }
         break
       case 'roll': {
+        if (ai.kind === 'hopper') {
+          // --- Hase: große Sätze. Am Boden abspringen, in der Luft nur fliegen ---
+          if (this.onGround) {
+            if (this.hopsLeft > 0 && time >= this.nextHopAt) {
+              this.hopsLeft--
+              this.setVelocity(this.dir * ai.hopSpeed, -ai.hopPower)
+              this.nextHopAt = time + 220
+            } else if (this.hopsLeft <= 0 && time >= this.nextHopAt) {
+              this.setVelocityX(0)
+              this.state = 'dizzy'
+              this.stateUntil = time + ai.dizzyMs
+              this.showMark(true, '★')
+            } else if (this.body.velocity.y === 0) {
+              this.setVelocityX(0)   // kurz sammeln vor dem nächsten Satz
+            }
+          }
+          if (time >= this.stateUntil) { this.setVelocityX(0); this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs; this.showMark(true, '★') }
+          break
+        }
+        // --- Igel und Wildschwein: geradeaus ---
         this.setVelocityX(this.dir * ai.rollSpeed)
         if (ai.rotate !== false) this.angle += this.dir * 14 // die Kugel dreht sich (Wildschwein nicht)
         const blocked = this.dir < 0 ? this.body.blocked.left : this.body.blocked.right
-        const edge = this.onGround && !this.groundAhead(groundLayer)
+        const edge = this.onGround && !this.groundAhead(groundLayer, 3)
         if (blocked || edge || time >= this.stateUntil) {
+          if (ai.kind === 'charger' && this.chargesLeft > 0) {
+            // Wildschwein: umdrehen und nochmal – dabei kurz stehen (jetzt trifft man es!)
+            this.chargesLeft--
+            this.dir = -this.dir
+            this.setVelocityX(0)
+            this.stopRolling()
+            this.state = 'turn'
+            this.stateUntil = time + (ai.turnMs ?? 400)
+            this.showMark(true, '!')
+            break
+          }
           this.stopRolling()
           this.state = 'dizzy'
           this.stateUntil = time + ai.dizzyMs
@@ -131,9 +179,20 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
         break
       }
+      case 'turn':
+        this.setVelocityX(0)
+        if (time >= this.stateUntil) {
+          this.state = 'roll'
+          this.stateUntil = time + (ai.rollMaxMs ?? 2000)
+          this.useTexture(this.cfg.key + '-kugel')
+          this.showMark(false)
+        }
+        break
       case 'dizzy':
         this.setVelocityX(0)
         this.mark.setAngle(Math.sin(time / 100) * 20)
+        // schnaufende Animation, wenn es eine gibt (Wildschwein)
+        if (this.scene.anims.exists(this.cfg.key + '-muede') && this.anims.currentAnim?.key !== this.cfg.key + '-muede') { this.play(this.cfg.key + '-muede'); this.useTexture(this.cfg.key + '-muede') }
         if (time >= this.stateUntil) {
           this.state = 'wander'
           this.stateUntil = time
@@ -143,12 +202,12 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         break
     }
 
-    if (this.state !== 'roll' || ai.rotate === false) this.setFlipX(this.dir > 0)
+    if (this.state !== 'roll' || ai.rotate === false || ai.kind === 'hopper') this.setFlipX(this.dir > 0)
     // Lauf-Animation, wenn es eine gibt (nur beim Gehen); im Alarm läuft die Alarm-Animation
-    const walking = (this.state === 'wander' && !this.wanderPause)
+    const walking = (this.state === 'wander' && !this.wanderPause) || (ai.kind === 'hopper' && this.state === 'roll')
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
       if (walking) { if (this.anims.currentAnim?.key !== this.cfg.key + '-lauf') { this.play(this.cfg.key + '-lauf'); this.useTexture(this.cfg.key + '-lauf') } }
-      else if (this.anims.isPlaying && this.state !== 'alert') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
+      else if (this.anims.isPlaying && this.state !== 'alert' && this.state !== 'dizzy') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
     }
     if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()
     this.mark.setPosition(this.x, this.body.top - 8)
@@ -161,9 +220,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityX(this.dir * speed)
   }
 
-  groundAhead(groundLayer) {
+  // Ist vor mir Boden? Auch eine oder zwei Stufen tiefer zählt – sonst bleibt
+  // ein rollender Igel an jeder kleinen Geländestufe stehen.
+  groundAhead(groundLayer, tiefe = 1) {
     const aheadX = this.x + this.dir * (this.body.width / 2 + 2)
-    return groundLayer.getTileAtWorldXY(aheadX, this.body.bottom + 2) !== null
+    for (let i = 0; i < tiefe; i++) {
+      if (groundLayer.getTileAtWorldXY(aheadX, this.body.bottom + 2 + i * 16) !== null) return true
+    }
+    return false
   }
 
   stopRolling() {

@@ -165,6 +165,7 @@ export const ENEMIES = {
     walkSheet: { file: 'assets/sprites/igel_lauf.png', w: 24, h: 20, n: 6, rate: 8 },   // animate_image dd740dac…
     alertSheet: { file: 'assets/sprites/igel_einrollen.png', w: 24, h: 20, n: 6, rate: 12 }, // animate_image 513fffff… (rollt sich ein; letztes Bild = Kugel)
     ai: {
+      kind: 'roller',       // rollt sich ein und rollt geradeaus los
       spiky: true,          // nur verwundbar, wenn benommen (oder vom Geist beruhigt)
       wanderSpeed: 25,      // beim Stromern
       sight: { x: 150, y: 40 },  // so weit sieht er Helden (waagerecht / Höhenunterschied)
@@ -219,18 +220,54 @@ ENEMIES.wildschwein = {
   healedFile: 'assets/sprites/wildschwein_heil.png', // PixelLab b844a0c9… (schläft)
   ballFile: 'assets/sprites/wildschwein_sturm.png',  // PixelLab 42c3513f… (Sturm-Pose; "Kugel"-Slot)
   walkSheet: { file: 'assets/sprites/wildschwein_lauf.png', w: 30, h: 25, n: 6, rate: 8 },   // animate_image c5eb7d6e…
+  tiredSheet: { file: 'assets/sprites/wildschwein_mued.png', w: 30, h: 25, n: 4, rate: 5 },  // animate_image a2a6b7c7… (schnauft)
   alertSheet: { file: 'assets/sprites/wildschwein_sturm_anim.png', w: 30, h: 25, n: 6, rate: 10 }, // animate_image 2f593a4e… (schnaubt, senkt den Kopf; letztes Bild = Sturm)
   ai: {
-    spiky: false,           // immer verwundbar
+    kind: 'charger',        // stürmt MEHRMALS hin und her, statt einmal zu rollen
+    spiky: false,           // immer verwundbar – aber schwer zu erwischen, solange es rennt
     rotate: false,          // beim Stürmen nicht drehen (ist ja keine Kugel)
     wanderSpeed: 30,
-    sight: { x: 170, y: 40 },
-    alertMs: 600,           // schnaubt länger – Zeit zum Ausweichen
-    rollSpeed: 190,         // schneller als beide Helden → drüberhüpfen oder ausweichen
-    rollMaxMs: 1800,
-    dizzyMs: 1400,          // rennt gegen die Wand → benommen
-    cooldownMs: 1500,
+    sight: { x: 190, y: 40 },
+    alertMs: 700,           // schnaubt und scharrt – Zeit zum Ausweichen
+    rollSpeed: 200,         // schneller als beide Helden → drüberhüpfen oder ausweichen
+    rollMaxMs: 1300,        // so lange dauert EIN Sturmlauf
+    charges: 1,             // danach dreht es um und stürmt noch einmal (also 2 Läufe)
+    turnMs: 450,            // Pause beim Umdrehen (kurz verwundbar und ungefährlich)
+    dizzyMs: 2200,          // danach völlig außer Puste (Animation wildschwein_mued)
+    cooldownMs: 1800,
     healedWanderSpeed: 0,   // geheilt schläft es
+  },
+}
+
+//  Verwirrter Hase: hüpft in Sätzen auf einen zu. Zwischen den Sprüngen ist er
+//  kurz am Boden – da trifft man ihn. Er ist nicht stachelig, aber flink.
+ENEMIES.hase = {
+  key: 'hase',
+  name: 'Verwirrter Hase',
+  hp: 3,
+  speed: 40,
+  damage: 1,
+  frame: { w: 22, h: 31 },
+  body: { w: 16, h: 22 },
+  color: P.hautHell,
+  accent: P.sandHell,
+  file: 'assets/sprites/hase_wirr.png',        // PixelLab 8865748f… (aus dem Tier-Hasen abgeleitet)
+  ballFile: 'assets/sprites/hase_sprung.png',  // Sprung-Pose (Bild 4 der Hüpf-Animation)
+  walkSheet: { file: 'assets/sprites/hase_hop.png', w: 24, h: 32, n: 6, rate: 9 },   // animate_image a90366a3…
+  healedFile: 'assets/sprites/tier_hase.png',  // geheilt = wieder der friedliche Hase
+  ai: {
+    kind: 'hopper',
+    spiky: false,
+    wanderSpeed: 30,
+    wanderHopMs: 900,       // beim Stromern alle ~0,9 s ein kleiner Hopser
+    sight: { x: 140, y: 60 },
+    alertMs: 400,           // duckt sich kurz zusammen
+    hops: 3,                // so viele große Sätze
+    hopPower: 300,          // Absprungkraft nach oben
+    hopSpeed: 120,          // Tempo nach vorn
+    dizzyMs: 1200,          // danach sitzt er benommen da
+    cooldownMs: 1200,
+    healedWanderSpeed: 14,
   },
 }
 

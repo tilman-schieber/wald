@@ -43,7 +43,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.slamming = false        // Stampfer läuft (Jonas)
     this.attackAnimUntil = 0
     this.hurtAnimUntil = 0
-    this.slamReadyAt = 0
+    this.specialReadyAt = 0      // ab wann die Fähigkeit (E) wieder geht
+    this.specialCooldownMs = 1   // wird von der Szene gesetzt (Jonas: Stampfer, Leonel: Geist)
     this.slash = scene.add.image(0, 0, 'slash').setVisible(false).setDepth(11).setAlpha(0.9)
     this.zzz = scene.add.text(0, 0, 'zzz', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc' }).setOrigin(0.5).setVisible(false).setDepth(11)
 
@@ -52,6 +53,13 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
   get onGround() {
     return this.body.blocked.down
+  }
+
+  // Ist die Spezialfähigkeit (Taste E) bereit? 0…1 = wie weit aufgeladen
+  specialReady(time) { return time >= this.specialReadyAt }
+  specialCharge(time) {
+    if (this.specialReady(time)) return 1
+    return Math.max(0, 1 - (this.specialReadyAt - time) / this.specialCooldownMs)
   }
 
   // Figur so setzen, dass die FÜSSE bei (x, feetY) stehen – egal wie das Bild aufgebaut ist
@@ -206,10 +214,10 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
   // --- Stampfer (Jonas) ---
   startSlam(time) {
-    if (time < this.slamReadyAt || this.vine) return false
+    if (!this.specialReady(time) || this.vine) return false
     this.slamming = true
     this.slamPhase = 'up'
-    this.slamReadyAt = time + SLAM.cooldownMs
+    this.specialReadyAt = time + SLAM.cooldownMs
     this.setCrouched(false)
     this.setVelocity(0, -SLAM.jump)
     this.attackUntil = 0

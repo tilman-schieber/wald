@@ -51,6 +51,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.shadows = []            // weiche Schatten unter allem, was auf dem Boden steht
     this.sfx = new Sfx(this)
     saveGame(this.roomKey, this.spawnName)      // Checkpoint: jeder Raumeingang
     this.paused = false
@@ -115,6 +116,7 @@ export default class GameScene extends Phaser.Scene {
       this.physics.add.collider(h, this.groundLayer)
     }
 
+    for (const hero of [this.jonas, this.leonel]) this.addShadow(hero, 14)
     this.graph = new PlatformGraph(this.groundLayer)     // Landkarte der Stehflächen
     this.brain = new CompanionBrain(this.groundLayer, this.graph)
     this.teleports = 0
@@ -132,6 +134,7 @@ export default class GameScene extends Phaser.Scene {
       e.objectId = o.id
       if (healedIn(this.roomKey).has(o.id)) e.heal(true)
       this.physics.add.collider(e, this.groundLayer)
+      this.addShadow(e, Math.max(12, cfg.body.w))
       this.enemies.push(e)
     }
     for (const hero of [this.jonas, this.leonel]) {
@@ -184,7 +187,8 @@ export default class GameScene extends Phaser.Scene {
       this.leaves.push(img)
     }
     this.spirits = []
-    this.spiritReadyAt = 0
+    this.jonas.specialCooldownMs = SLAM.cooldownMs
+    this.leonel.specialCooldownMs = SPIRIT.cooldownMs
 
     // Glühwürmchen: treiben langsam durch den Raum und blinken
     this.fireflies = []
@@ -212,8 +216,10 @@ export default class GameScene extends Phaser.Scene {
       const key = 'deko-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Deko:', o.name); continue }
       const p = props(o), d = DEKO[o.name] ?? {}
+      // +2 px: die Deko steckt leicht im Moos, sonst sieht sie aus, als schwebe sie
       const img = d.anim ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)
       img.setOrigin(0.5, d.haengend ? 0 : 1).setDepth(p.vorne ? 15 : 2).setFlipX(!!p.spiegeln)
+      if (!d.haengend) { img.y += 2; if (img.width >= 20) this.addShadow(img, Math.min(30, img.width * 0.8), false).setPosition(img.x, img.y - 1) }
       if (d.glow) this.glowing.push(img)
     }
 
@@ -225,7 +231,9 @@ export default class GameScene extends Phaser.Scene {
       const t = TIERE[o.name] ?? {}
       const spr = t.anim ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)
       spr.setOrigin(0.5, 1).setDepth(7).setFlipX(Math.random() < 0.5)
-      this.tiere.push({ spr, cfg: t, home: { x: o.x, y: o.y }, next: 0 })
+      spr.y += 2
+      if (!t.flatter) this.addShadow(spr, 14, false).setPosition(spr.x, spr.y - 1)
+      this.tiere.push({ spr, cfg: t, home: { x: o.x, y: o.y + 2 }, next: 0 })
     }
 
     // Speicherpunkte: ein Eichhörnchen, das beim Berühren hüpft und ein Herz zeigt
@@ -233,6 +241,8 @@ export default class GameScene extends Phaser.Scene {
       const key = this.textures.exists('tier-eichhoernchen') ? 'tier-eichhoernchen' : 'deko-schild'
       const img = (this.anims.exists(key) ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)).setOrigin(0.5, 1).setDepth(7)
       this.physics.add.existing(img, true)
+      img.y += 2
+      this.addShadow(img, 14, false).setPosition(img.x, img.y - 1)
       const heart = this.add.text(o.x, o.y - 30, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(8).setVisible(o.name === this.spawnName)
       return { img, heart, name: o.name, x: o.x, y: o.y }
     })
@@ -282,6 +292,10 @@ export default class GameScene extends Phaser.Scene {
       }
       if (this.textures.exists('blatt')) this.add.image(208, 30, 'blatt').setScale(0.5).setScrollFactor(0).setDepth(101)
       this.hudLeaves = this.add.text(218, 22, '0', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+      // Fähigkeits-Anzeige: Balken füllt sich, bis E wieder geht
+      this.abilityBack = this.add.rectangle(242, 30, 22, 5, P.schwarz, 0.6).setScrollFactor(0).setDepth(100)
+      this.abilityBar = this.add.rectangle(232, 30, 20, 3, P.eisBlau).setOrigin(0, 0.5).setScrollFactor(0).setDepth(101)
+      this.add.text(232, 18, 'E', { ...hudStyle, fontSize: '9px', color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
     }
     if (!isTouch) this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
     this.updateNameText()
@@ -343,7 +357,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     for (const cp of this.checkpoints) if (cp.heart.visible) cp.heart.y = cp.y - 30 + Math.sin(time / 300) * 2
-    // 4c. Tiere und leuchtende Deko
+    // 4c. Schatten, Tiere und leuchtende Deko
+    this.updateShadows()
     this.updateTiere(time)
     for (const g of this.glowing) g.setAlpha(0.85 + Math.sin(time / 300 + g.x) * 0.15)
 
@@ -500,14 +515,18 @@ export default class GameScene extends Phaser.Scene {
 
   // Spezialfähigkeit des aktiven Helden (Taste E)
   useSpecial(hero, time) {
-    if (hero.isDazed(time) || hero.hook) return
+    if (hero.isDazed(time) || hero.vine) return
+    if (!hero.specialReady(time)) {              // noch nicht aufgeladen → kurze Rückmeldung
+      this.sfx.play('nope')
+      this.floatText(hero, 'Noch nicht bereit')
+      return
+    }
     if (hero.cfg.key === 'jonas') {
       // Stampfer: hochspringen und auf den Boden knallen → Gegner ringsum werden benommen
-      if (hero.startSlam(time)) this.sfx.play('hook')
+      if (hero.startSlam(time)) this.sfx.play('jump')
     } else if (hero.cfg.key === 'leonel') {
-      // Waldgeist rufen (mit Pause dazwischen)
-      if (time < this.spiritReadyAt) return
-      this.spiritReadyAt = time + SPIRIT.cooldownMs
+      // Waldgeist rufen – danach muss sich Leonel erst wieder sammeln
+      hero.specialReadyAt = time + SPIRIT.cooldownMs
       this.spirits.push(new Spirit(this, hero, time))
       this.sfx.play('spirit')
     }
@@ -516,7 +535,7 @@ export default class GameScene extends Phaser.Scene {
   // Jonas ist mit dem Stampfer aufgekommen: Erschütterung!
   onSlamLanded(hero, time) {
     this.cameras.main.shake(180, 0.006)
-    this.sfx.play('gate')
+    this.sfx.play('slam')
     const ring = this.add.ellipse(hero.x, hero.body.bottom, 10, 4, 0, 0).setStrokeStyle(2, P.sandHell).setDepth(12)
     this.tweens.add({ targets: ring, width: SLAM.radius * 2, height: 10, alpha: 0, duration: 300, onComplete: () => ring.destroy() })
     for (const e of this.enemies) {
@@ -556,6 +575,33 @@ export default class GameScene extends Phaser.Scene {
         this.tweens.add({ targets: spr, x: Phaser.Math.Clamp(spr.x + dx, home.x - 30, home.x + 30), duration: 320 })
         spr.setFlipX(dx < 0)
       }
+    }
+  }
+
+  // Ein weicher Schatten macht sichtbar, WO etwas steht – ohne ihn wirkt alles
+  // wie schwebend, weil der Moosboden oben rund und dunkel ist.
+  addShadow(target, width = 14, follow = true) {
+    const sh = this.add.ellipse(target.x, 0, width, Math.max(3, width * 0.3), P.schwarz, 0.28).setDepth(1)
+    sh.follow = follow
+    sh.target = target
+    sh.groundY = (target.body ? target.body.bottom : target.y) + 1
+    this.shadows.push(sh)
+    return sh
+  }
+
+  updateShadows() {
+    for (const sh of this.shadows) {
+      const t = sh.target
+      if (!t.active) { sh.setVisible(false); continue }
+      if (!sh.follow) continue
+      sh.x = t.x
+      if (t.body) {
+        if (t.body.blocked.down) sh.groundY = t.body.bottom + 1          // am Boden: Höhe merken
+        const hoehe = Math.max(0, sh.groundY - t.body.bottom)             // wie hoch in der Luft?
+        sh.setScale(Math.max(0.35, 1 - hoehe / 90))
+        sh.setAlpha(0.28 * Math.max(0.25, 1 - hoehe / 90))
+      }
+      sh.y = sh.groundY
     }
   }
 
@@ -703,6 +749,9 @@ export default class GameScene extends Phaser.Scene {
     if (this.heartIcons) {
       this.hudLeaves.setText(String(world.leaves))
       for (const [key, icons] of Object.entries(this.heartIcons)) icons.forEach((ic, i) => ic.setTexture(i < this[key].hp ? 'herz' : 'herz_leer'))
+      const charge = this.active.specialCharge(this.time.now)
+      this.abilityBar.width = Math.max(1, 20 * charge)
+      this.abilityBar.fillColor = charge >= 1 ? P.eisBlau : P.schieferGrau
       return
     }
     const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))

@@ -57,6 +57,7 @@ export default class BootScene extends Phaser.Scene {
       if (enemy.walkSheet) this.load.spritesheet(enemy.key + '-lauf', enemy.walkSheet.file, { frameWidth: enemy.walkSheet.w, frameHeight: enemy.walkSheet.h })
       if (enemy.flySheet) this.load.spritesheet(enemy.key + '-flug-anim', enemy.flySheet.file, { frameWidth: enemy.flySheet.w, frameHeight: enemy.flySheet.h })
       if (enemy.alertSheet) this.load.spritesheet(enemy.key + '-alarm', enemy.alertSheet.file, { frameWidth: enemy.alertSheet.w, frameHeight: enemy.alertSheet.h })
+      if (enemy.tiredSheet) this.load.spritesheet(enemy.key + '-muede', enemy.tiredSheet.file, { frameWidth: enemy.tiredSheet.w, frameHeight: enemy.tiredSheet.h })
     }
     if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
     if (TILESET2.file) this.load.image(TILESET2.key, TILESET2.file)
@@ -310,6 +311,7 @@ export default class BootScene extends Phaser.Scene {
       if (e.walkSheet) mk(e.key + '-lauf', e.key + '-lauf', e.walkSheet.n, e.walkSheet.rate ?? 8)
       if (e.flySheet) mk(e.key + '-flug-anim', e.key + '-flug-anim', e.flySheet.n, e.flySheet.rate ?? 8)
       if (e.alertSheet && !this.anims.exists(e.key + '-alarm')) this.anims.create({ key: e.key + '-alarm', frames: this.anims.generateFrameNumbers(e.key + '-alarm', { start: 0, end: e.alertSheet.n - 1 }), frameRate: e.alertSheet.rate ?? 10, repeat: 0 })
+      if (e.tiredSheet) mk(e.key + '-muede', e.key + '-muede', e.tiredSheet.n, e.tiredSheet.rate ?? 5)
     }
     if (SPIRIT.sheet) mk('geist-anim', 'geist-anim', SPIRIT.sheet.n, SPIRIT.sheet.rate ?? 6)
     for (const [name, it] of Object.entries(ITEMS)) if (it.anim) mk(name + '-anim', name, it.anim.n, it.anim.rate ?? 4)

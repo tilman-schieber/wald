@@ -65,7 +65,8 @@ for (let c = 156; c <= 164; c++) set(c, 4, STEIN)
 const objs = []
 const point = (name, type, x, y, props) => objs.push({ name, type, point: true, x, y, width: 0, height: 0, rotation: 0, visible: true, properties: props })
 const rect = (name, type, x, y, w, h, props) => objs.push({ name, type, x, y, width: w, height: h, rotation: 0, visible: true, properties: props ? Object.entries(props).map(([n, v]) => ({ name: n, type: typeof v === 'boolean' ? 'bool' : 'string', value: v })) : undefined })
-const top = (c) => { for (let r = 0; r < H; r++) if (solid(c, r)) return r * T; return 240 }   // Oberkante in px
+const top = (c) => { for (let r = 0; r < H; r++) if (solid(c, r)) return r * T; return 240 }   // oberste Fläche in px
+const boden = (c) => g[c] * T                                                                  // der ECHTE Boden (nicht die Plattform darüber)
 point('start', 'spawn', 48, 240)
 // Zone B: Platte hält Tor, Hebel öffnet dauerhaft
 rect('b_tor', 'tor', 90 * T, 192, 16, 48); rect('b_platte', 'platte', 84 * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', 97 * T, 224, 12, 16, { oeffnet: 'b_tor' })
@@ -73,7 +74,7 @@ point('eule', 'enemy', 95 * T, 130)
 // Zone C: Tor (Spalt darunter für Leonel), Hebel rechts, Ranke zum Sims
 rect('c_tor', 'tor', 140 * T, 144, 32, 80); rect('c_hebel', 'hebel', 147 * T, 224, 12, 16, { oeffnet: 'c_tor' })
 rect('c_ranke', 'ranke', 155 * T - 4, 64, 8, 160); point('blatt', 'blatt', 159 * T, 48); point('blatt', 'blatt', 162 * T, 48)
-point('wildschwein', 'enemy', 170 * T, top(170))
+point('wildschwein', 'enemy', 170 * T, boden(170))
 // Zone D: Treppe zur Platte, Tor unten, Hebel, Ranke
 rect('d_tor', 'tor', 196 * T, 192, 32, 48); rect('d_platte', 'platte', 190 * T, 92, 16, 4, { oeffnet: 'd_tor' }); rect('d_hebel', 'hebel', 213 * T, 224, 12, 16, { oeffnet: 'd_tor' })
 rect('d_ranke', 'ranke', 187 * T - 4, 96, 8, 128); point('blatt', 'blatt', 192 * T, 80); point('blatt', 'blatt', 208 * T, 144)
@@ -82,8 +83,15 @@ point('eule', 'enemy', 205 * T, 120); point('wildschwein', 'enemy', 212 * T, 240
 point('waldherz', 'waldherz', 271.5 * T, 176)
 // Ranken an hohen Plattformen (jede 3. Plattform, wenn sie 4 hoch ist)
 plats.filter((p, i) => i % 3 === 1).forEach((p) => { const gx = p.x0 - 1; if (top(gx) - p.row * T >= 48) rect('ranke_' + p.x0, 'ranke', gx * T + 4, p.row * T, 8, top(gx) - p.row * T - 16) })
-// Igel auf Boden-Plateaus, Blätter auf Plattformen
-for (let c = 20; c < 260; c += between(22, 34)) { if (isFlat(c) && c > 12) continue; point('igel', 'enemy', c * T, top(c)) }
+// Gegner auf Boden-Plateaus abwechselnd: Igel, verwirrter Hase, ab und zu ein Wildschwein
+let gegnerNr = 0
+for (let c = 20; c < 260; c += between(20, 30)) {
+  if (isFlat(c) && c > 12) continue
+  const art = ['igel', 'hase', 'igel', 'wildschwein', 'igel'][gegnerNr++ % 5]
+  point(art, 'enemy', c * T, boden(c))
+}
+// ein paar Hasen auch auf Plattformen
+plats.filter((p, i) => i % 8 === 3).forEach((p) => point('hase', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T))
 plats.forEach((p, i) => { if (i % 2 === 0) point('blatt', 'blatt', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T - 20) })
 // Kulissen im Hintergrund (Schwarzwald bei Freiburg): weit weg = kleine tiefe
 const kulisse = (name, x, tiefe, spiegeln = false) => objs.push({ name, type: 'kulisse', point: true, x, y: 240, width: 0, height: 0, rotation: 0, visible: true, properties: [{ name: 'tiefe', type: 'string', value: String(tiefe) }, { name: 'spiegeln', type: 'bool', value: spiegeln }] })
@@ -94,7 +102,7 @@ kulisse('schauinsland', 3300, 0.4)
 kulisse('schwarzwaldhof', 4000, 0.5, true)
 kulisse('hochsitz', 4550, 0.65, true)
 // Speicherpunkte (Eichhörnchen) am Anfang jeder Zone
-for (const [i, c] of [[2, 62], [3, 118], [4, 172], [5, 240]]) point('speicher' + i, 'checkpoint', c * T, top(c))
+for (const [i, c] of [[2, 62], [3, 118], [4, 172], [5, 240]]) point('speicher' + i, 'checkpoint', c * T, boden(c))
 
 // ---------- Deko + Tiere auf allen Stehflächen ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)
