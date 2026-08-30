@@ -306,6 +306,7 @@ export default class GameScene extends Phaser.Scene {
     // 4. … der Begleiter tut, was sein Gehirn sagt.
     if (cmd.call && this.brain.waiting) this.sfx.play('call')
     const aiCmd = this.brain.think(this.companion, this.active, time, this.enemies, cmd.call)
+    this.lastAiCmd = aiCmd   // zum Nachschauen in der Konsole
     if (aiCmd.teleport) this.teleportCompanion()
     else this.companion.applyCommand(aiCmd, time)
     this.waitText.setVisible(this.brain.waiting).setPosition(Math.round(this.companion.x), Math.round(this.companion.body.top - 10))
@@ -456,11 +457,19 @@ export default class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: ring, radius: 22, alpha: 0, duration: 350, onComplete: () => ring.destroy() })
   }
 
+  // Steht ein geschlossenes Tor zwischen zwei Punkten (gleiche Höhe)? Dann geht nichts durch.
+  gateBetween(x1, x2, y) {
+    const lo = Math.min(x1, x2), hi = Math.max(x1, x2)
+    return Object.values(this.gates).some((g) => g.body.enable && g.x >= lo && g.x <= hi && y >= g.y - g.height / 2 - 8 && y <= g.y + g.height / 2 + 8)
+  }
+
   // Trifft ein Schlag gerade einen Gegner? Jeder Schlag trifft jeden Gegner nur einmal.
+  // Durch ein geschlossenes Tor geht kein Schlag.
   resolveAttacks(time) {
     for (const hero of [this.active, this.companion]) {
       const rect = hero.attackRect(time)
       if (!rect) continue
+      if (Object.values(this.gates).some((g) => g.body.enable && Phaser.Geom.Rectangle.Overlaps(rect, g.getBounds()))) { hero.hitThisAttack.add('tor'); continue }
       const factor = hero === this.active ? 1 : COMBAT.companionDamageFactor
       const damage = Math.max(1, Math.ceil(hero.cfg.damage * factor))
       for (const e of this.enemies) {
@@ -498,6 +507,7 @@ export default class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: ring, width: SLAM.radius * 2, height: 10, alpha: 0, duration: 300, onComplete: () => ring.destroy() })
     for (const e of this.enemies) {
       if (e.healed || Math.abs(e.x - hero.x) > SLAM.radius || Math.abs(e.body.bottom - hero.body.bottom) > 24) continue
+      if (this.gateBetween(hero.x, e.x, e.body.center.y)) continue   // Tore halten die Erschütterung auf
       e.stun(time, SLAM.dizzyMs)
     }
   }

@@ -123,18 +123,20 @@ export default class CompanionBrain {
 
     let wantJump = false
 
-    // Stehe ich direkt UNTER der Zielfläche? Dann erst zur näheren Kante rauslaufen.
-    // (gleicher Rand wie bei ceilingAbove, sonst gibt es eine Lücke, in der er nichts tut)
+    // Stehe ich direkt UNTER der Zielfläche (eine ihrer Kacheln über meinem Kopf)?
+    // Dann erst zur näheren Kante rauslaufen.
     const tp = target.platform
-    const margin = me.body.width / 2 + 3
-    const underTarget = targetAbove && tp && me.x >= tp.px0 - margin && me.x <= tp.px1 + margin
+    const underTarget = targetAbove && tp && tp.py < me.body.top
+      && [me.body.left + 1, me.x, me.body.right - 1].some((x) => x >= tp.px0 && x < tp.px1)
     if (underTarget) {
       const out = (me.x - tp.px0) < (tp.px1 - me.x) ? -1 : 1
       cmd.left = out < 0
       cmd.right = out > 0
     } else if (this.climbing) {
-      if (this.ceilingAbove(me)) {
-        // Eine ANDERE Fläche über mir → einfach weiter Richtung Ziel, nicht springen
+      // Wie hoch muss der Sprung? So hoch (plus Körper) muss über mir frei sein – nicht mehr.
+      const rise = Math.max(0, me.body.bottom - target.bottom)
+      if (this.ceilingAbove(me, rise + me.body.height + 4)) {
+        // Eine ANDERE Fläche zu dicht über mir → weiter Richtung Ziel, nicht springen
         cmd.left = dir < 0
         cmd.right = dir > 0
       } else {
@@ -172,12 +174,12 @@ export default class CompanionBrain {
     return this.groundLayer.getTileAtWorldXY(x, y) !== null
   }
 
-  // Ist über meinem Kopf (in Sprunghöhe) irgendwo eine Kachel?
+  // Ist über meinem Kopf (bis "height" Pixel hoch) irgendwo eine Kachel?
   // Geprüft wird links, in der Mitte und rechts vom Körper.
-  ceilingAbove(me) {
-    const xs = [me.body.left - 2, me.x, me.body.right + 2]
+  ceilingAbove(me, height = 72) {
+    const xs = [me.body.left + 1, me.x, me.body.right - 1]
     for (const x of xs) {
-      for (let y = me.body.top - 4; y > me.body.top - 72; y -= 16) {
+      for (let y = me.body.top - 2; y > me.body.top - height; y -= 8) {
         if (this.groundLayer.getTileAtWorldXY(x, y) !== null) return true
       }
     }
