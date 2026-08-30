@@ -45,11 +45,11 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Kacheln: `create_sidescroller_tileset` Lehmboden `c35edd34…` → tiles/tijuca.png, Aquädukt-Quader `db7bb68f…` → tiles/tijuca_stein.png
 - Hintergrund: Berge/Zuckerhut `156c065e…` (erster Versuch `70402aa9…` sah nach Schwarzwald aus), Bäume `fc80e03f…` (Versuch `19c6e885…` hatte Wasserzeichen; hellblau per colorkey freigestellt), Farne `1e0bd52a…`, Kronen `82362121…`
 - Kulissen: Cascatinha `53e9775d…`, Vista Chinesa `a4858ee5…`, Cristo Redentor `ceffa730…`
-- Gegner: Affe `722b9a21…` (+ beruhigt `b3dec16c…`), Nasenbär `8d2502b2…` (+ Lauf `f7b71e9e…`), Faultier `cf441662…` (+ schlafend `09083a31…`), Ameise `12dcce15…` (+ Lauf `5e30cb70…`), Jackfrucht `61cd7fe8…`
+- Gegner: Affe `722b9a21…` (+ beruhigt `b3dec16c…`), Nasenbär `8d2502b2…` (+ Lauf `f7b71e9e…`), Faultier `cf441662…` (+ schlafend `09083a31…`), Ameise `12dcce15…` (+ Lauf `5e30cb70…`), Jackfrucht `61cd7fe8…` → ersetzt durch pixen `07973072…` (grün, knubbelig, 16×18)
 - Deko: Bromelie `22653618…`, Bambus `095f2e62…`, Liane `60db5b2e…`, Monstera `516084f6…`
 - Nachbesserung: Nasenbär `e6ec27a6…` und Kapuzineraffe `64e3b8e5…` neu (die ersten sahen nicht nach den Tieren aus);
   Animationen dazu: Nasenbär-Lauf `af1e73b3…`, Affe beruhigt `78ac5772…`, Affe wirft `ab097341…`;
-  Tijuca-Intro: Flug `1fa2d8b4…`, Waldrand `37a215c6…`; Jonas klettert (Rückansicht) `64f53502…`
+  Tijuca-Intro: Flug `1fa2d8b4…` (Jonas' Gesicht nachträglich froh gemacht: `edit_image` `2372e8dc…`, nur das Gesicht per Ellipsen-Blende ins Original kopiert), Waldrand `37a215c6…`; Jonas klettert (Rückansicht) `64f53502…`
 - Nachbesserung 2: böser Hase `388ff465…` (img2img aus dem freundlichen Hasen, strength 110) + Hüpfen `34893bc5…`;
   kleinerer Kapuzineraffe `829cc473…` (32×32 statt 44×48) + Wurf `beeeaf04…` + beruhigt `975ef13d…`;
   Nasenbär-Bilder mit `tools/spiegeln.mjs` nach links gedreht (er war als einziger nach rechts gezeichnet);
