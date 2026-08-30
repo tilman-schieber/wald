@@ -214,12 +214,13 @@ export default class GameScene extends Phaser.Scene {
       this.tiere.push({ spr, cfg: t, home: { x: o.x, y: o.y }, next: 0 })
     }
 
-    // Speicherpunkte: Wegweiser, die beim Berühren den Stand sichern
+    // Speicherpunkte: ein Eichhörnchen, das beim Berühren hüpft und ein Herz zeigt
     this.checkpoints = objects.filter((o) => o.type === 'checkpoint').map((o) => {
-      const img = this.add.image(o.x, o.y, 'deko-schild').setOrigin(0.5, 1).setDepth(6)
+      const key = this.textures.exists('tier-eichhoernchen') ? 'tier-eichhoernchen' : 'deko-schild'
+      const img = (this.anims.exists(key) ? this.add.sprite(o.x, o.y, key).play(key) : this.add.image(o.x, o.y, key)).setOrigin(0.5, 1).setDepth(7)
       this.physics.add.existing(img, true)
-      if (o.name === this.spawnName) img.setTint(P.hellGelb)
-      return { img, name: o.name, x: o.x, y: o.y }
+      const heart = this.add.text(o.x, o.y - 30, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(8).setVisible(o.name === this.spawnName)
+      return { img, heart, name: o.name, x: o.x, y: o.y }
     })
 
     // Waldherz (Ziel)
@@ -326,6 +327,7 @@ export default class GameScene extends Phaser.Scene {
       w.f.setAlpha(0.3 + Math.max(0, Math.sin(time / 400 + w.phase)) * 0.7)
     }
 
+    for (const cp of this.checkpoints) if (cp.heart.visible) cp.heart.y = cp.y - 30 + Math.sin(time / 300) * 2
     // 4c. Tiere und leuchtende Deko
     this.updateTiere(time)
     for (const g of this.glowing) g.setAlpha(0.85 + Math.sin(time / 300 + g.x) * 0.15)
@@ -343,9 +345,10 @@ export default class GameScene extends Phaser.Scene {
       this.spawnName = cp.name
       world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp
       saveGame(this.roomKey, cp.name)
-      for (const c of this.checkpoints) c.img.clearTint()
-      cp.img.setTint(P.hellGelb)
-      this.sparkle(cp.x, cp.y - 16, P.hellGelb, 12)
+      for (const c of this.checkpoints) c.heart.setVisible(false)
+      cp.heart.setVisible(true)
+      this.tweens.add({ targets: cp.img, y: cp.y - 14, duration: 180, yoyo: true, repeat: 1, ease: 'Quad.Out' })   // Freudenhopser
+      this.sparkle(cp.x, cp.y - 20, P.rosaHell, 12)
       this.sfx.play('room')
       this.floatText(this.active, 'Gespeichert!')
     }
