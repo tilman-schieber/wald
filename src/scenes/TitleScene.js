@@ -60,6 +60,7 @@ export default class TitleScene extends Phaser.Scene {
       this.add.nineslice(W / 2, this.menuY0 + 7 * (n - 1), 'panel', undefined, 200, 14 * n + 18, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setAlpha(0.95)
     }
     this.selected = 0
+    this.startedAt = this.time.now
     this.optionTexts = this.options.map((o, i) =>
       this.add.text(W / 2, this.menuY0 + i * 14, o.label, { fontFamily: font, fontSize: font === 'monospace' ? '10px' : '12px', color: '#ffffff', stroke: hex(P.schwarz), strokeThickness: 3 }).setOrigin(0.5)
         .setInteractive({ useHandCursor: true }).on('pointerdown', () => { this.selected = i; this.choose() }))
@@ -84,7 +85,12 @@ export default class TitleScene extends Phaser.Scene {
 
   update() { this.hint.setAlpha(0.6 + Math.sin(this.time.now / 300) * 0.4) }
 
-  choose() { this.options[this.selected].action() }
+  choose() {
+    // Kurz nach dem Aufblenden nichts annehmen: sonst wählt der Tastendruck,
+    // mit dem man das Pausenmenü verlassen hat, hier gleich weiter.
+    if (this.time.now - this.startedAt < 400) return
+    this.options[this.selected].action()
+  }
 
   newGame() {
     clearSave()

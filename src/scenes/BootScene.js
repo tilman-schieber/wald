@@ -7,7 +7,7 @@
 //  PixelLab-Sprites einbauen, ohne den Spielcode anzufassen.
 // ============================================================
 import Phaser from 'phaser'
-import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTROS, FORESTS, WURF } from '../config.js'
+import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTROS, FORESTS, WURF, TOR } from '../config.js'
 import { P } from '../palette.js'
 
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
@@ -67,6 +67,7 @@ export default class BootScene extends Phaser.Scene {
       if (it.anim) this.load.spritesheet(name, it.file, { frameWidth: it.anim.w, frameHeight: it.anim.h })
       else this.load.image(name, it.file)
     }
+    if (TOR.bogen) this.load.image('torbogen', TOR.bogen)
     if (SLASH.file) this.load.image('slash', SLASH.file)
     if (WURF.file) this.load.image(WURF.key, WURF.file)
     if (HEARTS.full) { this.load.image('herz', HEARTS.full); this.load.image('herz_leer', HEARTS.empty) }
@@ -275,9 +276,18 @@ export default class BootScene extends Phaser.Scene {
   // Tor (Holzbalken), Bodenplatte, Hebel
   makePuzzlePlaceholders() {
     const t = GAME.tile
+    // Torflügel: senkrechte Bohlen mit Eisenband und Nieten – wiederholt sich
+    // nahtlos in alle Richtungen, weil das Tor ein TileSprite ist.
     let g = this.make.graphics({ x: 0, y: 0, add: false })
     g.fillStyle(P.holzBraun); g.fillRect(0, 0, t, t)
-    g.fillStyle(P.rindeBraun); g.fillRect(0, 3, t, 2); g.fillRect(0, 11, t, 2); g.fillRect(7, 0, 2, t)
+    for (const x of [0, 8]) {                       // zwei Bohlen à 8 px
+      g.fillStyle(P.rindeBraun); g.fillRect(x, 0, 1, t)          // Fuge
+      g.fillStyle(P.erdeDunkel); g.fillRect(x + 1, 0, 1, t)      // Schatten daneben
+      g.fillStyle(P.hautHell); g.fillRect(x + 6, 0, 1, t)        // Lichtkante
+    }
+    g.fillStyle(P.schieferGrau); g.fillRect(0, 5, t, 4)          // Eisenband quer
+    g.fillStyle(P.steinGrau); g.fillRect(0, 5, t, 1)
+    g.fillStyle(P.nachtBlau); g.fillRect(3, 6, 2, 2); g.fillRect(11, 6, 2, 2)   // Nieten
     g.generateTexture('tor', t, t); g.destroy()
 
     g = this.make.graphics({ x: 0, y: 0, add: false })

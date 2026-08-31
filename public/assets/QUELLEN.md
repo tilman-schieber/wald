@@ -45,6 +45,8 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Kacheln: `create_sidescroller_tileset` Lehmboden `c35edd34…` → tiles/tijuca.png, Aquädukt-Quader `db7bb68f…` → tiles/tijuca_stein.png
 - Hintergrund: Berge/Zuckerhut `156c065e…` (erster Versuch `70402aa9…` sah nach Schwarzwald aus), Bäume `fc80e03f…` (Versuch `19c6e885…` hatte Wasserzeichen; hellblau per colorkey freigestellt), Farne `1e0bd52a…`, Kronen `82362121…`
 - Kulissen: Cascatinha `53e9775d…`, Vista Chinesa `a4858ee5…`, Cristo Redentor `ceffa730…`
+- Torbogen (Steinbalken über den Toren): pixen `0975c40a…`, freigestellt + palettisiert, Ranken von Hand grün gefärbt.
+  Ein zweiter Versuch für eine wiederholbare Tor-Holzkachel (`b6790206…`) taugte nichts – der Torflügel wird jetzt in BootScene gemalt.
 - Gegner: Affe `722b9a21…` (+ beruhigt `b3dec16c…`), Nasenbär `8d2502b2…` (+ Lauf `f7b71e9e…`), Faultier `cf441662…` (+ schlafend `09083a31…`), Ameise `12dcce15…` (+ Lauf `5e30cb70…`), Jackfrucht `61cd7fe8…` → ersetzt durch pixen `07973072…` (grün, knubbelig, 16×18)
 - Deko: Bromelie `22653618…`, Bambus `095f2e62…`, Liane `60db5b2e…`, Monstera `516084f6…`
 - Nachbesserung: Nasenbär `e6ec27a6…` und Kapuzineraffe `64e3b8e5…` neu (die ersten sahen nicht nach den Tieren aus);

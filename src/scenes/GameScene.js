@@ -170,6 +170,27 @@ export default class GameScene extends Phaser.Scene {
       this.physics.add.existing(g, true)
       for (const body of [this.jonas, this.leonel, ...this.enemies]) this.physics.add.collider(body, g)
       g.permanentlyOpen = gatesOpenIn(this.roomKey).has(o.name)
+      g.startY = g.y
+      // Steinbalken über dem Tor: erst dadurch sieht die Mauer nach Durchgang aus
+      // und nicht nach einer Wand, die oben einfach aufhört.
+      if (this.textures.exists('torbogen')) {
+        const breite = o.width + 14
+        this.add.image(o.x + o.width / 2, o.y + 2, 'torbogen').setOrigin(0.5, 1)
+          .setDisplaySize(breite, Math.round(breite * 32 / 64)).setDepth(6)
+      }
+      // Efeu an der Säule darüber, damit sie wie eine alte, überwachsene Ruine wirkt
+      if (this.textures.exists('deko-moos')) {
+        for (let y = o.y - 52; y > 6; y -= 40) {
+          this.add.image(o.x + (y % 17 < 8 ? 3 : o.width - 3), y, 'deko-moos')
+            .setOrigin(0.5, 0).setDepth(6).setAlpha(0.9).setFlipX(y % 2 === 0)
+        }
+      }
+      // offen gespeicherte Tore stehen von Anfang an offen (ohne Bewegung)
+      const offen = g.permanentlyOpen
+      g.istOffen = offen
+      g.setVisible(!offen).setAlpha(offen ? 0 : 1)
+      if (offen) g.y = g.startY + g.height
+      g.body.enable = !offen
       this.gates[o.name] = g
     }
     this.plates = objects.filter((o) => o.type === 'platte').map((o) => ({
@@ -337,14 +358,31 @@ export default class GameScene extends Phaser.Scene {
     }
     this.updateNameText()
 
+    // ---------- Pausenbild mit kleinem Menü ----------
     const pauseFont = this.textures.exists('panel') && document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    this.pauseOptions = [
+      { label: 'Weiterspielen', action: () => this.togglePause() },
+      { label: 'Wald neu starten', action: () => this.waldNeuStarten() },
+      { label: 'Zurück zum Menü', action: () => this.zumHauptmenue() },
+    ]
+    const ph = 48 + this.pauseOptions.length * 14        // Höhe des Holzschilds
+    const py = GAME.height / 2
     this.pausePanel = this.textures.exists('panel')
-      ? this.add.nineslice(GAME.width / 2, GAME.height / 2, 'panel', undefined, 270, 70, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setScrollFactor(0).setDepth(299).setVisible(false)
-      : null
-    this.pauseText = this.add.text(GAME.width / 2, GAME.height / 2, 'PAUSE\n\nP oder Esc zum Weiterspielen', {
+      ? this.add.nineslice(GAME.width / 2, py, 'panel', undefined, 200, ph, UI.panelBorder, UI.panelBorder, UI.panelBorder, UI.panelBorder).setScrollFactor(0).setDepth(299)
+      : this.add.rectangle(GAME.width / 2, py, 200, ph, P.schwarz, 0.85).setScrollFactor(0).setDepth(299)
+    this.pausePanel.setVisible(false)
+    this.pauseText = this.add.text(GAME.width / 2, py - ph / 2 + 14, 'PAUSE', {
       fontFamily: pauseFont, fontSize: pauseFont === 'monospace' ? '14px' : '13px', color: '#fee761', align: 'center', stroke: '#181425', strokeThickness: 3,
-      ...(this.pausePanel ? {} : { backgroundColor: 'rgba(24,20,37,0.85)', padding: { x: 10, y: 8 } }),
     }).setOrigin(0.5).setScrollFactor(0).setDepth(300).setVisible(false)
+    this.pauseSel = 0
+    this.pauseTexts = this.pauseOptions.map((o, i) => this.add.text(GAME.width / 2, py - ph / 2 + 36 + i * 14, o.label, {
+      fontFamily: pauseFont, fontSize: pauseFont === 'monospace' ? '10px' : '12px', color: '#ffffff', stroke: '#181425', strokeThickness: 3,
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(300).setVisible(false)
+      .setInteractive({ useHandCursor: true }).on('pointerdown', () => { this.pauseSel = i; this.pauseWaehlen() }))
+    const kb = this.input.keyboard
+    kb.on('keydown-UP', () => this.pauseBewegen(-1)); kb.on('keydown-W', () => this.pauseBewegen(-1))
+    kb.on('keydown-DOWN', () => this.pauseBewegen(1)); kb.on('keydown-S', () => this.pauseBewegen(1))
+    kb.on('keydown-SPACE', () => this.pauseWaehlen()); kb.on('keydown-ENTER', () => this.pauseWaehlen())
     // kleiner Pause-Knopf oben rechts (für Touch)
     this.add.text(GAME.width - 4, 3, 'II', { fontFamily: 'monospace', fontSize: '10px', color: '#c0cbdc', backgroundColor: 'rgba(24,20,37,0.7)', padding: { x: 4, y: 1 } })
       .setOrigin(1, 0).setScrollFactor(0).setDepth(100).setInteractive().on('pointerdown', () => this.togglePause())
@@ -468,8 +506,49 @@ export default class GameScene extends Phaser.Scene {
     this.paused = !this.paused
     this.pauseText.setVisible(this.paused)
     this.pausePanel?.setVisible(this.paused)
-    if (this.paused) { this.physics.pause(); this.anims.pauseAll(); this.tweens.pauseAll() }
+    for (const t of this.pauseTexts) t.setVisible(this.paused)
+    if (this.paused) { this.pauseSel = 0; this.pauseAuffrischen(); this.physics.pause(); this.anims.pauseAll(); this.tweens.pauseAll() }
     else { this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll() }
+  }
+
+  // Im Pausenbild mit den Pfeiltasten auf und ab
+  pauseBewegen(d) {
+    if (!this.paused) return
+    this.pauseSel = Phaser.Math.Wrap(this.pauseSel + d, 0, this.pauseOptions.length)
+    this.pauseAuffrischen()
+  }
+
+  pauseAuffrischen() {
+    this.pauseTexts.forEach((t, i) => t
+      .setColor(i === this.pauseSel ? '#fee761' : '#ffffff')
+      .setText((i === this.pauseSel ? '> ' : '  ') + this.pauseOptions[i].label + (i === this.pauseSel ? ' <' : '  ')))
+  }
+
+  pauseWaehlen() {
+    if (!this.paused) return
+    this.pauseOptions[this.pauseSel].action()
+  }
+
+  // Vor einem Szenenwechsel: alles wieder laufen lassen, sonst bleibt die Physik stehen
+  pauseBeenden() {
+    this.paused = false
+    this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll()
+  }
+
+  // Diesen Wald noch einmal von vorn – geheilte Tiere, Tore und Blätter zurücksetzen
+  waldNeuStarten() {
+    this.pauseBeenden()
+    world.active = 'jonas'
+    world.hp = { jonas: COMBAT.heroHp, leonel: COMBAT.heroHp }
+    world.healed = {}; world.gatesOpen = {}; world.collected = {}; world.leaves = 0
+    this.scene.start('Game', { room: this.forest.level, spawn: 'start' })
+  }
+
+  // Zurück zum Titelbild (der Spielstand bleibt gespeichert, "Weiter" geht danach wieder)
+  zumHauptmenue() {
+    this.pauseBeenden()
+    for (const s of this.sound.getAllPlaying()) if (s.key.startsWith('musik-')) s.stop()
+    this.scene.start('Title')
   }
 
   // Zeichnet den Boden mit dem Wang-Tileset (siehe Erklärung in config.js).
@@ -790,7 +869,17 @@ export default class GameScene extends Phaser.Scene {
     const closed = []
     for (const [name, g] of Object.entries(this.gates)) {
       const isOpen = open.has(name)
-      g.setVisible(!isOpen)
+      // Nur beim Umschalten bewegen: das Tor rutscht in den Boden statt zu verschwinden
+      if (g.istOffen !== isOpen) {
+        g.istOffen = isOpen
+        this.tweens.killTweensOf(g)
+        if (isOpen) {
+          this.tweens.add({ targets: g, y: g.startY + g.height, alpha: 0, duration: 400, ease: 'Quad.In', onComplete: () => g.setVisible(false) })
+        } else {
+          g.setVisible(true)
+          this.tweens.add({ targets: g, y: g.startY, alpha: 1, duration: 300, ease: 'Quad.Out' })
+        }
+      }
       g.body.enable = !isOpen
       if (!isOpen) closed.push(name)
     }

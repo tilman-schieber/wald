@@ -357,6 +357,10 @@ ENEMIES.ameise = {
   ai: { kind: 'marcher', spiky: false, wanderSpeed: 22, sight: { x: 0, y: 0 }, alertMs: 0, dizzyMs: 0, cooldownMs: 0, healedWanderSpeed: 18 },
 }
 
+//  Tore (Rätsel): der Torflügel selbst wird gemalt (siehe BootScene),
+//  der Steinbalken darüber macht aus der Mauer einen richtigen Durchgang.
+export const TOR = { bogen: 'assets/sprites/torbogen.png' }   // PixelLab pixen 0975c40a…
+
 //  Die Jackfrucht, die der Affe wirft
 export const WURF = { key: 'frucht', file: 'assets/sprites/frucht.png', damage: 1 }
 

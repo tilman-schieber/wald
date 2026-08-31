@@ -76,6 +76,11 @@ Entscheidungen so, dass Kinder mitlesen können.
   liegen auf Tiefe 25, also vor Deko und Vordergrund-Ebenen.
 - Alles, was auf dem Boden steht, bekommt einen weichen Schatten (`addShadow`) und Deko sitzt 2 px
   im Moos – ohne das wirkt bei diesem Tileset alles schwebend.
+- Tore (`tor`-Objekte): der Torflügel wird in `BootScene` gemalt (Bohlen + Eisenband, nahtlos kachelbar),
+  darüber sitzt der Steinbalken `torbogen` und an der Säule hängt Efeu – sonst sieht die Mauer aus,
+  als hörte sie oben einfach auf. Beim Öffnen rutscht das Tor in den Boden statt zu verschwinden.
+- Pause (P/Esc) ist ein kleines Menü: Weiterspielen · Wald neu starten · Zurück zum Menü
+  (Pfeile + Leertaste/Enter, auch antippbar)
 - Beide Fähigkeiten (E) haben einen Cooldown mit Balken im HUD (`hero.specialReadyAt`)
 - Deko sind Tiled-Objekte vom Typ `deko` ohne Physik (`DEKO` in config: haengend/glow/anim), `vorne=true` = vor den Figuren;
   Tiere (`tier`) sind lebendige Deko (hüpfen, flattern); Stein-Material: gids ab 17 im selben Layer `Boden`
