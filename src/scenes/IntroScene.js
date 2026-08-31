@@ -37,7 +37,8 @@ export default class IntroScene extends Phaser.Scene {
 
   showLine() {
     // Buchstabe für Buchstabe erscheinen lassen
-    const full = this.lines[this.line]
+    const full = this.lines?.[this.line]
+    if (full === undefined) return
     this.text.setText('')
     let i = 0
     this.typing?.remove()
@@ -45,7 +46,13 @@ export default class IntroScene extends Phaser.Scene {
   }
 
   next() {
-    if (this.text.text.length < this.lines[this.line].length) { this.typing?.remove(); this.text.setText(this.lines[this.line]); return }   // erst ganze Zeile zeigen
+    // Nach dem letzten Satz kommt nichts mehr: weitere Tastendrücke (und Tipper)
+    // einfach schlucken. Ohne diese Bremse holte der Code hier einen Satz, den
+    // es nicht mehr gibt – der Fehler hat das ganze Spiel eingefroren.
+    if (this.starting) return
+    const satz = this.lines?.[this.line]
+    if (satz === undefined) return
+    if (this.text.text.length < satz.length) { this.typing?.remove(); this.text.setText(satz); return }   // erst ganze Zeile zeigen
     this.line++
     if (this.line >= this.lines.length) {
       // nächste Folie: Bild überblenden
@@ -61,8 +68,12 @@ export default class IntroScene extends Phaser.Scene {
   start() {
     if (this.starting) return
     this.starting = true
+    this.typing?.remove()
     if (!this.folien.length) return this.scene.start('Game', { room: this.room, spawn: this.spawn })
     this.cameras.main.fadeOut(400, 0, 0, 0)
-    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Game', { room: this.room, spawn: this.spawn }))
+    // Nicht auf das Ende der Blende warten, sondern selbst die Zeit nehmen:
+    // läuft gerade noch die Einblendung, käme das Blenden-Ende nie – und das
+    // Spiel würde ewig auf dem letzten Intro-Bild stehenbleiben.
+    this.time.delayedCall(450, () => this.scene.start('Game', { room: this.room, spawn: this.spawn }))
   }
 }

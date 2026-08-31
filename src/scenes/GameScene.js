@@ -388,7 +388,7 @@ export default class GameScene extends Phaser.Scene {
       .setOrigin(1, 0).setScrollFactor(0).setDepth(100).setInteractive().on('pointerdown', () => this.togglePause())
 
     // Zum Nachschauen in der Browser-Konsole: __wald.scene.jonas.x usw.
-    window.__wald = { scene: this, world }
+    window.__wald = { ...window.__wald, scene: this, world }
   }
 
   update(time) {

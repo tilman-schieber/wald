@@ -40,4 +40,5 @@ const config = {
   scene: [BootScene, TitleScene, IntroScene, GameScene],
 }
 
-new Phaser.Game(config)
+// Zum Nachschauen in der Browser-Konsole: __wald.spiel.scene.getScenes(true)
+window.__wald = { spiel: new Phaser.Game(config) }
