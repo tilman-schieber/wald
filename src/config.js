@@ -282,7 +282,8 @@ ENEMIES.hase = {
 //  Die Gegner der Floresta da Tijuca
 // ------------------------------------------------------------
 //  Verwirrter Kapuzineraffe: sitzt oben und wirft Jackfrüchte im Bogen.
-//  Nach drei Würfen muss er verschnaufen – dann kommt man an ihn heran.
+//  Nach zwei Würfen schaut er sich eine Weile nur um (nicht benommen – er ist
+//  ja nicht müde): das ist die Zeit, zu ihm hinaufzuklettern.
 ENEMIES.affe = {
   key: 'affe', name: 'Verwirrter Kapuzineraffe', hp: 3, speed: 0, damage: 1,
   frame: { w: 21, h: 30 }, body: { w: 13, h: 24 },
@@ -297,12 +298,14 @@ ENEMIES.affe = {
     alertMs: 500,
     throws: 2, throwEveryMs: 1300,  // zwei Würfe mit Pause (fair auch für kleine Spieler)
     wurf: { x: 130, y: -190 },      // Anfangsgeschwindigkeit der Frucht
-    dizzyMs: 2000, cooldownMs: 1600, healedWanderSpeed: 0,
+    cooldownMs: 1600,               // so lange schaut er sich nach einer Salve nur um
+    healedWanderSpeed: 0,
   },
 }
 
-//  Verwirrter Nasenbär: gibt nie auf. Läuft hinterher und klettert
-//  sogar an Wänden hoch. Dafür ist er langsam und immer verwundbar.
+//  Verwirrter Nasenbär: gibt nie auf. Läuft hinterher und springt sogar
+//  auf Plattformen (Weg über den PlatformGraph, wie der Begleiter).
+//  Dafür ist er langsam und immer verwundbar.
 ENEMIES.nasenbaer = {
   key: 'nasenbaer', name: 'Verwirrter Nasenbär', hp: 4, speed: 35, damage: 1,
   frame: { w: 40, h: 36 }, body: { w: 26, h: 22 },
@@ -316,8 +319,8 @@ ENEMIES.nasenbaer = {
     sight: { x: 200, y: 150 },
     alertMs: 350,
     rollSpeed: 75,                  // Verfolgungstempo (langsamer als die Helden)
-    climbSpeed: 70,                 // so schnell hangelt er sich hoch
-    climbWidth: 34,                 // so genau muss er unter dem Ziel stehen
+    jump: 380,                      // Absprungkraft – wie Jonas, sonst käme er auf keine Plattform
+    jumpEveryMs: 600,               // nicht dauernd hüpfen
     rollMaxMs: 7000,                // so lange bleibt er dran
     dizzyMs: 1500, cooldownMs: 1200, healedWanderSpeed: 12,
   },
@@ -342,7 +345,8 @@ ENEMIES.faultier = {
 }
 
 //  Verwirrte Blattschneiderameisen: marschieren im Gänsemarsch und haben
-//  ihre Blätter verloren. Sie greifen nie an, aber anrempeln tut weh.
+//  ihre Blätter verloren. Sie greifen nie an, aber anrempeln tut weh –
+//  darum tragen sie beim Marschieren das rote "!" (ihr Marsch IST der Angriff).
 //  Ein einziger Schlag auf IRGENDEINE Ameise heilt die ganze Reihe:
 //  alle drehen sich um, tragen wieder ein Blatt und marschieren heim.
 ENEMIES.ameise = {

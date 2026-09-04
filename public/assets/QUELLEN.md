@@ -43,7 +43,7 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 
 ## Floresta da Tijuca (30.08.2026)
 - Kacheln: `create_sidescroller_tileset` Lehmboden `c35edd34…` → tiles/tijuca.png, Aquädukt-Quader `db7bb68f…` → tiles/tijuca_stein.png
-- Hintergrund: Berge/Zuckerhut `156c065e…` (erster Versuch `70402aa9…` sah nach Schwarzwald aus), Bäume `fc80e03f…` (Versuch `19c6e885…` hatte Wasserzeichen; hellblau per colorkey freigestellt), Farne `1e0bd52a…`, Kronen `82362121…`
+- Hintergrund: Berge/Zuckerhut `156c065e…` (erster Versuch `70402aa9…` sah nach Schwarzwald aus), Bäume `fc80e03f…` (Versuch `19c6e885…` hatte Wasserzeichen; hellblau per colorkey freigestellt), Farne `1e0bd52a…`, Kronen `82362121…` → ersetzt durch pixflux `af86430f…` (nur hängende Wedel, KEINE Stämme – die alten hingen wie Bäume von der Decke; palettisiert, ab Zeile 85 weich ausgeblendet, per mirror-tile.mjs auf 800 px)
 - Kulissen: Cascatinha `53e9775d…`, Vista Chinesa `a4858ee5…`, Cristo Redentor `ceffa730…`
 - Torbogen (Steinbalken über den Toren): pixen `0975c40a…`, freigestellt + palettisiert, Ranken von Hand grün gefärbt.
   Ein zweiter Versuch für eine wiederholbare Tor-Holzkachel (`b6790206…`) taugte nichts – der Torflügel wird jetzt in BootScene gemalt.

@@ -65,11 +65,16 @@ Entscheidungen so, dass Kinder mitlesen können.
   Drei Arten (`ai.kind`): `roller` (Igel: rollt als Kugel geradeaus, nur benommen verwundbar),
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),
   `hopper` (Hase: hüpft in Sätzen heran), `thrower` (Affe: wirft Jackfrüchte im Bogen),
-  `climber` (Nasenbär: verfolgt und klettert auf Plattformen), `dropper` (Faultier: hängt am Ast und lässt sich fallen),
+  `climber` (Nasenbär: verfolgt und SPRINGT auf Plattformen – Weg über `PlatformGraph` wie der Begleiter, Absprung
+  genau im berechneten Fenster vor der Kante; er schwebt nie), `dropper` (Faultier: hängt am Ast und lässt sich fallen),
   `marcher` (Ameisenkolonne: marschiert stur im Gänsemarsch, alle in dieselbe Richtung – dreht eine um,
-  drehen alle um; `gruppe` in der Config). Über verwirrten Ameisen schwebt ein "?", ein Treffer auf
-  IRGENDEINE heilt die ganze Reihe: über jeder erscheint ein Herz und die Kolonne kehrt um.
-  Jeder muss mit Springen + Basisangriff zu schaffen sein.
+  drehen alle um; `gruppe` in der Config). Ein Treffer auf IRGENDEINE Ameise heilt die ganze Reihe:
+  über jeder erscheint ein Herz und die Kolonne kehrt um. Jeder muss mit Springen + Basisangriff zu schaffen sein.
+- **Ampel über jedem Gegner** (`Enemy.updateMark`, eine Sprache für alle Tiere, Tilman-Wunsch: friedlich/gefährlich
+  muss sofort erkennbar sein): `?` weiß = verwirrt, harmlos (stromert/sitzt/hängt) · `!` gelb = hat dich gesehen, gleich
+  geht's los (noch harmlos) · `!` rot, pulsierend = GEFAHR, Berühren tut weh · `★` gelb = benommen, jetzt treffen ·
+  `♥` = geheilt. **Weh tut ein Gegner NUR bei Rot** (`hurtsOnTouch` ⇔ `dangerous`: Zustand `roll`, Eule `swoop`,
+  marschierende Ameisen). Der Affe ist nach seiner Salve nicht benommen, sondern schaut sich nur um (`?`).
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
 - Hintergrund-Ebenen (`BACKGROUND.layers`): am OBEREN Bildrand darf nichts angeschnitten sein –
   ein abgeschnittener Baum wirkt im Spiel, als hinge er von der Decke. Zeichen-Marker der Gegner
