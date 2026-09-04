@@ -15,7 +15,8 @@ Entscheidungen so, dass Kinder mitlesen können.
   `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)
 - Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause, M Musik
-- Szenen: Boot → Title → Intro (Geschichte, `INTRO` in config) → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand
+- Szenen: Boot → Title → Intro (Geschichte, `INTRO` in config) → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand.
+  Waldende (`finishForest`) → Jubelbild → direkt Intro des nächsten Waldes (`FORESTS[x].weiter`), mit vollen Herzen; nach dem letzten Wald → Title
   zwischen Räumen, `save.js` speichert ihn bei jedem Raumeingang in localStorage
 - Sounds werden in `sound.js` synthetisch erzeugt (keine Dateien); Musik: `MUSIC.file` (MP3, mit
   `~/crush.py` im SNES-Stil bearbeitet), läuft über alle Räume durch

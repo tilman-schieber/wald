@@ -805,7 +805,15 @@ export default class GameScene extends Phaser.Scene {
     this.add.text(W / 2, H - 28, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     if (this.naechsterWald) this.add.text(W / 2, H - 42, `Weiter geht es in die ${this.naechsterWald.name}!`, { fontFamily: font, fontSize: '11px', color: '#63c74d', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     this.add.text(W / 2, H - 12, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
-    const back = () => { world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp; this.scene.start('Title') }
+    // Gibt es einen nächsten Wald, geht es direkt in seine Geschichte – der Text hat es ja
+    // versprochen. Nur nach dem letzten Wald zurück zum Titel.
+    const back = () => {
+      // In den nächsten Wald mit vollen Herzen (oben schon aufgefüllt) – nur ohne
+      // nächsten Wald die Herzen behalten und zurück zum Titel.
+      if (this.naechsterWald) return this.scene.start('Intro', { forest: this.forest.weiter, room: this.naechsterWald.level, spawn: 'start' })
+      world.hp.jonas = this.jonas.hp; world.hp.leonel = this.leonel.hp
+      this.scene.start('Title')
+    }
     this.time.delayedCall(800, () => { this.input.keyboard.once('keydown-SPACE', back); this.input.once('pointerdown', back) })
   }
 
