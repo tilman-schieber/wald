@@ -10,6 +10,10 @@ import Phaser from 'phaser'
 import { HEROES, TILESET, TILESET2, GAME, ENEMIES, COMBAT, BACKGROUND, SPIRIT, DEKO, TIERE, MUSIC, UI, ITEMS, SLASH, HEARTS, KULISSEN, INTROS, FORESTS, WURF, TOR } from '../config.js'
 import { P } from '../palette.js'
 
+// Alle Gegner-Bildsätze: jeder Gegner selbst und seine Varianten (Wächter ohne Geweih/Schuppen:
+// `varianten.s1`, `varianten.s0` → Texturen '<key>-s1', '<key>-s0' samt eigener Lauf-Animation)
+const alleGegnerBilder = () => Object.values(ENEMIES).flatMap((e) => [e, ...Object.entries(e.varianten ?? {}).map(([n, v]) => ({ ...v, key: e.key + '-' + n }))])
+
 // Alle Räume auf einmal: Vite sammelt jede JSON-Datei aus src/levels/
 const LEVELS = import.meta.glob('../levels/*.json', { eager: true, import: 'default' })
 
@@ -37,13 +41,15 @@ export default class BootScene extends Phaser.Scene {
       if (wald.endeBild) this.load.image('ende-' + wald.level, wald.endeBild)
     }
     if (BACKGROUND.titleFile) this.load.image(BACKGROUND.titleKey, BACKGROUND.titleFile)
-    for (const enemy of Object.values(ENEMIES)) {
+    for (const enemy of alleGegnerBilder()) {
       if (enemy.file) this.load.image(enemy.key, enemy.file)
       if (enemy.healedFile) this.load.image(enemy.key + '-heil', enemy.healedFile)
       if (enemy.ballFile) this.load.image(enemy.key + '-kugel', enemy.ballFile)
       if (enemy.flyFile) this.load.image(enemy.key + '-flug', enemy.flyFile)
       if (enemy.groundFile) this.load.image(enemy.key + '-boden', enemy.groundFile)
       if (enemy.wurfFile) this.load.image(enemy.key + '-wurf', enemy.wurfFile)
+      if (enemy.sprungFile) this.load.image(enemy.key + '-sprung', enemy.sprungFile)
+      if (enemy.stueckFile) this.load.image(enemy.key + '-stueck', enemy.stueckFile)
     }
     for (const [name, file] of Object.entries(MUSIC.tracks)) this.load.audio('musik-' + name, [file])
     for (const [name, d] of Object.entries(DEKO)) {
@@ -56,11 +62,12 @@ export default class BootScene extends Phaser.Scene {
       if (t.anim) this.load.spritesheet('tier-' + name, t.file, { frameWidth: t.anim.w, frameHeight: t.anim.h })
       else this.load.image('tier-' + name, t.file)
     }
-    for (const enemy of Object.values(ENEMIES)) {
+    for (const enemy of alleGegnerBilder()) {
       if (enemy.walkSheet) this.load.spritesheet(enemy.key + '-lauf', enemy.walkSheet.file, { frameWidth: enemy.walkSheet.w, frameHeight: enemy.walkSheet.h })
       if (enemy.flySheet) this.load.spritesheet(enemy.key + '-flug-anim', enemy.flySheet.file, { frameWidth: enemy.flySheet.w, frameHeight: enemy.flySheet.h })
       if (enemy.alertSheet) this.load.spritesheet(enemy.key + '-alarm', enemy.alertSheet.file, { frameWidth: enemy.alertSheet.w, frameHeight: enemy.alertSheet.h })
       if (enemy.tiredSheet) this.load.spritesheet(enemy.key + '-muede', enemy.tiredSheet.file, { frameWidth: enemy.tiredSheet.w, frameHeight: enemy.tiredSheet.h })
+      if (enemy.rufSheet) this.load.spritesheet(enemy.key + '-ruf', enemy.rufSheet.file, { frameWidth: enemy.rufSheet.w, frameHeight: enemy.rufSheet.h })
     }
     if (SPIRIT.sheet) this.load.spritesheet('geist-anim', SPIRIT.sheet.file, { frameWidth: SPIRIT.sheet.w, frameHeight: SPIRIT.sheet.h })
     for (const [name, it] of Object.entries(ITEMS)) {
@@ -334,8 +341,9 @@ export default class BootScene extends Phaser.Scene {
     }
     for (const [name, d] of Object.entries(DEKO)) if (d.anim) mk('deko-' + name, 'deko-' + name, d.anim.n, d.anim.rate ?? 6)
     for (const [name, t] of Object.entries(TIERE)) if (t.anim) mk('tier-' + name, 'tier-' + name, t.anim.n, t.anim.rate ?? 6)
-    for (const e of Object.values(ENEMIES)) {
+    for (const e of alleGegnerBilder()) {
       if (e.walkSheet) mk(e.key + '-lauf', e.key + '-lauf', e.walkSheet.n, e.walkSheet.rate ?? 8)
+      if (e.rufSheet) mk(e.key + '-ruf', e.key + '-ruf', e.rufSheet.n, e.rufSheet.rate ?? 8)
       if (e.flySheet) mk(e.key + '-flug-anim', e.key + '-flug-anim', e.flySheet.n, e.flySheet.rate ?? 8)
       if (e.alertSheet && !this.anims.exists(e.key + '-alarm')) this.anims.create({ key: e.key + '-alarm', frames: this.anims.generateFrameNumbers(e.key + '-alarm', { start: 0, end: e.alertSheet.n - 1 }), frameRate: e.alertSheet.rate ?? 10, repeat: 0 })
       if (e.tiredSheet) mk(e.key + '-muede', e.key + '-muede', e.tiredSheet.n, e.tiredSheet.rate ?? 5)

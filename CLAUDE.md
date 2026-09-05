@@ -59,7 +59,10 @@ Entscheidungen so, dass Kinder mitlesen können.
   als hinterher verkleinern.
 - Posen/Animationen einer Figur IMMER per `animate_image` aus ihrem Hauptbild ableiten, nie separat generieren (sonst passt es nicht zusammen)
 - `animate_image` malt jedes Bild neu → bei LAUFZYKLEN wandert die Form. Danach immer
-  `node tools/frames-aussortieren.mjs <sheet> <n> <out>` laufen lassen (wirft Ausreißer raus).
+  `node tools/frames-aussortieren.mjs <sheet> <n> <out> [toleranz]` laufen lassen (wirft Ausreißer raus;
+  große Figuren wie die Wächter brauchen Toleranz 0.4, sonst bleiben nur 3 Bilder übrig).
+- Braunes Fell (Hirsch) beim Palettisieren OHNE Rottöne: `feuerRot,beerenRot,rosaHell,magiePink,bluetenLila,pflaumeLila`,
+  sonst wird es knallrot. `node tools/vergroessern.mjs <ein> <aus> [faktor]` zum Prüfen von Pixelbildern.
   NICHT bei Verwandlungen (Einrollen, Sprung, Wurf) – dort ist die Änderung gewollt.
 - Hintergrund-Tiefe: `tiefeZuDepth(scroll) = -60 + scroll*20` gilt für Ebenen UND Kulissen
   (Kulisse +1, damit sie vor der gleich schnellen Ebene liegt). Der Himmel liegt bei -100.
@@ -79,6 +82,19 @@ Entscheidungen so, dass Kinder mitlesen können.
   `♥` = geheilt (bleibt dauerhaft über dem Tier). **Weh tut ein Gegner NUR bei Rot** (`hurtsOnTouch` ⇔ `dangerous`: Zustand `roll`, Eule `swoop`,
   marschierende Ameisen). Der Affe ist nach seiner Salve nicht benommen, sondern schaut sich nur um (`?`).
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
+- **Wächter (Endgegner, `Boss.js`, `boss: true` in ENEMIES)** am Ende jedes Waldes, in einer flachen `arena`
+  (Rechteck-Objekt aus dem Generator, davor ein Speicherpunkt). Regeln (Tilman-Wunsch): Er erscheint ERST, wenn
+  alle Blätter des Waldes gesammelt sind (HUD zeigt `x/y`; in der Arena und am Farn sagt der Wald sonst
+  „bleibt stumm … euch fehlen noch N Blätter"). Das Farn (Waldherz) ist grau und stumm, bis der Wächter geheilt
+  ist – dann leuchtet es und Berühren beendet den Wald. `ai.schild` = Schutzstücke (Geweih/Steinschuppen):
+  solange eins dran ist, prallt jeder Schlag ab (`abprallText` sagt, was hilft), nur Jonas' Stampfer bricht
+  eins ab (Bild wechselt auf `varianten.s1`/`.s0`, Bruchstück `stueckFile` fliegt). `ai.ruf` = Röhren
+  (gelb warnen, dann rote Schallringe, näher als `radius` = ein Herz weg). `ai.nurBeruhigt` = nur verwundbar,
+  solange Leonels Waldgeist wirkt; `ai.schildNurBeruhigt` = der Stampfer wirkt nur beruhigt (beide Helden nötig).
+  Zusätzliches Ampel-Zeichen `✕` weiß = jetzt bringt Schlagen nichts. Lebensleiste oben rechts.
+  Schwarzwald: Hirsch (Geweih ×2, Röhren) · Tijuca: Onça/Jaguar (springt, nur beruhigt verwundbar) ·
+  La Palma: Rieseneidechse (Steinschuppen ×2, nur beruhigt zu sprengen). Geheilt-Zustand wird in `Enemy.heal`
+  gemerkt (`healedMerken`), damit auch ein Waldgeist-Treffer zählt.
 - Hintergrund-Ebenen (`BACKGROUND.layers`): am OBEREN Bildrand darf nichts angeschnitten sein –
   ein abgeschnittener Baum wirkt im Spiel, als hinge er von der Decke. Zeichen-Marker der Gegner
   liegen auf Tiefe 25, also vor Deko und Vordergrund-Ebenen.
@@ -108,6 +124,7 @@ Entscheidungen so, dass Kinder mitlesen können.
   Ziege (`hopper`), Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Lavaröhre = ein
   Kachel hoher Kriechgang unter der Basaltwand (nur Leonel). Sechs Ostereier liegen als Deko `osterei` versteckt.
   Ostereier sind Sammelobjekte (`osterei`, `ITEMS`): selten (4 pro Wald), jedes gibt dem Finder ein Herz zurück.
+  Blätter liegen in allen Wäldern auf jeder zweiten Plattform (+ Rätselzonen), ~26–30 pro Wald – alle nötig für den Wächter.
   **Ein Tier ist entweder Gegner oder friedliches Deko-Tier, nie beides** (Tilman-Wunsch) – Graja/Eidechse sind Gegner.
   Neuer Wald = Kachelsets (pixflux `create_sidescroller_tileset`, 2–3 Gen.), 4 Hintergrund-Ebenen, 3–4 Kulissen, ~8 Deko,
   4 Gegner mit je Grundbild + Animation + Schlafbild (`animate_image`, letztes Bild), 3 Intro-Folien (Pro) – zusammen ~200 Generierungen.

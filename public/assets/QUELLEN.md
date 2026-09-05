@@ -71,3 +71,16 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
   (erster Anlauf `52103814…`/`431a4f32…`/`3dcea938…` blieb hängen und wurde als "failed" markiert)
 - Musik: music/la_palma.mp3 ("Moonlit Save Point", war schon da)
 - Jubelbild (Pro, 480×270, ohne edge-fill): `6376c1d7…` → bg/la_palma_ende.png
+
+## Wächter / Endgegner (06.09.2026)
+Alle mit `create_image_pixen` (Grundbild, schaut nach links), Posen per `animate_image`, Varianten per `edit_image_pixen`; zusammen 26 Generierungen.
+- **Hirsch** (Schwarzwald): Grundbild `87a94653…` → sprites/hirsch.png (palettisiert OHNE Rottöne); ohne linke Stange `fe4795a3…` → hirsch_s1.png, ohne Geweih `dc435542…` → hirsch_s0.png;
+  Lauf `642a93c5…` / `3cac0fc8…` (s1) / `46252c9f…` (s0) → hirsch_lauf.png, hirsch_s1_lauf.png, hirsch_s0_lauf.png (je 6 Bilder, Toleranz 0.4);
+  Röhren `936addbf…` → hirsch_ruf.png (6, Kopf hoch, Maul auf); schlafend `6db471d8…` (letztes Bild aus dem geweihlosen) → hirsch_heil.png; Geweihstück `6facb661…` → geweih_stueck.png
+- **Jaguar / Onça** (Tijuca): Grundbild `99ae9eb8…` → jaguar.png; Schleichen `8a0e9962…` → jaguar_lauf.png; Sprung `894df6eb…` Bild 3 → jaguar_sprung.png;
+  schlafend `edit_image_pixen` `28cbb729…` → jaguar_heil.png (die animate-Versuche `75738c75…`, `44778498…` blieben in der Kauerpose)
+- **Rieseneidechse** (La Palma): Grundbild `79f962e5…` → riesenechse.png; ohne Schuppen `410aa8f3…` → riesenechse_s0.png (die Edits `f9c84ed7…`, `03cf35a3…` nahmen ebenfalls ALLE Schuppen weg –
+  halbe Schuppen darum selbst zusammengesetzt: linke 40 Spalten aus 410aa8f3, Rest Original → riesenechse_s1.png);
+  Lauf `a14b3be2…` / `ba1c5751…` (s1, aus dem zusammengesetzten Bild) / `a09dd4e7…` (s0) → riesenechse_lauf.png, _s1_lauf.png, _s0_lauf.png; `d4cb6a99…` (Lauf von f9c84ed7) unbenutzt;
+  Zischen `1ccc4385…` → riesenechse_zisch.png (Alarm, 4); schlafend `872513b6…` (letztes Bild) → riesenechse_heil.png; Steinschuppe `07020b16…` → schuppe_stueck.png
+- Stand danach: 1300 von 2000 Generierungen verbraucht (699 übrig bis 29.09.2026)

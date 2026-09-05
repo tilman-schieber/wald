@@ -20,7 +20,7 @@ const PX = (x) => X(x / T) * T
 const W = X(240)   // 240 Kacheln Grundriss + eingeschobene Stücke = 400
 
 // Flache Zonen: hier stehen Rätsel und das Ziel
-const FLAT = [[0, 12], [70, 92], [128, 150], [206, 240]].map(([a, b]) => [X(a), X(b)])
+const FLAT = [[0, 12], [70, 92], [128, 150], [188, 240]].map(([a, b]) => [X(a), X(b)])
 const isFlat = (x) => FLAT.some(([a, b]) => x >= a && x < b)
 
 // ---------- Bodenprofil ----------
@@ -73,7 +73,10 @@ rect('b_tor', 'tor', X(80) * T, 192, 16, 48); rect('b_platte', 'platte', X(74) *
 rect('c_tor', 'tor', X(138) * T, 144, 32, 80); rect('c_hebel', 'hebel', X(145) * T, 224, 12, 16, { oeffnet: 'c_tor' })
 rect('c_ranke', 'ranke', X(149) * T - 4, 64, 8, 160)
 point('blatt', 'blatt', X(153) * T, 48); point('blatt', 'blatt', X(156) * T, 48)
-// Waldherz
+// Arena des Wächters (die verwirrte Onça) + Farn (Waldherz)
+rect('arena', 'arena', X(188) * T, 0, (X(211) - X(188)) * T, 272)
+point('jaguar', 'enemy', X(200) * T, 240)
+point('speicher_waechter', 'checkpoint', X(185) * T, boden(X(185)))
 point('waldherz', 'waldherz', X(215.5) * T, 176)
 
 // ---------- Lianen zum Schwingen: über breite Lücken zwischen Plattformen ----------
@@ -93,12 +96,16 @@ for (let i = 0; i < plats.length - 1 && schwingen < 9; i++) {
 // Affen sitzen auf Plattformen (von oben werfen sie), Nasenbären und Ameisen unten
 plats.filter((p, i) => i % 3 === 0 && p.row < 11).forEach((p) => point('affe', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T))
 let nr = 0
-for (let c = 22; c < X(205); c += between(18, 26)) {
+for (let c = 22; c < X(184); c += between(18, 26)) {
   if (isFlat(c) && c > 12) continue
   point(['nasenbaer', 'ameise', 'nasenbaer'][nr++ % 3], 'enemy', c * T, boden(c))
 }
 // Faultiere hängen unter breiten Plattformen
 plats.filter((p, i) => i % 4 === 2 && p.x1 - p.x0 >= 4).slice(0, 5).forEach((p) => point('faultier', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, (p.row + 2) * T))
+// Blätter auf jeder zweiten Plattform – der Wächter kommt erst, wenn ALLE gesammelt sind
+plats.forEach((p, i) => { if (i % 2 === 0) point('blatt', 'blatt', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T - 20) })
+// In der Arena des Wächters stromert sonst niemand herum
+{ const a = objs.find((o) => o.type === 'arena'); for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if (o.type === 'enemy' && !['jaguar'].includes(o.name) && o.x >= a.x && o.x <= a.x + a.width) objs.splice(i, 1) } }
 
 // ---------- Kulissen aus Rio ----------
 const kulisse = (name, x, tiefe, spiegeln = false) => point(name, 'kulisse', x, 240, [prop('tiefe', String(tiefe)), prop('spiegeln', spiegeln)])
@@ -109,7 +116,7 @@ kulisse('cascatinha', PX(3200), 0.35, true)
 
 // ---------- Speicherpunkte ----------
 let sp = 2
-for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12) k += 4; point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }
+for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12 && k < W - 8) k += 4; if (k < W - 8) point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }   // (vor der Arena kommt ein eigener)
 
 // ---------- Deko und Tiere ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn', 'schwinge'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)

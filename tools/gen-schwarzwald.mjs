@@ -20,7 +20,7 @@ const PX = (x) => X(x / T) * T
 const W = X(300)   // 300 Kacheln Grundriss + eingeschobene Stücke = 430
 
 // ---------- Zonen: hier bleibt der Boden flach (Rätsel brauchen das) ----------
-const FLAT = [[0, 12], [80, 100], [136, 150], [176, 216], [262, 300]].map(([a, b]) => [X(a), X(b)])
+const FLAT = [[0, 12], [80, 100], [136, 150], [176, 216], [244, 300]].map(([a, b]) => [X(a), X(b)])
 const isFlat = (x) => FLAT.some(([a, b]) => x >= a && x < b)
 
 // ---------- Bodenprofil: Zeile der Oberkante je Spalte (15 = normal, 11 = 4 hoch) ----------
@@ -88,13 +88,17 @@ point('wildschwein', 'enemy', X(170) * T, boden(X(170)))
 rect('d_tor', 'tor', X(196) * T, 192, 32, 48); rect('d_platte', 'platte', X(190) * T, 92, 16, 4, { oeffnet: 'd_tor' }); rect('d_hebel', 'hebel', X(213) * T, 224, 12, 16, { oeffnet: 'd_tor' })
 rect('d_ranke', 'ranke', X(187) * T - 4, 96, 8, 128); point('blatt', 'blatt', X(192) * T, 80); point('blatt', 'blatt', X(208) * T, 144)
 point('eule', 'enemy', X(205) * T, 120); point('wildschwein', 'enemy', X(212) * T, 240)
-// Zone E: Waldherz
+// Zone E: Arena des Wächters + Farn (Waldherz). Der verwirrte Hirsch erscheint erst, wenn alle
+// Blätter da sind – die Arena ist flach und leer, davor ein Speicherpunkt.
+rect('arena', 'arena', X(244) * T, 0, (X(267) - X(244)) * T, 272)
+point('hirsch', 'enemy', X(257) * T, 240)
+point('speicher_waechter', 'checkpoint', X(241) * T, boden(X(241)))
 point('waldherz', 'waldherz', X(271.5) * T, 176)
 // Ranken an hohen Plattformen (jede 3. Plattform, wenn sie 4 hoch ist)
 plats.filter((p, i) => i % 3 === 1).forEach((p) => { const gx = p.x0 - 1; if (top(gx) - p.row * T >= 48) rect('ranke_' + p.x0, 'ranke', gx * T + 4, p.row * T, 8, top(gx) - p.row * T - 16) })
 // Gegner auf Boden-Plateaus abwechselnd: Igel, verwirrter Hase, ab und zu ein Wildschwein
 let gegnerNr = 0
-for (let c = 20; c < X(260); c += between(20, 30)) {
+for (let c = 20; c < X(240); c += between(20, 30)) {
   if (isFlat(c) && c > 12) continue
   const art = ['igel', 'hase', 'igel', 'wildschwein', 'igel'][gegnerNr++ % 5]
   point(art, 'enemy', c * T, boden(c))
@@ -102,6 +106,8 @@ for (let c = 20; c < X(260); c += between(20, 30)) {
 // ein paar Hasen auch auf Plattformen
 plats.filter((p, i) => i % 8 === 3).forEach((p) => point('hase', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T))
 plats.forEach((p, i) => { if (i % 2 === 0) point('blatt', 'blatt', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T - 20) })
+// In der Arena des Wächters stromert sonst niemand herum
+{ const a = objs.find((o) => o.type === 'arena'); for (let i = objs.length - 1; i >= 0; i--) { const o = objs[i]; if (o.type === 'enemy' && !['hirsch'].includes(o.name) && o.x >= a.x && o.x <= a.x + a.width) objs.splice(i, 1) } }
 // Kulissen im Hintergrund (Schwarzwald bei Freiburg): weit weg = kleine tiefe
 const kulisse = (name, x, tiefe, spiegeln = false) => objs.push({ name, type: 'kulisse', point: true, x, y: 240, width: 0, height: 0, rotation: 0, visible: true, properties: [{ name: 'tiefe', type: 'string', value: String(tiefe) }, { name: 'spiegeln', type: 'bool', value: spiegeln }] })
 kulisse('muenster', PX(260), 0.15)          // ganz am Anfang: Freiburg liegt hinter uns
@@ -112,7 +118,7 @@ kulisse('schwarzwaldhof', PX(4000), 0.5, true)
 kulisse('hochsitz', PX(4550), 0.65, true)
 // Speicherpunkte (Eichhörnchen) am Anfang jeder Zone
 let sp = 2
-for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12) k += 4; point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }
+for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12 && k < W - 8) k += 4; if (k < W - 8) point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }   // (vor der Arena kommt ein eigener)
 
 // ---------- Deko + Tiere auf allen Stehflächen ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)

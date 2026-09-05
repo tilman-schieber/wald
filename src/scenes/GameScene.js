@@ -22,6 +22,8 @@
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
 //    kulisse  Punkt (Fuß), name = Schlüssel aus KULISSEN, Eigenschaft tiefe = Parallax (0.15 … 0.8):
 //             wird HINTER dem Spielfeld gezeichnet und wandert langsamer als die Kamera
+//    arena    Rechteck: hier wartet der Wächter (Endgegner, `boss: true` in ENEMIES). Er erscheint erst,
+//             wenn alle Blätter des Waldes gesammelt sind; das Farn leuchtet erst, wenn er geheilt ist
 // ============================================================
 import Phaser from 'phaser'
 import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF, tiefeZuDepth } from '../config.js'
@@ -35,6 +37,7 @@ import CompanionBrain from '../entities/CompanionBrain.js'
 import PlatformGraph from '../entities/PlatformGraph.js'
 import Enemy from '../entities/Enemy.js'
 import Owl from '../entities/Owl.js'
+import Boss from '../entities/Boss.js'
 import Spirit from '../entities/Spirit.js'
 import Projectile from '../entities/Projectile.js'
 import Controls from '../input/Controls.js'
@@ -56,6 +59,7 @@ export default class GameScene extends Phaser.Scene {
     this.forestKey = Object.keys(FORESTS).find((k) => this.roomKey.startsWith(k)) ?? 'schwarzwald'
     this.forest = FORESTS[this.forestKey]
     world.forest = this.forestKey
+    this.raumFertig = false      // wird am Ende des Aufbaus wahr (Hinweise erst dann)
   }
 
   create() {
@@ -139,7 +143,7 @@ export default class GameScene extends Phaser.Scene {
       if (o.type !== 'enemy') continue
       const cfg = ENEMIES[o.name]
       if (!cfg) { console.warn('Unbekannter Gegner:', o.name); continue }
-      const Klasse = cfg.kind === 'flyer' ? Owl : Enemy
+      const Klasse = cfg.kind === 'flyer' ? Owl : cfg.boss ? Boss : Enemy
       // Manche Gegner kommen als Gruppe (Ameisenkolonne) aus EINEM Tiled-Punkt
       const anzahl = cfg.gruppe ?? 1
       const gruppe = []
@@ -322,6 +326,18 @@ export default class GameScene extends Phaser.Scene {
       return img
     })
 
+    // ---------- Wächter (Endgegner) und Farn ----------
+    // Das Farn bleibt stumm, bis alle Blätter gesammelt UND der Wächter geheilt ist.
+    this.blaetterGesamt = objects.filter((o) => o.type === 'blatt').length
+    this.boss = this.enemies.find((e) => e.cfg.boss) ?? null
+    const arenaObj = objects.find((o) => o.type === 'arena')
+    this.arena = arenaObj ? { x0: arenaObj.x, x1: arenaObj.x + arenaObj.width } : this.boss ? { x0: this.boss.x - 170, x1: this.boss.x + 170 } : null
+    if (this.boss) this.boss.arena = this.arena
+    this.farnHinweisAt = 0; this.arenaHinweisAt = 0
+    this.bossLeiste = this.boss ? this.makeBossLeiste(this.boss) : null
+    this.farnAuffrischen(false)
+    this.raumFertig = true
+
     // ---------- Kamera & Welt ----------
     const worldW = map.widthInPixels, worldH = map.heightInPixels
     this.physics.world.setBounds(0, 0, worldW, worldH + 64)   // unten offen (Abgründe gibt es aktuell keine – Tilman will keine)
@@ -357,12 +373,12 @@ export default class GameScene extends Phaser.Scene {
         this.heartIcons.jonas.push(this.add.image(56 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
         this.heartIcons.leonel.push(this.add.image(160 + i * 12, 30, 'herz').setScale(0.75).setScrollFactor(0).setDepth(101))
       }
-      if (this.textures.exists('blatt')) this.add.image(208, 30, 'blatt').setScale(0.5).setScrollFactor(0).setDepth(101)
-      this.hudLeaves = this.add.text(218, 22, '0', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
+      if (this.textures.exists('blatt')) this.add.image(194, 30, 'blatt').setScale(0.5).setScrollFactor(0).setDepth(101)
+      this.hudLeaves = this.add.text(203, 22, '0', { ...hudStyle, color: '#ffffff' }).setScrollFactor(0).setDepth(100)
       // Fähigkeits-Anzeige: Balken füllt sich, bis E wieder geht
-      this.abilityBack = this.add.rectangle(242, 30, 22, 5, P.schwarz, 0.6).setScrollFactor(0).setDepth(100)
-      this.abilityBar = this.add.rectangle(232, 30, 20, 3, P.eisBlau).setOrigin(0, 0.5).setScrollFactor(0).setDepth(101)
-      this.add.text(232, 18, 'E', { ...hudStyle, fontSize: '9px', color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
+      this.abilityBack = this.add.rectangle(256, 30, 22, 5, P.schwarz, 0.6).setScrollFactor(0).setDepth(100)
+      this.abilityBar = this.add.rectangle(246, 30, 20, 3, P.eisBlau).setOrigin(0, 0.5).setScrollFactor(0).setDepth(101)
+      this.add.text(246, 18, 'E', { ...hudStyle, fontSize: '9px', color: '#c0cbdc' }).setScrollFactor(0).setDepth(100)
     }
     // Tastenhilfe: am Anfang gut sichtbar, nach 15 Sekunden blendet sie weg,
     // damit sie nicht dauernd im Wald herumliegt.
@@ -470,7 +486,8 @@ export default class GameScene extends Phaser.Scene {
     this.resolveAttacks(time)
     this.updatePuzzles()
     this.collectLeaves()
-    if (this.hearts.some((h) => this.physics.overlap(h, this.active))) this.finishForest()
+    this.updateWaechter(time)
+    if (this.hearts.some((h) => this.physics.overlap(h, this.active))) { if (this.farnAktiv) this.finishForest(); else this.farnStumm(time) }
     for (const cp of this.checkpoints) {
       if (cp.name === this.spawnName || !this.physics.overlap(cp.img, this.active)) continue
       this.spawnName = cp.name
@@ -648,7 +665,7 @@ export default class GameScene extends Phaser.Scene {
         if (!Phaser.Geom.Rectangle.Overlaps(rect, e.getBounds())) continue
         hero.hitThisAttack.add(e)
         const result = e.hit(damage, hero.x, time)
-        if (result === null) { this.floatText(hero, 'Stachelig!'); this.sfx.play('hit'); continue }
+        if (result === null) { this.floatText(hero, e.cfg.ai.abprallText ?? 'Stachelig!'); this.sfx.play('hit'); continue }   // Wächter sagen, was hilft
         if (result) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal'); this.sparkle(e.x, e.body.center.y, P.rosaHell, 16) }
         else this.sfx.play('hit')
       }
@@ -818,7 +835,7 @@ export default class GameScene extends Phaser.Scene {
       this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
     }
     this.add.text(W / 2, 20, this.forest.endeText, { fontFamily: font, fontSize: '18px', color: '#fee761', stroke: '#181425', strokeThickness: 4 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
-    this.add.text(W / 2, H - 28, `Gesammelte Blätter: ${world.leaves}`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H - 28, `${this.blaetterGesamt - this.leaves.length} von ${this.blaetterGesamt} Blättern gesammelt`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     if (this.naechsterWald) this.add.text(W / 2, H - 42, `Weiter geht es in die ${this.naechsterWald.name}!`, { fontFamily: font, fontSize: '11px', color: '#63c74d', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     this.add.text(W / 2, H - 12, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     // Gibt es einen nächsten Wald, geht es direkt in seine Geschichte – der Text hat es ja
@@ -877,9 +894,15 @@ export default class GameScene extends Phaser.Scene {
   // Ein Held berührt einen (noch nicht geheilten, nicht beruhigten) Gegner
   onTouchEnemy(hero, enemy) {
     if (this.gameOver) return
+    if (!enemy.hurtsOnTouch(this.time.now)) return
+    this.hurtHero(hero, enemy.x)
+  }
+
+  // Ein Held verliert ein Herz (Berührung, Röhren des Wächters …)
+  hurtHero(hero, fromX) {
+    if (this.gameOver) return
     const time = this.time.now
-    if (!enemy.hurtsOnTouch(time)) return
-    const result = hero.hurt(time, enemy.x)
+    const result = hero.hurt(time, fromX)
     if (result) this.sfx.play('hurt')
     if (result !== 'ko') return
     if (hero === this.companion) hero.daze(time)   // Begleiter: nur benommen, nie Game Over
@@ -962,9 +985,108 @@ export default class GameScene extends Phaser.Scene {
     this.cameras.main.once('camerafadeoutcomplete', () => this.scene.restart({ room: this.roomKey, spawn: this.spawnName }))
   }
 
+  // ---------- Wächter (Endgegner) ----------
+  get farnAktiv() { return !this.boss || this.boss.healed }
+  get blaetterFehlen() { return this.leaves.length }
+
+  // Der Wächter erwacht, wenn alle Blätter da sind und der aktive Held die Arena betritt.
+  // Fehlen noch Blätter, sagt der Wald es – statt dass die Kinder rätseln, warum nichts passiert.
+  updateWaechter(time) {
+    const b = this.boss
+    if (b && this.arena && !b.erschienen && !b.healed) {
+      const drin = this.active.x >= this.arena.x0 && this.active.x <= this.arena.x1
+      if (drin && this.blaetterFehlen === 0) {
+        b.erscheinen(time)
+        this.cameras.main.shake(500, 0.008)
+        this.sfx.play('roehren')
+        this.hinweis(`${b.cfg.name} erwacht!`, '#e43b44')
+      } else if (drin && time >= this.arenaHinweisAt) {
+        this.arenaHinweisAt = time + 7000
+        this.hinweis(`Hier ist es ganz still … ${this.fehlText()}`)
+      }
+    }
+    if (this.bossLeiste) {
+      const zeigen = !!b && b.erschienen && !b.healed
+      this.bossLeiste.box.setVisible(zeigen)
+      if (zeigen) {
+        this.bossLeiste.hp.forEach((r, i) => r.setFillStyle(i < b.hp ? P.feuerRot : P.schieferGrau))
+        this.bossLeiste.schild.forEach((r, i) => r.setVisible(i < b.schildLeft))
+      }
+    }
+  }
+
+  fehlText() {
+    const n = this.blaetterFehlen
+    return n === 1 ? 'Euch fehlt noch 1 Blatt.' : `Euch fehlen noch ${n} Blätter.`
+  }
+
+  // Das Farn berührt, aber es ist noch stumm
+  farnStumm(time) {
+    if (time < this.farnHinweisAt) return
+    this.farnHinweisAt = time + 4000
+    this.sfx.play('nope')
+    this.hinweis(this.blaetterFehlen > 0
+      ? `Das Farn bleibt stumm … ${this.fehlText()}`
+      : 'Das Farn bleibt stumm, solange der Wächter verwirrt ist!')
+  }
+
+  // Ein Tier wurde geheilt (egal wodurch: Schlag, Waldgeist, Gruppe) → merken, damit es beim
+  // nächsten Raumaufbau geheilt bleibt. Enemy.heal ruft das auf.
+  healedMerken(e) {
+    if (e.objectId != null) healedIn(this.roomKey).add(e.objectId)
+  }
+
+  // Der Wächter ist geheilt → das Farn erwacht (Boss.heal ruft das auf)
+  bossGeheilt(boss) {
+    if (!this.raumFertig) return       // beim Aufbau des Raums (schon geheilt geladen) – farnAuffrischen kommt gleich, kein Hinweis
+    this.farnAuffrischen(true)
+    this.hinweis(`${boss.cfg.name} ist wieder friedlich! Das Farn leuchtet.`, '#63c74d')
+  }
+
+  // Farn (Waldherz): grau und stumm, solange der Wächter verwirrt ist – leuchtend, wenn er geheilt ist
+  farnAuffrischen(mitFeier) {
+    for (const h of this.hearts) {
+      if (!this.farnAktiv) { h.setTint(P.schieferGrau); continue }
+      h.clearTint()
+      if (mitFeier) { this.sparkle(h.x, h.y, P.hellGelb, 24); this.sparkle(h.x, h.y - 10, P.rosaHell, 16) }
+    }
+  }
+
+  // Lebensleiste des Wächters oben in der Mitte: Name, rote Herzen, graue Schild-Kästchen
+  makeBossLeiste(boss) {
+    const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    const n = boss.cfg.hp, s = boss.cfg.ai.schild ?? 0
+    const breite = Math.max(120, n * 12 + s * 12 + 24)
+    const box = this.add.container(GAME.width - 118, 14).setScrollFactor(0).setDepth(100).setVisible(false)   // rechts neben dem Holz-HUD
+    box.add(this.add.rectangle(0, 0, breite, 26, P.schwarz, 0.55))
+    box.add(this.add.text(0, -7, boss.cfg.name, { fontFamily: font, fontSize: '9px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5))
+    const hp = [], schild = []
+    const x0 = -(n * 12 + (s ? s * 12 + 6 : 0)) / 2 + 5
+    for (let i = 0; i < n; i++) { const r = this.add.rectangle(x0 + i * 12, 5, 10, 5, P.feuerRot); box.add(r); hp.push(r) }
+    for (let i = 0; i < s; i++) { const r = this.add.rectangle(x0 + n * 12 + 6 + i * 12, 5, 10, 6, P.steinGrau).setStrokeStyle(1, P.nebelHell); box.add(r); schild.push(r) }
+    return { box, hp, schild }
+  }
+
+  // Großer Hinweis oben in der Bildmitte, blendet nach ein paar Sekunden weg
+  hinweis(text, farbe = '#fee761') {
+    this.hinweisText?.destroy()
+    const font = document.fonts?.check?.(`8px "${UI.fontFamily}"`) ? UI.fontFamily : 'monospace'
+    const t = this.add.text(GAME.width / 2, 62, text, { fontFamily: font, fontSize: '11px', color: farbe, stroke: '#181425', strokeThickness: 3, align: 'center', wordWrap: { width: 320 } }).setOrigin(0.5).setScrollFactor(0).setDepth(150)
+    this.hinweisText = t
+    this.tweens.add({ targets: t, alpha: 0, delay: 3400, duration: 600, onComplete: () => { if (this.hinweisText === t) this.hinweisText = null; t.destroy() } })
+  }
+
+  // Schallringe beim Röhren – so sieht man, wie weit der Schrei reicht
+  schallwelle(boss, ruf) {
+    for (let i = 0; i < 3; i++) {
+      const ring = this.add.ellipse(boss.x, boss.body.center.y, 8, 8, 0, 0).setStrokeStyle(2, P.sonnenGelb).setDepth(12).setAlpha(0.9)
+      this.tweens.add({ targets: ring, width: ruf.radius * 2, height: ruf.radius * 2, alpha: 0, delay: i * 120, duration: ruf.dauerMs, onComplete: () => ring.destroy() })
+    }
+  }
+
   updateHud() {
     if (this.heartIcons) {
-      this.hudLeaves.setText(String(world.leaves))
+      this.hudLeaves.setText(`${this.blaetterGesamt - this.leaves.length}/${this.blaetterGesamt}`)
       for (const [key, icons] of Object.entries(this.heartIcons)) icons.forEach((ic, i) => ic.setTexture(i < this[key].hp ? 'herz' : 'herz_leer'))
       const charge = this.active.specialCharge(this.time.now)
       this.abilityBar.width = Math.max(1, 20 * charge)
@@ -972,7 +1094,7 @@ export default class GameScene extends Phaser.Scene {
       return
     }
     const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))
-    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${world.leaves}`)
+    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${this.blaetterGesamt - this.leaves.length}/${this.blaetterGesamt}`)
   }
 
   // Funkeln: kleine Punkte, die auseinanderfliegen und verblassen

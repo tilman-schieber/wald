@@ -431,6 +431,138 @@ ENEMIES.taube = {
 
 //  Tore (Rätsel): der Torflügel selbst wird gemalt (siehe BootScene),
 //  der Steinbalken darüber macht aus der Mauer einen richtigen Durchgang.
+// ------------------------------------------------------------
+//  WÄCHTER – der Endgegner jedes Waldes (Klasse Boss.js, erkannt an `boss: true`)
+//  Ein großes, besonders verwirrtes Tier bewacht das Farn. Es erscheint erst, wenn
+//  ALLE Blätter des Waldes gesammelt sind, und erst nach seiner Heilung leuchtet das Farn.
+//   ai.schild            so viele Schutzstücke (Geweih, Steinschuppen) – solange eins dran
+//                        ist, prallt jeder Schlag ab; Jonas' Stampfer bricht pro Landung eins ab
+//   varianten.s1/.s0     Bild (+ Lauf-Animation) mit 1 / 0 Schutzstücken → Texturen '<key>-s1', '<key>-s0'
+//   ai.schildNurBeruhigt der Stampfer wirkt nur, solange Leonels Waldgeist das Tier beruhigt
+//   ai.nurBeruhigt       überhaupt nur verwundbar, solange es beruhigt ist
+//   ai.ruf               Röhren: warnMs gelb warnen, dann dauerMs Schallringe – näher als radius = ein Herz weg
+//   stueckFile           das Bruchstück, das beim Stampfer davonfliegt ('<key>-stueck')
+// ------------------------------------------------------------
+//  Schwarzwald: der verwirrte Hirsch mit dem riesigen Geweih. Solange er das Geweih hat, ist er
+//  unverwundbar. Jonas' Stampfer bricht ein Stück ab, der zweite das zweite – dann kann man ihn
+//  treffen. Ab und zu röhrt er: wer dann zu nah steht, verliert ein Herz (erst gelb warnen!).
+//  (Hirsche werfen ihr Geweih jedes Jahr ab – es wächst wieder. Ihm fehlt also nichts.)
+ENEMIES.hirsch = {
+  key: 'hirsch',
+  name: 'Der verwirrte Hirsch',
+  boss: true,
+  hp: 6,
+  damage: 1,
+  frame: { w: 58, h: 68 }, body: { w: 40, h: 38 },
+  color: P.rindeBraun, accent: P.sandHell,
+  file: 'assets/sprites/hirsch.png',                    // pixen 87a94653…
+  healedFile: 'assets/sprites/hirsch_heil.png',         // animate_image 6db471d8… (letztes Bild: döst ohne Geweih)
+  walkSheet: { file: 'assets/sprites/hirsch_lauf.png', w: 59, h: 68, n: 6, rate: 8 },   // animate_image 642a93c5…
+  rufSheet: { file: 'assets/sprites/hirsch_ruf.png', w: 59, h: 69, n: 6, rate: 8 },     // animate_image 936addbf… (Kopf hoch, Maul auf)
+  stueckFile: 'assets/sprites/geweih_stueck.png',       // pixen 6facb661…
+  varianten: {
+    s1: { file: 'assets/sprites/hirsch_s1.png', walkSheet: { file: 'assets/sprites/hirsch_s1_lauf.png', w: 50, h: 68, n: 6, rate: 8 } },   // edit_image_pixen fe4795a3… / 3cac0fc8…
+    s0: { file: 'assets/sprites/hirsch_s0.png', walkSheet: { file: 'assets/sprites/hirsch_s0_lauf.png', w: 51, h: 43, n: 6, rate: 8 } },   // edit_image_pixen dc435542… / 46252c9f…
+  },
+  ai: {
+    kind: 'charger',        // stürmt hin und her wie das Wildschwein …
+    spiky: false,           // … ohne Geweih jederzeit verwundbar
+    rotate: false,
+    laufAnim: true,         // beim Sturm laufen die Beine
+    schild: 2,              // zwei Geweihstangen – je ein Stampfer
+    abprallText: 'Das Geweih schützt ihn! Jonas: Stampfer (E)',
+    bruchText: 'Krach! Ein Stück Geweih bricht ab!',
+    freiText: 'Das Geweih ist ab – jetzt trefft ihn!',
+    wanderSpeed: 35,
+    sight: { x: 240, y: 60 },
+    alertMs: 800,           // scharrt – Zeit zum Ausweichen
+    rollSpeed: 170,         // Sturm: schneller als Jonas, langsamer als ein Hase springt
+    rollMaxMs: 1500,
+    charges: 1,             // stürmt zweimal
+    turnMs: 500,
+    dizzyMs: 2000,          // danach außer Puste – das Fenster für Stampfer und Schläge
+    cooldownMs: 2500,
+    ruf: { everyMs: 7000, warnMs: 1000, dauerMs: 700, radius: 96 },
+    healedWanderSpeed: 0,   // geheilt döst er
+  },
+}
+//  Floresta da Tijuca: die verwirrte Onça (Jaguar). Springt in riesigen Sätzen und ist viel zu wild,
+//  um sie zu treffen – nur solange Leonels Waldgeist sie beruhigt, hält sie still und ist verwundbar.
+ENEMIES.jaguar = {
+  key: 'jaguar',
+  name: 'Die verwirrte Onça',
+  boss: true,
+  hp: 6,
+  damage: 1,
+  frame: { w: 68, h: 37 }, body: { w: 50, h: 28 },
+  color: P.fuchsOrange, accent: P.schwarz,
+  file: 'assets/sprites/jaguar.png',                    // pixen 99ae9eb8…
+  healedFile: 'assets/sprites/jaguar_heil.png',         // schläft (siehe QUELLEN.md)
+  sprungFile: 'assets/sprites/jaguar_sprung.png',       // animate_image 894df6eb… Bild 3 (gestreckt in der Luft)
+  walkSheet: { file: 'assets/sprites/jaguar_lauf.png', w: 69, h: 37, n: 6, rate: 8 },   // animate_image 8a0e9962… (schleicht)
+  ai: {
+    kind: 'hopper',
+    spiky: true,
+    nurBeruhigt: true,      // nur verwundbar, solange der Waldgeist wirkt
+    sprungBild: true,       // in der Luft das Sprungbild
+    abprallText: 'Zu wild! Leonel: Waldgeist (E)',
+    wanderSpeed: 40,
+    sight: { x: 240, y: 70 },
+    alertMs: 700,           // duckt sich – gleich springt sie
+    hops: 3,                // drei große Sätze
+    hopPower: 330,
+    hopSpeed: 170,
+    rollMaxMs: 3200,
+    dizzyMs: 1500,          // danach schnauft sie (aber: ✕ – erst beruhigen!)
+    cooldownMs: 2000,
+    healedWanderSpeed: 0,
+  },
+}
+//  La Palma: die verwirrte Rieseneidechse (die Riesenechse von La Palma galt lange als ausgestorben!).
+//  Ihr Rücken ist mit Steinschuppen gepanzert. Nur wenn Leonels Waldgeist sie beruhigt, hält sie
+//  still genug, dass Jonas' Stampfer eine Schuppe absprengt – zwei Schuppen, dann ist sie verwundbar.
+//  Beide Helden müssen zusammenarbeiten (Tab!).
+ENEMIES.riesenechse = {
+  key: 'riesenechse',
+  name: 'Die verwirrte Rieseneidechse',
+  boss: true,
+  hp: 6,
+  damage: 1,
+  frame: { w: 78, h: 35 }, body: { w: 56, h: 26 },
+  color: P.moosGruen, accent: P.schieferGrau,
+  file: 'assets/sprites/riesenechse.png',               // pixen 79f962e5…
+  healedFile: 'assets/sprites/riesenechse_heil.png',    // animate_image 872513b6… (letztes Bild: schläft, ohne Schuppen)
+  stueckFile: 'assets/sprites/schuppe_stueck.png',      // pixen 07020b16…
+  walkSheet: { file: 'assets/sprites/riesenechse_lauf.png', w: 78, h: 36, n: 6, rate: 8 },   // animate_image a14b3be2…
+  alertSheet: { file: 'assets/sprites/riesenechse_zisch.png', w: 79, h: 36, n: 4, rate: 8 }, // animate_image 1ccc4385… (zischt, Maul auf)
+  varianten: {
+    s1: { file: 'assets/sprites/riesenechse_s1.png', walkSheet: { file: 'assets/sprites/riesenechse_s1_lauf.png', w: 78, h: 37, n: 6, rate: 8 } },   // Original+410aa8f3… zusammengesetzt / ba1c5751…
+    s0: { file: 'assets/sprites/riesenechse_s0.png', walkSheet: { file: 'assets/sprites/riesenechse_s0_lauf.png', w: 81, h: 32, n: 6, rate: 8 } },   // edit_image_pixen 410aa8f3… / a09dd4e7…
+  },
+  ai: {
+    kind: 'charger',
+    spiky: false,
+    rotate: false,
+    laufAnim: true,
+    schild: 2,
+    schildNurBeruhigt: true,
+    abprallText: 'Steinschuppen! Erst beruhigen, dann stampfen',
+    zappelText: 'Sie zappelt zu sehr! Leonel: Waldgeist (E)',
+    bruchText: 'Knack! Eine Steinschuppe springt ab!',
+    freiText: 'Die Schuppen sind ab – jetzt trefft sie!',
+    wanderSpeed: 30,
+    sight: { x: 240, y: 60 },
+    alertMs: 900,
+    rollSpeed: 150,
+    rollMaxMs: 1600,
+    charges: 2,             // stürmt dreimal hin und her
+    turnMs: 500,
+    dizzyMs: 2000,
+    cooldownMs: 2500,
+    healedWanderSpeed: 0,
+  },
+}
+
 export const TOR = { bogen: 'assets/sprites/torbogen.png' }   // PixelLab pixen 0975c40a…
 
 //  Die Jackfrucht, die der Affe wirft

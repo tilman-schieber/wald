@@ -357,6 +357,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       }
       else if (this.anims.isPlaying && this.state !== 'alert' && this.state !== 'dizzy') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
     }
+    // Hüpfer mit eigenem Sprungbild (Jaguar): in der Luft das Sprungbild statt der Lauf-Animation
+    if (ai.sprungBild && this.state === 'roll' && !this.onGround && this.scene.textures.exists(this.cfg.key + '-sprung')) { this.anims.stop(); this.useTexture(this.cfg.key + '-sprung') }
+    else if (ai.sprungBild && this.state !== 'roll' && this.texture.key === this.cfg.key + '-sprung') this.useTexture(this.cfg.key)   // gelandet: wieder das normale Bild
     if (time > this.flashUntil && !this.isCalm(time)) this.clearTint()
     this.updateMark(time)
   }
@@ -436,6 +439,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Ameisen: es reicht, EINE zu treffen – die ganze Kolonne wacht mit auf
     if (this.groupMates && !vonDerGruppe) for (const m of this.groupMates) if (m !== this && !m.healed) m.heal(true)
     this.hp = 0
+    this.scene.healedMerken?.(this)      // bleibt geheilt, auch wenn der Waldgeist den letzten Treffer setzt
     this.clearTint()
     this.setVelocity(0, 0)
     this.setAngle(0)

@@ -34,6 +34,9 @@ const SOUNDS = {
   nope:    { type: 'triangle', steps: [{ f: 200, t: 0.07 }, { f: 150, t: 0.09 }], vol: 0.08, cutoff: 1200 },
   lose:    { type: 'triangle', steps: [{ f: 392, t: 0.22 }, { f: 330, t: 0.22 }, { f: 262, t: 0.45 }], vol: 0.12, cutoff: 1600 },
   room:    { type: 'sine',     steps: [{ f: 440, t: 0.07 }, { f: 554, t: 0.07 }, { f: 659, t: 0.14 }], vol: 0.08, cutoff: 3000 },
+  // Wächter: tiefes Röhren (Hirsch) und das Krachen, wenn ein Stück Geweih/Schuppe abbricht
+  roehren: { type: 'sawtooth', steps: [{ f: 95, t: 0.14 }, { f: 140, t: 0.22 }, { f: 118, t: 0.34 }], vol: 0.13, cutoff: 650 },
+  bruch:   { type: 'noise',    steps: [{ f: 900, t: 0.16 }], vol: 0.17, cutoff: 1600, sweep: 0.15 },
 }
 
 export default class Sfx {

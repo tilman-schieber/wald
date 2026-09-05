@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 284,
+ "nextobjectid": 320,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1838,9 +1838,9 @@
     0,
     0,
     0,
-    0,
-    0,
-    0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -2003,8 +2003,6 @@
     17,
     17,
     17,
-    0,
-    0,
     0,
     0,
     0,
@@ -2270,8 +2268,10 @@
     0,
     0,
     0,
-    0,
-    0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -2472,10 +2472,8 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
+    0,
+    0,
     0,
     0,
     0,
@@ -2822,6 +2820,8 @@
     0,
     0,
     0,
+    0,
+    0,
     17,
     17,
     17,
@@ -2874,8 +2874,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -2923,8 +2921,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -2932,9 +2928,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3014,8 +3007,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -3046,8 +3037,7 @@
     0,
     0,
     0,
-    2,
-    2,
+    0,
     0,
     0,
     0,
@@ -3056,6 +3046,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3103,18 +3097,12 @@
     0,
     0,
     0,
-    17,
-    17,
+    0,
     17,
     17,
     17,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3153,8 +3141,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -3176,10 +3162,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3242,9 +3224,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -3263,6 +3242,9 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -3279,9 +3261,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3290,6 +3269,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3344,6 +3327,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3365,9 +3352,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3445,10 +3429,14 @@
     0,
     0,
     0,
-    0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
+    2,
+    2,
     0,
     0,
     0,
@@ -3458,8 +3446,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -3472,9 +3458,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3498,9 +3481,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3510,16 +3490,13 @@
     0,
     0,
     0,
+    2,
+    2,
     0,
     0,
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -3550,6 +3527,12 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3586,9 +3569,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3608,10 +3588,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3623,6 +3599,9 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3662,9 +3641,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -3676,6 +3652,9 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3683,6 +3662,9 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -3707,11 +3689,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -3725,12 +3702,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     17,
@@ -3739,6 +3710,10 @@
     17,
     17,
     17,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3762,6 +3737,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3859,6 +3838,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -3894,6 +3877,8 @@
     0,
     0,
     0,
+    2,
+    2,
     0,
     0,
     0,
@@ -3901,8 +3886,6 @@
     0,
     0,
     0,
-    2,
-    2,
     0,
     0,
     0,
@@ -3939,9 +3922,17 @@
     0,
     0,
     0,
+    2,
+    2,
     0,
     0,
     0,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -3956,9 +3947,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -3969,7 +3957,10 @@
     0,
     0,
     17,
-    0,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -3977,6 +3968,7 @@
     0,
     0,
     0,
+    17,
     0,
     0,
     0,
@@ -4035,6 +4027,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4057,6 +4053,10 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4109,13 +4109,6 @@
     0,
     0,
     0,
-    0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4134,10 +4127,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4157,6 +4146,9 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4182,11 +4174,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4195,16 +4182,9 @@
     2,
     2,
     2,
-    0,
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4275,11 +4255,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4305,11 +4280,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4337,6 +4307,11 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -4349,12 +4324,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4388,7 +4357,6 @@
     0,
     0,
     0,
-    17,
     0,
     0,
     0,
@@ -4414,18 +4382,13 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
     0,
     0,
     0,
+    17,
     0,
     0,
     0,
@@ -4434,9 +4397,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4453,6 +4413,11 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4462,6 +4427,9 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -4502,9 +4470,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4537,12 +4502,12 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4562,11 +4527,23 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4582,23 +4559,10 @@
     0,
     0,
     0,
-    0,
-    0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    0,
-    0,
-    0,
-    0,
-    17,
     17,
     17,
     17,
-    17,
-    17,
+    0,
     0,
     0,
     0,
@@ -4621,8 +4585,18 @@
     0,
     0,
     0,
+    0,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4635,6 +4609,8 @@
     0,
     0,
     0,
+    17,
+    17,
     17,
     17,
     17,
@@ -4643,6 +4619,9 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -4678,18 +4657,9 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4710,10 +4680,8 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
+    0,
+    0,
     0,
     0,
     0,
@@ -4728,14 +4696,26 @@
     0,
     0,
     0,
-    0,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     2,
     2,
     2,
     2,
-    2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -4759,10 +4739,23 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     17,
     17,
     17,
     17,
+    0,
+    0,
+    2,
+    2,
+    2,
+    0,
+    0,
     0,
     0,
     0,
@@ -4776,6 +4769,13 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     2,
     2,
     2,
@@ -4809,8 +4809,6 @@
     0,
     0,
     17,
-    0,
-    0,
     0,
     0,
     0,
@@ -4825,12 +4823,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -4845,12 +4837,13 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
     0,
     0,
     0,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -4862,16 +4855,14 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4881,37 +4872,22 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
-    17,
     17,
     17,
     17,
     0,
     0,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -4922,9 +4898,10 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -4933,13 +4910,18 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
     0,
     0,
     0,
-    17,
+    0,
     17,
     17,
     17,
@@ -5046,15 +5028,6 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
@@ -5066,10 +5039,6 @@
     0,
     0,
     0,
-    17,
-    17,
-    17,
-    17,
     0,
     0,
     0,
@@ -5097,6 +5066,10 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -5121,13 +5094,13 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
     0,
     0,
     0,
+    0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -5164,13 +5137,31 @@
     2,
     2,
     2,
+    2,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
     0,
+    0,
+    0,
+    0,
     17,
     17,
     17,
+    17,
+    0,
+    0,
     0,
     0,
     0,
@@ -5187,6 +5178,15 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -5217,9 +5217,6 @@
     1,
     1,
     2,
-    0,
-    0,
-    0,
     0,
     0,
     0,
@@ -5246,12 +5243,12 @@
     0,
     0,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -5291,6 +5288,10 @@
     0,
     0,
     0,
+    17,
+    17,
+    17,
+    17,
     0,
     0,
     0,
@@ -5300,16 +5301,7 @@
     2,
     2,
     2,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    2,
     0,
     0,
     0,
@@ -5322,9 +5314,17 @@
     0,
     0,
     0,
+    2,
+    2,
+    2,
     0,
     0,
     0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -5345,9 +5345,6 @@
     17,
     17,
     17,
-    0,
-    0,
-    0,
     0,
     0,
     0,
@@ -5362,8 +5359,11 @@
     0,
     0,
     0,
-    0,
-    0,
+    2,
+    2,
+    2,
+    2,
+    2,
     0,
     0,
     0,
@@ -5466,15 +5466,9 @@
     0,
     0,
     0,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -5484,6 +5478,12 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     17,
     17,
     17,
@@ -5880,24 +5880,7 @@
     0,
     0,
     0,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    2,
-    2,
-    2,
+    0,
     0,
     0,
     0,
@@ -5951,6 +5934,23 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     2,
     2,
     2,
@@ -6300,24 +6300,21 @@
     2,
     2,
     2,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    1,
-    1,
-    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -6352,6 +6349,9 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
     2,
     2,
     2,
@@ -6679,15 +6679,6 @@
     17,
     17,
     17,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
     1,
     1,
     1,
@@ -6726,18 +6717,13 @@
     1,
     1,
     1,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
     1,
     1,
     1,
+    2,
+    2,
+    2,
+    2,
     2,
     2,
     2,
@@ -6772,6 +6758,20 @@
     2,
     2,
     2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
     1,
     1,
     1,
@@ -7140,24 +7140,24 @@
     1,
     1,
     1,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
-    17,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
     1,
     1,
     1,
@@ -7328,6 +7328,41 @@
      "id": 9
     },
     {
+     "name": "arena",
+     "type": "arena",
+     "x": 5888,
+     "y": 0,
+     "width": 368,
+     "height": 272,
+     "rotation": 0,
+     "visible": true,
+     "id": 10
+    },
+    {
+     "name": "riesenechse",
+     "type": "enemy",
+     "point": true,
+     "x": 6080,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 11
+    },
+    {
+     "name": "speicher_waechter",
+     "type": "checkpoint",
+     "point": true,
+     "x": 5840,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 12
+    },
+    {
      "name": "waldherz",
      "type": "waldherz",
      "point": true,
@@ -7337,46 +7372,13 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 10
+     "id": 13
     },
     {
      "name": "schwinge0",
      "type": "schwinge",
-     "x": 322,
-     "y": 80,
-     "width": 12,
-     "height": 84,
-     "rotation": 0,
-     "visible": true,
-     "id": 11
-    },
-    {
-     "name": "schwinge1",
-     "type": "schwinge",
-     "x": 562,
-     "y": 96,
-     "width": 12,
-     "height": 84,
-     "rotation": 0,
-     "visible": true,
-     "id": 12
-    },
-    {
-     "name": "schwinge2",
-     "type": "schwinge",
-     "x": 706,
-     "y": 96,
-     "width": 12,
-     "height": 68,
-     "rotation": 0,
-     "visible": true,
-     "id": 13
-    },
-    {
-     "name": "schwinge3",
-     "type": "schwinge",
-     "x": 802,
-     "y": 48,
+     "x": 194,
+     "y": 64,
      "width": 12,
      "height": 68,
      "rotation": 0,
@@ -7384,21 +7386,21 @@
      "id": 14
     },
     {
-     "name": "schwinge4",
+     "name": "schwinge1",
      "type": "schwinge",
-     "x": 1322,
+     "x": 602,
      "y": 96,
      "width": 12,
-     "height": 84,
+     "height": 68,
      "rotation": 0,
      "visible": true,
      "id": 15
     },
     {
-     "name": "schwinge5",
+     "name": "schwinge2",
      "type": "schwinge",
-     "x": 1482,
-     "y": 48,
+     "x": 810,
+     "y": 64,
      "width": 12,
      "height": 68,
      "rotation": 0,
@@ -7406,70 +7408,67 @@
      "id": 16
     },
     {
-     "name": "schwinge6",
+     "name": "schwinge3",
      "type": "schwinge",
-     "x": 2866,
-     "y": 48,
+     "x": 1122,
+     "y": 96,
      "width": 12,
-     "height": 68,
+     "height": 84,
      "rotation": 0,
      "visible": true,
      "id": 17
     },
     {
-     "name": "schwinge7",
+     "name": "schwinge4",
      "type": "schwinge",
-     "x": 3418,
-     "y": 96,
+     "x": 1650,
+     "y": 32,
      "width": 12,
-     "height": 68,
+     "height": 100,
      "rotation": 0,
      "visible": true,
      "id": 18
     },
     {
-     "name": "schwinge8",
+     "name": "schwinge5",
      "type": "schwinge",
-     "x": 3546,
-     "y": 96,
+     "x": 2538,
+     "y": 80,
      "width": 12,
-     "height": 68,
+     "height": 100,
      "rotation": 0,
      "visible": true,
      "id": 19
     },
     {
-     "name": "taube",
-     "type": "enemy",
-     "point": true,
-     "x": 368,
-     "y": 112,
-     "width": 0,
-     "height": 0,
+     "name": "schwinge6",
+     "type": "schwinge",
+     "x": 2898,
+     "y": 80,
+     "width": 12,
+     "height": 68,
      "rotation": 0,
      "visible": true,
      "id": 20
     },
     {
-     "name": "taube",
-     "type": "enemy",
-     "point": true,
-     "x": 880,
-     "y": 112,
-     "width": 0,
-     "height": 0,
+     "name": "schwinge7",
+     "type": "schwinge",
+     "x": 3482,
+     "y": 96,
+     "width": 12,
+     "height": 68,
      "rotation": 0,
      "visible": true,
      "id": 21
     },
     {
-     "name": "taube",
-     "type": "enemy",
-     "point": true,
-     "x": 1688,
-     "y": 128,
-     "width": 0,
-     "height": 0,
+     "name": "schwinge8",
+     "type": "schwinge",
+     "x": 3762,
+     "y": 96,
+     "width": 12,
+     "height": 84,
      "rotation": 0,
      "visible": true,
      "id": 22
@@ -7478,8 +7477,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 2008,
-     "y": 144,
+     "x": 296,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7490,8 +7489,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 2640,
-     "y": 160,
+     "x": 736,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7502,7 +7501,7 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 2808,
+     "x": 1264,
      "y": 128,
      "width": 0,
      "height": 0,
@@ -7514,8 +7513,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 4616,
-     "y": 112,
+     "x": 1568,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7526,8 +7525,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 4848,
-     "y": 96,
+     "x": 1888,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7538,8 +7537,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 5152,
-     "y": 80,
+     "x": 1984,
+     "y": 96,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7550,8 +7549,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 5640,
-     "y": 144,
+     "x": 3016,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7562,8 +7561,8 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 5784,
-     "y": 96,
+     "x": 3568,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7574,13 +7573,61 @@
      "name": "taube",
      "type": "enemy",
      "point": true,
-     "x": 6152,
-     "y": 160,
+     "x": 3864,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
      "id": 31
+    },
+    {
+     "name": "taube",
+     "type": "enemy",
+     "point": true,
+     "x": 4464,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 32
+    },
+    {
+     "name": "taube",
+     "type": "enemy",
+     "point": true,
+     "x": 4800,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 33
+    },
+    {
+     "name": "taube",
+     "type": "enemy",
+     "point": true,
+     "x": 5232,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 34
+    },
+    {
+     "name": "taube",
+     "type": "enemy",
+     "point": true,
+     "x": 5480,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 35
     },
     {
      "name": "eidechse",
@@ -7592,61 +7639,13 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 32
-    },
-    {
-     "name": "ziege",
-     "type": "enemy",
-     "point": true,
-     "x": 768,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 33
-    },
-    {
-     "name": "eidechse",
-     "type": "enemy",
-     "point": true,
-     "x": 1184,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 34
-    },
-    {
-     "name": "eidechse",
-     "type": "enemy",
-     "point": true,
-     "x": 1504,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 35
-    },
-    {
-     "name": "ziege",
-     "type": "enemy",
-     "point": true,
-     "x": 1856,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
      "id": 36
     },
     {
-     "name": "eidechse",
+     "name": "ziege",
      "type": "enemy",
      "point": true,
-     "x": 2512,
+     "x": 656,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -7658,8 +7657,8 @@
      "name": "eidechse",
      "type": "enemy",
      "point": true,
-     "x": 2928,
-     "y": 224,
+     "x": 1040,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -7667,16 +7666,76 @@
      "id": 38
     },
     {
-     "name": "ziege",
+     "name": "eidechse",
      "type": "enemy",
      "point": true,
-     "x": 3344,
+     "x": 1392,
      "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
      "id": 39
+    },
+    {
+     "name": "ziege",
+     "type": "enemy",
+     "point": true,
+     "x": 1776,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 40
+    },
+    {
+     "name": "eidechse",
+     "type": "enemy",
+     "point": true,
+     "x": 2480,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 41
+    },
+    {
+     "name": "eidechse",
+     "type": "enemy",
+     "point": true,
+     "x": 2768,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 42
+    },
+    {
+     "name": "ziege",
+     "type": "enemy",
+     "point": true,
+     "x": 3056,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 43
+    },
+    {
+     "name": "eidechse",
+     "type": "enemy",
+     "point": true,
+     "x": 3376,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 44
     },
     {
      "name": "eidechse",
@@ -7688,67 +7747,55 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 40
-    },
-    {
-     "name": "eidechse",
-     "type": "enemy",
-     "point": true,
-     "x": 4480,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 41
+     "id": 45
     },
     {
      "name": "ziege",
      "type": "enemy",
      "point": true,
-     "x": 4864,
-     "y": 208,
+     "x": 4432,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 42
+     "id": 46
     },
     {
      "name": "eidechse",
      "type": "enemy",
      "point": true,
-     "x": 5168,
+     "x": 4816,
      "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 43
+     "id": 47
     },
     {
      "name": "eidechse",
      "type": "enemy",
      "point": true,
-     "x": 5472,
-     "y": 224,
+     "x": 5152,
+     "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 44
+     "id": 48
     },
     {
      "name": "ziege",
      "type": "enemy",
      "point": true,
-     "x": 5824,
+     "x": 5504,
      "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 45
+     "id": 49
     },
     {
      "name": "graja",
@@ -7760,7 +7807,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 46
+     "id": 50
     },
     {
      "name": "graja",
@@ -7772,7 +7819,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 47
+     "id": 51
     },
     {
      "name": "graja",
@@ -7784,19 +7831,343 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 48
+     "id": 52
     },
     {
-     "name": "graja",
-     "type": "enemy",
+     "name": "blatt",
+     "type": "blatt",
      "point": true,
-     "x": 5984,
-     "y": 80,
+     "x": 120,
+     "y": 172,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 49
+     "id": 53
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 264,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 54
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 432,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 55
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 544,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 56
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 784,
+     "y": 172,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 57
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 920,
+     "y": 140,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 58
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1056,
+     "y": 172,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 59
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1288,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 60
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1472,
+     "y": 172,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 61
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1568,
+     "y": 124,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 62
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1720,
+     "y": 44,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 63
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1888,
+     "y": 60,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 64
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 1984,
+     "y": 76,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 65
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 2616,
+     "y": 140,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 66
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 2824,
+     "y": 140,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 67
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 3016,
+     "y": 108,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 68
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 3152,
+     "y": 124,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 69
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 3400,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 70
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 3568,
+     "y": 124,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 71
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 3848,
+     "y": 156,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 72
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 4312,
+     "y": 172,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 73
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 4464,
+     "y": 92,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 74
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 4720,
+     "y": 108,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 75
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 4936,
+     "y": 140,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 76
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 5232,
+     "y": 108,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 77
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 5392,
+     "y": 92,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 78
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 5576,
+     "y": 124,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 79
+    },
+    {
+     "name": "blatt",
+     "type": "blatt",
+     "point": true,
+     "x": 5896,
+     "y": 140,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 80
     },
     {
      "name": "vulkan",
@@ -7820,7 +8191,7 @@
        "value": false
       }
      ],
-     "id": 50
+     "id": 81
     },
     {
      "name": "lostilos",
@@ -7844,7 +8215,7 @@
        "value": false
       }
      ],
-     "id": 51
+     "id": 82
     },
     {
      "name": "drachenbaum",
@@ -7868,7 +8239,7 @@
        "value": false
       }
      ],
-     "id": 52
+     "id": 83
     },
     {
      "name": "haus",
@@ -7892,7 +8263,7 @@
        "value": false
       }
      ],
-     "id": 53
+     "id": 84
     },
     {
      "name": "drachenbaum",
@@ -7916,7 +8287,7 @@
        "value": true
       }
      ],
-     "id": 54
+     "id": 85
     },
     {
      "name": "speicher2",
@@ -7928,7 +8299,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 55
+     "id": 86
     },
     {
      "name": "speicher3",
@@ -7940,7 +8311,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 56
+     "id": 87
     },
     {
      "name": "speicher4",
@@ -7952,7 +8323,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 57
+     "id": 88
     },
     {
      "name": "speicher5",
@@ -7964,7 +8335,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 58
+     "id": 89
     },
     {
      "name": "speicher6",
@@ -7976,7 +8347,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 59
+     "id": 90
     },
     {
      "name": "speicher7",
@@ -7988,686 +8359,14 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 60
-    },
-    {
-     "name": "speicher8",
-     "type": "checkpoint",
-     "point": true,
-     "x": 6160,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 61
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 5132,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 62
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 4932,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 63
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 5939,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 64
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 3020,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 65
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 5839,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 66
-    },
-    {
-     "name": "drachenbaum",
-     "type": "deko",
-     "point": true,
-     "x": 1450,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 67
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 4022,
-     "y": 0,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 68
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 4012,
-     "y": 16,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 69
-    },
-    {
-     "name": "lavafels",
-     "type": "deko",
-     "point": true,
-     "x": 4212,
-     "y": 64,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 70
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 4272,
-     "y": 64,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 71
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 4311,
-     "y": 64,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 72
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 4204,
-     "y": 80,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 73
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 4287,
-     "y": 80,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 74
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 5140,
-     "y": 80,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 75
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 5175,
-     "y": 80,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 76
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 5132,
-     "y": 96,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 77
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 2012,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 78
-    },
-    {
-     "name": "glockenblume",
-     "type": "deko",
-     "point": true,
-     "x": 4853,
-     "y": 96,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 79
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 4844,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 80
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 5792,
-     "y": 96,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 81
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 5772,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 82
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 876,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 83
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 1798,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 84
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 1820,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 85
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 1900,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 86
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 1944,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 87
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 2960,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 88
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 2993,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 89
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 5981,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 90
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 5980,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
      "id": 91
     },
     {
-     "name": "flechte",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 6007,
-     "y": 128,
+     "x": 1931,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8677,16 +8376,21 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
       }
      ],
      "id": 92
     },
     {
-     "name": "wurzeln",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 6150,
-     "y": 112,
+     "x": 5095,
+     "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8706,11 +8410,11 @@
      "id": 93
     },
     {
-     "name": "lavafels",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 747,
-     "y": 128,
+     "x": 4913,
+     "y": 208,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8730,11 +8434,11 @@
      "id": 94
     },
     {
-     "name": "moos",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 748,
-     "y": 144,
+     "x": 373,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8743,17 +8447,22 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
       }
      ],
      "id": 95
     },
     {
-     "name": "tajinaste",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 1406,
-     "y": 128,
+     "x": 4651,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8773,11 +8482,11 @@
      "id": 96
     },
     {
-     "name": "tajinaste",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 1681,
-     "y": 128,
+     "x": 206,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8786,22 +8495,22 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       },
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 97
     },
     {
-     "name": "lavafels",
+     "name": "drachenbaum",
      "type": "deko",
      "point": true,
-     "x": 2813,
-     "y": 128,
+     "x": 2131,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8815,17 +8524,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 98
     },
     {
-     "name": "moos",
+     "name": "pilze",
      "type": "deko",
      "point": true,
-     "x": 2796,
-     "y": 144,
+     "x": 4028,
+     "y": 0,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8833,6 +8542,11 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -8840,11 +8554,11 @@
      "id": 99
     },
     {
-     "name": "kiefer",
+     "name": "tajinaste",
      "type": "deko",
      "point": true,
-     "x": 3167,
-     "y": 128,
+     "x": 1729,
+     "y": 64,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8853,7 +8567,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       },
       {
        "name": "spiegeln",
@@ -8867,8 +8581,8 @@
      "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 3148,
-     "y": 144,
+     "x": 1708,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8883,30 +8597,11 @@
      "id": 101
     },
     {
-     "name": "flechte",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 3183,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 102
-    },
-    {
-     "name": "glockenblume",
-     "type": "deko",
-     "point": true,
-     "x": 4741,
-     "y": 128,
+     "x": 1736,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8916,6 +8611,25 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      }
+     ],
+     "id": 102
+    },
+    {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 4271,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -8926,11 +8640,11 @@
      "id": 103
     },
     {
-     "name": "moos",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 4732,
-     "y": 144,
+     "x": 4204,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8945,11 +8659,11 @@
      "id": 104
     },
     {
-     "name": "flechte",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 4776,
-     "y": 144,
+     "x": 4235,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8964,11 +8678,11 @@
      "id": 105
     },
     {
-     "name": "lorbeerbusch",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 5038,
-     "y": 128,
+     "x": 4288,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8976,11 +8690,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -8988,11 +8697,11 @@
      "id": 106
     },
     {
-     "name": "lorbeerbusch",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 5091,
-     "y": 128,
+     "x": 1888,
+     "y": 80,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9001,7 +8710,31 @@
       {
        "name": "vorne",
        "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
        "value": true
+      }
+     ],
+     "id": 107
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 1988,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
       },
       {
        "name": "spiegeln",
@@ -9009,33 +8742,14 @@
        "value": false
       }
      ],
-     "id": 107
+     "id": 108
     },
     {
      "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 5020,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 108
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 5061,
-     "y": 144,
+     "x": 1980,
+     "y": 112,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9050,10 +8764,249 @@
      "id": 109
     },
     {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 890,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 110
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 876,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 111
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 1717,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 112
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 1708,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 113
+    },
+    {
      "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 5158,
+     "x": 4458,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 114
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 5374,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 115
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 5407,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 116
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 5889,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 117
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 5884,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 118
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 299,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 119
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 380,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 120
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 1856,
      "y": 128,
      "width": 0,
      "height": 0,
@@ -9071,252 +9024,13 @@
        "value": false
       }
      ],
-     "id": 110
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 5148,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 111
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 5182,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 112
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 5219,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 113
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 2005,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 114
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 1996,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 115
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 4477,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 116
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 4846,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 117
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 4883,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 118
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 4844,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 119
-    },
-    {
-     "name": "gras",
-     "type": "deko",
-     "point": true,
-     "x": 5612,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 120
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 5648,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 121
     },
     {
-     "name": "holz",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 5782,
+     "x": 1852,
      "y": 144,
      "width": 0,
      "height": 0,
@@ -9325,11 +9039,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -9337,11 +9046,11 @@
      "id": 122
     },
     {
-     "name": "moos",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 5772,
-     "y": 160,
+     "x": 1893,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9356,10 +9065,58 @@
      "id": 123
     },
     {
-     "name": "wurzeln",
+     "name": "glockenblume",
      "type": "deko",
      "point": true,
-     "x": 5932,
+     "x": 3013,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 124
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 3865,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 125
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3852,
      "y": 144,
      "width": 0,
      "height": 0,
@@ -9370,64 +9127,16 @@
        "name": "vorne",
        "type": "bool",
        "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 124
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 5884,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 125
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 381,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
       }
      ],
      "id": 126
     },
     {
-     "name": "flechte",
+     "name": "holz",
      "type": "deko",
      "point": true,
-     "x": 380,
-     "y": 176,
+     "x": 4702,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9437,35 +9146,21 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
       }
      ],
      "id": 127
     },
     {
-     "name": "moos",
+     "name": "pilze",
      "type": "deko",
      "point": true,
-     "x": 420,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 128
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 860,
-     "y": 160,
+     "x": 4737,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9482,14 +9177,14 @@
        "value": false
       }
      ],
-     "id": 129
+     "id": 128
     },
     {
-     "name": "moos",
+     "name": "glockenblume",
      "type": "deko",
      "point": true,
-     "x": 907,
-     "y": 176,
+     "x": 4812,
+     "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9497,6 +9192,35 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 129
+    },
+    {
+     "name": "blumen",
+     "type": "deko",
+     "point": true,
+     "x": 5221,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -9504,11 +9228,11 @@
      "id": 130
     },
     {
-     "name": "kiefer",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 1584,
-     "y": 160,
+     "x": 5245,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9516,11 +9240,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -9528,11 +9247,11 @@
      "id": 131
     },
     {
-     "name": "moos",
+     "name": "holz",
      "type": "deko",
      "point": true,
-     "x": 1596,
-     "y": 176,
+     "x": 126,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9540,6 +9259,11 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -9550,8 +9274,8 @@
      "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 1635,
-     "y": 176,
+     "x": 108,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9560,17 +9284,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 133
     },
     {
-     "name": "lorbeerbusch",
+     "name": "gras",
      "type": "deko",
      "point": true,
-     "x": 2653,
-     "y": 160,
+     "x": 742,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9590,11 +9314,11 @@
      "id": 134
     },
     {
-     "name": "flechte",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 2604,
-     "y": 176,
+     "x": 732,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9609,11 +9333,11 @@
      "id": 135
     },
     {
-     "name": "flechte",
+     "name": "glockenblume",
      "type": "deko",
      "point": true,
-     "x": 2674,
-     "y": 176,
+     "x": 1458,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9621,6 +9345,11 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": true
       }
@@ -9628,10 +9357,10 @@
      "id": 136
     },
     {
-     "name": "gras",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 2940,
+     "x": 1452,
      "y": 160,
      "width": 0,
      "height": 0,
@@ -9641,22 +9370,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
        "value": false
       }
      ],
      "id": 137
     },
     {
-     "name": "moos",
+     "name": "lavafels",
      "type": "deko",
      "point": true,
-     "x": 2924,
-     "y": 176,
+     "x": 1538,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9666,16 +9390,21 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
       }
      ],
      "id": 138
     },
     {
-     "name": "farn",
+     "name": "pilze",
      "type": "deko",
      "point": true,
-     "x": 5342,
-     "y": 160,
+     "x": 1572,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9684,12 +9413,12 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 139
@@ -9698,8 +9427,8 @@
      "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 5351,
-     "y": 176,
+     "x": 1581,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9714,30 +9443,11 @@
      "id": 140
     },
     {
-     "name": "moos",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 5382,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 141
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 5485,
-     "y": 160,
+     "x": 2005,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9750,6 +9460,25 @@
       },
       {
        "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 141
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 1996,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
        "type": "bool",
        "value": false
       }
@@ -9760,26 +9489,7 @@
      "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 5526,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 143
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 6159,
+     "x": 2037,
      "y": 160,
      "width": 0,
      "height": 0,
@@ -9789,22 +9499,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
        "value": true
       }
      ],
-     "id": 144
+     "id": 143
     },
     {
-     "name": "kiefer",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 125,
-     "y": 176,
+     "x": 3147,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9817,6 +9522,25 @@
       },
       {
        "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 144
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 3132,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
        "type": "bool",
        "value": true
       }
@@ -9827,8 +9551,8 @@
      "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 108,
-     "y": 192,
+     "x": 3167,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9837,17 +9561,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 146
     },
     {
-     "name": "farn",
+     "name": "tajinaste",
      "type": "deko",
      "point": true,
-     "x": 218,
-     "y": 176,
+     "x": 3559,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9870,8 +9594,51 @@
      "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 204,
-     "y": 192,
+     "x": 3548,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 148
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 5043,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 149
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 5036,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9883,52 +9650,14 @@
        "value": false
       }
      ],
-     "id": 148
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 234,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 149
-    },
-    {
-     "name": "flechte",
-     "type": "deko",
-     "point": true,
-     "x": 261,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
      "id": 150
     },
     {
-     "name": "flechte",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 651,
-     "y": 192,
+     "x": 5578,
+     "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9936,6 +9665,11 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": true
       }
@@ -9943,11 +9677,30 @@
      "id": 151
     },
     {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 5564,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 152
+    },
+    {
      "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 785,
-     "y": 176,
+     "x": 897,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -9964,33 +9717,14 @@
        "value": false
       }
      ],
-     "id": 152
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 764,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
      "id": 153
     },
     {
-     "name": "lavafels",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 974,
-     "y": 176,
+     "x": 946,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10010,11 +9744,11 @@
      "id": 154
     },
     {
-     "name": "moos",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 956,
-     "y": 192,
+     "x": 921,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10029,11 +9763,11 @@
      "id": 155
     },
     {
-     "name": "flechte",
+     "name": "laub",
      "type": "deko",
      "point": true,
-     "x": 986,
-     "y": 192,
+     "x": 2588,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10043,16 +9777,21 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
       }
      ],
      "id": 156
     },
     {
-     "name": "kiefer",
+     "name": "lavafels",
      "type": "deko",
      "point": true,
-     "x": 1417,
-     "y": 176,
+     "x": 2642,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10061,7 +9800,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       },
       {
        "name": "spiegeln",
@@ -10072,10 +9811,10 @@
      "id": 157
     },
     {
-     "name": "farn",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 1692,
+     "x": 2588,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10084,11 +9823,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -10096,10 +9830,10 @@
      "id": 158
     },
     {
-     "name": "pilze",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 1872,
+     "x": 2631,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10108,11 +9842,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": true
       }
@@ -10120,11 +9849,11 @@
      "id": 159
     },
     {
-     "name": "wurzeln",
+     "name": "laub",
      "type": "deko",
      "point": true,
-     "x": 1936,
-     "y": 176,
+     "x": 2813,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10138,16 +9867,16 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 160
     },
     {
-     "name": "lorbeerbusch",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 2469,
+     "x": 2812,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10156,11 +9885,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -10168,11 +9892,11 @@
      "id": 161
     },
     {
-     "name": "moos",
+     "name": "laub",
      "type": "deko",
      "point": true,
-     "x": 2460,
-     "y": 192,
+     "x": 4425,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10180,6 +9904,11 @@
      "properties": [
       {
        "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
        "type": "bool",
        "value": true
       }
@@ -10190,26 +9919,7 @@
      "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 2513,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 163
-    },
-    {
-     "name": "pilze",
-     "type": "deko",
-     "point": true,
-     "x": 2795,
+     "x": 4412,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10219,10 +9929,24 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
-      },
+       "value": true
+      }
+     ],
+     "id": 163
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 4440,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
       {
-       "name": "spiegeln",
+       "name": "vorne",
        "type": "bool",
        "value": true
       }
@@ -10230,11 +9954,11 @@
      "id": 164
     },
     {
-     "name": "kiefer",
+     "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 3055,
-     "y": 176,
+     "x": 4591,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10243,7 +9967,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       },
       {
        "name": "spiegeln",
@@ -10254,11 +9978,11 @@
      "id": 165
     },
     {
-     "name": "moos",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 3052,
-     "y": 192,
+     "x": 4649,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10268,16 +9992,21 @@
        "name": "vorne",
        "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
       }
      ],
      "id": 166
     },
     {
-     "name": "wurzeln",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 3165,
-     "y": 176,
+     "x": 4945,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10297,11 +10026,11 @@
      "id": 167
     },
     {
-     "name": "moos",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 3190,
-     "y": 192,
+     "x": 4951,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10316,11 +10045,11 @@
      "id": 168
     },
     {
-     "name": "glockenblume",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 3373,
-     "y": 176,
+     "x": 5372,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10334,16 +10063,16 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 169
     },
     {
-     "name": "lorbeerbusch",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 3478,
+     "x": 5356,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10353,41 +10082,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 170
     },
     {
-     "name": "flechte",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 3468,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 171
-    },
-    {
-     "name": "pilze",
-     "type": "deko",
-     "point": true,
-     "x": 3627,
-     "y": 176,
+     "x": 5501,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10400,6 +10105,25 @@
       },
       {
        "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 171
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 5452,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
        "type": "bool",
        "value": false
       }
@@ -10407,11 +10131,11 @@
      "id": 172
     },
     {
-     "name": "holz",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 3726,
-     "y": 176,
+     "x": 5733,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10431,11 +10155,11 @@
      "id": 173
     },
     {
-     "name": "gras",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 3812,
-     "y": 176,
+     "x": 5765,
+     "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10455,11 +10179,11 @@
      "id": 174
     },
     {
-     "name": "moos",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 3804,
-     "y": 192,
+     "x": 5724,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10474,10 +10198,10 @@
      "id": 175
     },
     {
-     "name": "pilze",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 4302,
+     "x": 260,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10498,10 +10222,53 @@
      "id": 176
     },
     {
-     "name": "holz",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 6009,
+     "x": 252,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 177
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 394,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 178
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 431,
      "y": 176,
      "width": 0,
      "height": 0,
@@ -10519,56 +10286,13 @@
        "value": false
       }
      ],
-     "id": 177
-    },
-    {
-     "name": "lavafels",
-     "type": "deko",
-     "point": true,
-     "x": 1101,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 178
-    },
-    {
-     "name": "moos",
-     "type": "deko",
-     "point": true,
-     "x": 1084,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 179
     },
     {
-     "name": "farn",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 1246,
+     "x": 396,
      "y": 192,
      "width": 0,
      "height": 0,
@@ -10577,11 +10301,6 @@
      "properties": [
       {
        "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
        "type": "bool",
        "value": false
       }
@@ -10589,10 +10308,10 @@
      "id": 180
     },
     {
-     "name": "laub",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 3266,
+     "x": 470,
      "y": 192,
      "width": 0,
      "height": 0,
@@ -10602,65 +10321,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 181
     },
     {
-     "name": "moos",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 3311,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 182
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 4731,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 183
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 4777,
-     "y": 192,
+     "x": 537,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10677,13 +10348,13 @@
        "value": false
       }
      ],
-     "id": 184
+     "id": 182
     },
     {
-     "name": "lorbeerbusch",
+     "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 4825,
+     "x": 524,
      "y": 192,
      "width": 0,
      "height": 0,
@@ -10693,7 +10364,50 @@
       {
        "name": "vorne",
        "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 183
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 1183,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
        "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 184
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 1281,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -10704,10 +10418,10 @@
      "id": 185
     },
     {
-     "name": "kiefer",
+     "name": "moos",
      "type": "deko",
      "point": true,
-     "x": 4987,
+     "x": 1276,
      "y": 192,
      "width": 0,
      "height": 0,
@@ -10717,22 +10431,17 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 186
     },
     {
-     "name": "farn",
+     "name": "holz",
      "type": "deko",
      "point": true,
-     "x": 5045,
-     "y": 192,
+     "x": 1675,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10746,17 +10455,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 187
     },
     {
-     "name": "glockenblume",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 5093,
-     "y": 192,
+     "x": 1841,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10770,17 +10479,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 188
     },
     {
-     "name": "glockenblume",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 5160,
-     "y": 192,
+     "x": 1890,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10800,11 +10509,11 @@
      "id": 189
     },
     {
-     "name": "wurzeln",
+     "name": "glockenblume",
      "type": "deko",
      "point": true,
-     "x": 5217,
-     "y": 192,
+     "x": 1938,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10824,11 +10533,164 @@
      "id": 190
     },
     {
+     "name": "holz",
+     "type": "deko",
+     "point": true,
+     "x": 2708,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 191
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 2700,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 192
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 2742,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 193
+    },
+    {
+     "name": "blumen",
+     "type": "deko",
+     "point": true,
+     "x": 2983,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 194
+    },
+    {
      "name": "flechte",
      "type": "deko",
      "point": true,
-     "x": 6284,
-     "y": 208,
+     "x": 3006,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 195
+    },
+    {
+     "name": "laub",
+     "type": "deko",
+     "point": true,
+     "x": 3821,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 196
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 3870,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 197
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 3872,
+     "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -10840,13 +10702,104 @@
        "value": true
       }
      ],
-     "id": 191
+     "id": 198
     },
     {
-     "name": "lavafels",
+     "name": "pilze",
      "type": "deko",
      "point": true,
-     "x": 6383,
+     "x": 119,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 199
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 108,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 200
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 655,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 201
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 727,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 202
+    },
+    {
+     "name": "wurzeln",
+     "type": "deko",
+     "point": true,
+     "x": 796,
      "y": 192,
      "width": 0,
      "height": 0,
@@ -10864,7 +10817,633 @@
        "value": false
       }
      ],
-     "id": 192
+     "id": 203
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 694,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 204
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 769,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 205
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 1046,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 206
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 1036,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 207
+    },
+    {
+     "name": "laub",
+     "type": "deko",
+     "point": true,
+     "x": 1451,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 208
+    },
+    {
+     "name": "wurzeln",
+     "type": "deko",
+     "point": true,
+     "x": 2431,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 209
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 2461,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 210
+    },
+    {
+     "name": "wurzeln",
+     "type": "deko",
+     "point": true,
+     "x": 3164,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 211
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3148,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 212
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3192,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 213
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 3276,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 214
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3330,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 215
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 3579,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 216
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 3564,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 217
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 3666,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 218
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3660,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 219
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 3687,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 220
+    },
+    {
+     "name": "blumen",
+     "type": "deko",
+     "point": true,
+     "x": 4305,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 221
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 4284,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 222
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 4733,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 223
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 4790,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 224
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 4830,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 225
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 4999,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 226
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 5075,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 227
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 5122,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 228
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 5179,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 229
+    },
+    {
+     "name": "flechte",
+     "type": "deko",
+     "point": true,
+     "x": 6284,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 230
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 6385,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 231
+    },
+    {
+     "name": "moos",
+     "type": "deko",
+     "point": true,
+     "x": 6380,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 232
     },
     {
      "name": "lavafels",
@@ -10888,7 +11467,7 @@
        "value": true
       }
      ],
-     "id": 193
+     "id": 233
     },
     {
      "name": "lorbeerbusch",
@@ -10912,7 +11491,7 @@
        "value": true
       }
      ],
-     "id": 194
+     "id": 234
     },
     {
      "name": "wurzeln",
@@ -10936,7 +11515,7 @@
        "value": false
       }
      ],
-     "id": 195
+     "id": 235
     },
     {
      "name": "kiefer",
@@ -10960,7 +11539,7 @@
        "value": false
       }
      ],
-     "id": 196
+     "id": 236
     },
     {
      "name": "blumen",
@@ -10984,7 +11563,7 @@
        "value": true
       }
      ],
-     "id": 197
+     "id": 237
     },
     {
      "name": "glockenblume",
@@ -11008,7 +11587,7 @@
        "value": false
       }
      ],
-     "id": 198
+     "id": 238
     },
     {
      "name": "glockenblume",
@@ -11032,7 +11611,7 @@
        "value": true
       }
      ],
-     "id": 199
+     "id": 239
     },
     {
      "name": "kiefer",
@@ -11056,7 +11635,7 @@
        "value": true
       }
      ],
-     "id": 200
+     "id": 240
     },
     {
      "name": "lavafels",
@@ -11080,7 +11659,7 @@
        "value": false
       }
      ],
-     "id": 201
+     "id": 241
     },
     {
      "name": "farn",
@@ -11104,974 +11683,14 @@
        "value": false
       }
      ],
-     "id": 202
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 5904,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 203
-    },
-    {
-     "name": "blumen",
-     "type": "deko",
-     "point": true,
-     "x": 314,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 204
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 353,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 205
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 402,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 206
-    },
-    {
-     "name": "pilze",
-     "type": "deko",
-     "point": true,
-     "x": 990,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 207
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 2715,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 208
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 2767,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 209
-    },
-    {
-     "name": "blumen",
-     "type": "deko",
-     "point": true,
-     "x": 2809,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 210
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 2872,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 211
-    },
-    {
-     "name": "blumen",
-     "type": "deko",
-     "point": true,
-     "x": 2946,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 212
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 2999,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 213
-    },
-    {
-     "name": "glockenblume",
-     "type": "deko",
-     "point": true,
-     "x": 4617,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 214
-    },
-    {
-     "name": "lavafels",
-     "type": "deko",
-     "point": true,
-     "x": 5387,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 215
-    },
-    {
-     "name": "lavafels",
-     "type": "deko",
-     "point": true,
-     "x": 5419,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 216
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 5804,
-     "y": 224,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 217
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 109,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 218
-    },
-    {
-     "name": "blumen",
-     "type": "deko",
-     "point": true,
-     "x": 160,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 219
-    },
-    {
-     "name": "pilze",
-     "type": "deko",
-     "point": true,
-     "x": 199,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 220
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 436,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 221
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 507,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 222
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 568,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 223
-    },
-    {
-     "name": "kiefer",
-     "type": "deko",
-     "point": true,
-     "x": 645,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 224
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 677,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 225
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 716,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 226
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 758,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 227
-    },
-    {
-     "name": "lavafels",
-     "type": "deko",
-     "point": true,
-     "x": 823,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 228
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 1032,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 229
-    },
-    {
-     "name": "wurzeln",
-     "type": "deko",
-     "point": true,
-     "x": 1105,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 230
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 1156,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 231
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 1209,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 232
-    },
-    {
-     "name": "kiefer",
-     "type": "deko",
-     "point": true,
-     "x": 1249,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 233
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 1295,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 234
-    },
-    {
-     "name": "pilze",
-     "type": "deko",
-     "point": true,
-     "x": 1362,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 235
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 1433,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 236
-    },
-    {
-     "name": "glockenblume",
-     "type": "deko",
-     "point": true,
-     "x": 1487,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 237
-    },
-    {
-     "name": "tajinaste",
-     "type": "deko",
-     "point": true,
-     "x": 1556,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 238
-    },
-    {
-     "name": "gras",
-     "type": "deko",
-     "point": true,
-     "x": 2134,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 239
-    },
-    {
-     "name": "holz",
-     "type": "deko",
-     "point": true,
-     "x": 2236,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 240
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 2386,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 241
-    },
-    {
-     "name": "lorbeerbusch",
-     "type": "deko",
-     "point": true,
-     "x": 2433,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 242
     },
     {
-     "name": "holz",
+     "name": "tajinaste",
      "type": "deko",
      "point": true,
-     "x": 2556,
-     "y": 240,
+     "x": 320,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12091,11 +11710,11 @@
      "id": 243
     },
     {
-     "name": "farn",
+     "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 2588,
-     "y": 240,
+     "x": 946,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12104,7 +11723,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -12115,11 +11734,11 @@
      "id": 244
     },
     {
-     "name": "laub",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 3094,
-     "y": 240,
+     "x": 984,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12133,41 +11752,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 245
     },
     {
-     "name": "lorbeerbusch",
+     "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 3141,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 246
-    },
-    {
-     "name": "glockenblume",
-     "type": "deko",
-     "point": true,
-     "x": 3262,
-     "y": 240,
+     "x": 2687,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12182,6 +11777,30 @@
        "name": "spiegeln",
        "type": "bool",
        "value": false
+      }
+     ],
+     "id": 246
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 2813,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
       }
      ],
      "id": 247
@@ -12190,8 +11809,8 @@
      "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 3307,
-     "y": 240,
+     "x": 2937,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12205,17 +11824,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 248
     },
     {
-     "name": "gras",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 3375,
-     "y": 240,
+     "x": 2990,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12229,17 +11848,17 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 249
     },
     {
-     "name": "pilze",
+     "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 3438,
-     "y": 240,
+     "x": 3032,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12248,22 +11867,22 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 250
     },
     {
-     "name": "tajinaste",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 3472,
-     "y": 240,
+     "x": 4605,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12272,7 +11891,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -12283,11 +11902,11 @@
      "id": 251
     },
     {
-     "name": "gras",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 3569,
-     "y": 240,
+     "x": 5378,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12296,7 +11915,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": true
+       "value": false
       },
       {
        "name": "spiegeln",
@@ -12307,11 +11926,35 @@
      "id": 252
     },
     {
-     "name": "pilze",
+     "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 3625,
-     "y": 240,
+     "x": 5441,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 253
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 5495,
+     "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -12321,30 +11964,6 @@
        "name": "vorne",
        "type": "bool",
        "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": true
-      }
-     ],
-     "id": 253
-    },
-    {
-     "name": "laub",
-     "type": "deko",
-     "point": true,
-     "x": 3744,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": true
       },
       {
        "name": "spiegeln",
@@ -12355,10 +11974,34 @@
      "id": 254
     },
     {
-     "name": "glockenblume",
+     "name": "kiefer",
      "type": "deko",
      "point": true,
-     "x": 3821,
+     "x": 106,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 255
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 231,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12376,37 +12019,13 @@
        "value": true
       }
      ],
-     "id": 255
-    },
-    {
-     "name": "farn",
-     "type": "deko",
-     "point": true,
-     "x": 3863,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 256
     },
     {
      "name": "blumen",
      "type": "deko",
      "point": true,
-     "x": 3923,
+     "x": 279,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12427,10 +12046,10 @@
      "id": 257
     },
     {
-     "name": "farn",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 3981,
+     "x": 447,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12445,16 +12064,16 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 258
     },
     {
-     "name": "lavafels",
+     "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 4171,
+     "x": 524,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12464,7 +12083,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -12475,10 +12094,10 @@
      "id": 259
     },
     {
-     "name": "glockenblume",
+     "name": "lavafels",
      "type": "deko",
      "point": true,
-     "x": 4275,
+     "x": 589,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12499,10 +12118,10 @@
      "id": 260
     },
     {
-     "name": "gras",
+     "name": "glockenblume",
      "type": "deko",
      "point": true,
-     "x": 4311,
+     "x": 657,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12523,10 +12142,10 @@
      "id": 261
     },
     {
-     "name": "lorbeerbusch",
+     "name": "holz",
      "type": "deko",
      "point": true,
-     "x": 6187,
+     "x": 795,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12536,7 +12155,7 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
@@ -12547,10 +12166,10 @@
      "id": 262
     },
     {
-     "name": "glockenblume",
+     "name": "tajinaste",
      "type": "deko",
      "point": true,
-     "x": 6283,
+     "x": 1024,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12565,16 +12184,16 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": true
+       "value": false
       }
      ],
      "id": 263
     },
     {
-     "name": "laub",
+     "name": "holz",
      "type": "deko",
      "point": true,
-     "x": 6434,
+     "x": 1080,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12595,10 +12214,10 @@
      "id": 264
     },
     {
-     "name": "lorbeerbusch",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 6502,
+     "x": 1114,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12619,10 +12238,10 @@
      "id": 265
     },
     {
-     "name": "tajinaste",
+     "name": "wurzeln",
      "type": "deko",
      "point": true,
-     "x": 6568,
+     "x": 1197,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12632,21 +12251,21 @@
       {
        "name": "vorne",
        "type": "bool",
-       "value": false
+       "value": true
       },
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 266
     },
     {
-     "name": "pilze",
+     "name": "farn",
      "type": "deko",
      "point": true,
-     "x": 6638,
+     "x": 1263,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12661,16 +12280,160 @@
       {
        "name": "spiegeln",
        "type": "bool",
-       "value": false
+       "value": true
       }
      ],
      "id": 267
     },
     {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 1308,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 268
+    },
+    {
+     "name": "holz",
+     "type": "deko",
+     "point": true,
+     "x": 1363,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 269
+    },
+    {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 1426,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 270
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 1486,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 271
+    },
+    {
      "name": "lorbeerbusch",
      "type": "deko",
      "point": true,
-     "x": 6711,
+     "x": 1560,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 272
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 2031,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 273
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 2418,
      "y": 240,
      "width": 0,
      "height": 0,
@@ -12688,187 +12451,919 @@
        "value": true
       }
      ],
-     "id": 268
+     "id": 274
     },
     {
-     "name": "osterei",
-     "type": "osterei",
+     "name": "glockenblume",
+     "type": "deko",
      "point": true,
-     "x": 2597,
-     "y": 112,
+     "x": 2472,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 269
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 275
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 2541,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 276
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 3158,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 277
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 3207,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 278
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 3259,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 279
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 3299,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 280
+    },
+    {
+     "name": "pilze",
+     "type": "deko",
+     "point": true,
+     "x": 3365,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 281
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 3604,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 282
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 3673,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 283
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 3722,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 284
+    },
+    {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 3758,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 285
+    },
+    {
+     "name": "farn",
+     "type": "deko",
+     "point": true,
+     "x": 3809,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 286
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 3874,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 287
+    },
+    {
+     "name": "holz",
+     "type": "deko",
+     "point": true,
+     "x": 3907,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 288
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 3949,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 289
+    },
+    {
+     "name": "kiefer",
+     "type": "deko",
+     "point": true,
+     "x": 4016,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 290
+    },
+    {
+     "name": "tajinaste",
+     "type": "deko",
+     "point": true,
+     "x": 4186,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 291
+    },
+    {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 4251,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 292
+    },
+    {
+     "name": "laub",
+     "type": "deko",
+     "point": true,
+     "x": 4311,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 293
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 5915,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 294
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 5965,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 295
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 6020,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 296
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 6097,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 297
+    },
+    {
+     "name": "lavafels",
+     "type": "deko",
+     "point": true,
+     "x": 6150,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 298
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 6254,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 299
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 6289,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 300
+    },
+    {
+     "name": "holz",
+     "type": "deko",
+     "point": true,
+     "x": 6355,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 301
+    },
+    {
+     "name": "gras",
+     "type": "deko",
+     "point": true,
+     "x": 6394,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 302
+    },
+    {
+     "name": "glockenblume",
+     "type": "deko",
+     "point": true,
+     "x": 6445,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 303
+    },
+    {
+     "name": "laub",
+     "type": "deko",
+     "point": true,
+     "x": 6596,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": false
+      }
+     ],
+     "id": 304
+    },
+    {
+     "name": "lorbeerbusch",
+     "type": "deko",
+     "point": true,
+     "x": 6665,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "vorne",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "spiegeln",
+       "type": "bool",
+       "value": true
+      }
+     ],
+     "id": 305
     },
     {
      "name": "osterei",
      "type": "osterei",
      "point": true,
-     "x": 390,
+     "x": 283,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 306
+    },
+    {
+     "name": "osterei",
+     "type": "osterei",
+     "point": true,
+     "x": 2824,
      "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 270
+     "id": 307
     },
     {
      "name": "osterei",
      "type": "osterei",
      "point": true,
-     "x": 3745,
-     "y": 176,
+     "x": 1054,
+     "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 271
+     "id": 308
     },
     {
      "name": "osterei",
      "type": "osterei",
      "point": true,
-     "x": 399,
+     "x": 973,
      "y": 224,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 272
+     "id": 309
     },
     {
      "name": "schmetterling",
      "type": "tier",
      "point": true,
-     "x": 5638,
-     "y": 144,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 273
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 1692,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 274
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 1685,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 275
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 4743,
+     "x": 4799,
      "y": 192,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 276
+     "id": 310
     },
     {
      "name": "schmetterling",
      "type": "tier",
      "point": true,
-     "x": 3179,
-     "y": 176,
+     "x": 1486,
+     "y": 240,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 277
+     "id": 311
     },
     {
      "name": "schmetterling",
      "type": "tier",
      "point": true,
-     "x": 5895,
+     "x": 4256,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 312
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 3177,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 313
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 2039,
      "y": 144,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 278
+     "id": 314
     },
     {
      "name": "schmetterling",
      "type": "tier",
      "point": true,
-     "x": 417,
+     "x": 523,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 315
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 2984,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 316
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 3309,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 317
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 4311,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 318
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 4456,
      "y": 160,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 279
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 1898,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 280
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 5073,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 281
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 3174,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 282
-    },
-    {
-     "name": "schmetterling",
-     "type": "tier",
-     "point": true,
-     "x": 1698,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 283
+     "id": 319
     }
    ]
   }
