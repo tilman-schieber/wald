@@ -136,10 +136,10 @@ for (const run of runs) {
   }
   if (!run.ground) { for (let hx = run.x0 + 12; hx < run.x1 - 8; hx += 26 + rnd() * 28) if (rnd() < 0.6) point(rnd() < 0.5 ? 'moos' : 'flechte', 'deko', Math.round(hx), run.top + 16, [prop('vorne', rnd() < 0.4)]) }
 }
-// Ostern! Ein paar Ostereier liegen versteckt im Gras – auch oben auf Plattformen
-for (let i = 0; i < 8; i++) { const r = pick(runs); const tx = r.x0 + 10 + rnd() * Math.max(8, r.x1 - r.x0 - 20); if (!busy(tx, r.top)) point('osterei', 'deko', Math.round(tx), r.top, [prop('vorne', false), prop('spiegeln', false)]) }
+// Ostern! Vier Ostereier liegen versteckt – selten, denn jedes gibt ein Herz zurück
+for (let i = 0; i < 4; i++) { const r = runs[Math.floor((i + 0.5) * runs.length / 4)]; const tx = r.x0 + 10 + rnd() * Math.max(8, r.x1 - r.x0 - 20); if (!busy(tx, r.top)) point('osterei', 'osterei', Math.round(tx), r.top) }
 const wide = runs.filter((r) => r.x1 - r.x0 >= 64)
-for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point(i % 2 ? 'eidechse' : 'graja', 'tier', Math.round(tx), r.top) }
+for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }   // Graja und Eidechse sind GEGNER – ein Tier ist nie beides
 
 const map = {
   compressionlevel: -1, height: H, width: W, infinite: false, orientation: 'orthogonal', renderorder: 'right-down',

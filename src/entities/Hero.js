@@ -222,7 +222,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   // genau wie auf einer Schaukel. Mit Links/Rechts kann er "anschubsen".
   startSwing(liane, time) {
     if (time < this.swingReadyAt) return false
-    this.swing = { x: liane.x, y: liane.top, len: liane.len }
+    this.swing = { x: liane.x, y: liane.top, len: liane.len, rope: liane.rope }
     this.setCrouched(false)
     this.body.setAllowGravity(false)
     const dx = this.x - liane.x
@@ -243,6 +243,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     if (cmd.right) s.vel += SWING.pump * dt
     s.vel *= SWING.daempfung
     s.ang += s.vel * dt
+    s.rope?.setRotation(-s.ang)   // das Lianenbild schwingt mit (Ursprung oben am Anker)
     const bodyOffset = this.body.center.y - this.y
     this.setPosition(s.x + Math.sin(s.ang) * s.len, s.y + Math.cos(s.ang) * s.len - bodyOffset)
     this.setVelocity(0, 0)
@@ -266,6 +267,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   }
 
   stopSwing(time = 0) {
+    const rope = this.swing?.rope
+    if (rope) this.scene.tweens.add({ targets: rope, rotation: 0, duration: 700, ease: 'Sine.Out' })   // pendelt zurück in die Senkrechte
     this.swing = null
     this.body.setAllowGravity(true)
     this.swingReadyAt = time + SWING.greifPause

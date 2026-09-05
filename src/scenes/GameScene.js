@@ -16,6 +16,7 @@
 //    schwinge Rechteck (schmal, hoch): Liane zum Schwingen – Jonas greift im Sprung
 //             automatisch zu, mit Leertaste lässt er wieder los
 //    blatt    Punkt: Blatt zum Einsammeln
+//    osterei  Punkt: Osterei (La Palma) – wer es findet, bekommt ein Herz zurück
 //    waldherz Punkt: das Ziel eines Waldes – berühren = Wald gerettet
 //    checkpoint Punkt: Speicherpunkt (Wegweiser) – berühren = ab hier geht's nach einem Game Over weiter
 //    deko     Punkt (Fuß), name = farn/pilze/stein…, Eigenschaft vorne = true → vor den Figuren
@@ -216,8 +217,10 @@ export default class GameScene extends Phaser.Scene {
     // Lianen zum Schwingen (nur Jonas): Bild hängt vom Ankerpunkt herab
     this.schwingen = objects.filter((o) => o.type === 'schwinge').map((o) => {
       const x = o.x + o.width / 2
-      if (this.textures.exists('deko-liane')) this.add.tileSprite(x, o.y, 12, o.height, 'deko-liane').setOrigin(0.5, 0).setDepth(3)
-      return { x, top: o.y, len: o.height, zone: this.add.zone(x, o.y + o.height, 26, 30) }
+      // Das Bild hängt am Ankerpunkt (Ursprung oben) – so kann es sich beim Schwingen MITDREHEN,
+      // sonst hängt die Liane stur senkrecht, während Jonas weit daneben durch die Luft fliegt.
+      const rope = this.textures.exists('deko-liane') ? this.add.tileSprite(x, o.y, 12, o.height, 'deko-liane').setOrigin(0.5, 0).setDepth(3) : null
+      return { x, top: o.y, len: o.height, rope, zone: this.add.zone(x, o.y + o.height, 26, 30) }
     })
 
     // Blätter zum Sammeln (schon eingesammelte fehlen)
@@ -229,6 +232,17 @@ export default class GameScene extends Phaser.Scene {
       img.objectId = o.id
       this.tweens.add({ targets: img, y: o.y - 3, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' })
       this.leaves.push(img)
+    }
+    // Ostereier (La Palma): selten, und wer eins findet, bekommt ein Herz zurück
+    this.eier = []
+    for (const o of objects.filter((o) => o.type === 'osterei')) {
+      if (collectedIn(this.roomKey).has(o.id)) continue
+      const img = this.add.image(o.x, o.y - 8, 'osterei').setDepth(6)
+      this.physics.add.existing(img, true)
+      img.objectId = o.id
+      this.addShadow(img, 12, false).setPosition(img.x, o.y + 1)
+      this.tweens.add({ targets: img, y: o.y - 11, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' })
+      this.eier.push(img)
     }
     this.spirits = []
     this.projectiles = []
@@ -832,6 +846,20 @@ export default class GameScene extends Phaser.Scene {
       leaf.body.enable = false
     }
     this.leaves = this.leaves.filter((l) => l.active)
+    // Ostereier: heilen den Finder um ein Herz (höchstens bis zum vollen Vorrat)
+    for (const ei of this.eier) {
+      if (!ei.active) continue
+      const finder = [this.jonas, this.leonel].find((h) => this.physics.overlap(ei, h))
+      if (!finder) continue
+      collectedIn(this.roomKey).add(ei.objectId)
+      finder.hp = Math.min(COMBAT.heroHp, finder.hp + 1)
+      this.sfx.play('heal')
+      this.sparkle(ei.x, ei.y, P.rosaHell, 12)
+      this.floatText(finder, 'Ein Osterei! +1 Herz')
+      this.tweens.add({ targets: ei, y: ei.y - 16, alpha: 0, scale: 1.6, duration: 350, onComplete: () => ei.destroy() })
+      ei.body.enable = false
+    }
+    this.eier = this.eier.filter((e) => e.active)
   }
 
   // In einen Abgrund gefallen: ein Herz weniger, zurück auf den letzten sicheren Boden

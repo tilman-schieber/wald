@@ -24,7 +24,7 @@
 //    !  gelb   hat dich gesehen – gleich geht's los (noch harmlos)
 //    !  rot    GEFAHR: greift an, Berühren tut weh (pulsiert)
 //    ★  gelb   benommen: harmlos und jetzt gut zu treffen
-//    ♥  rosa   geheilt
+//    ♥  rosa   geheilt – bleibt für immer über dem Tier (Tilman-Wunsch)
 //  Weh tut ein Gegner NUR bei Rot – ohne Ausnahme, damit Kinder sich darauf verlassen können.
 // ============================================================
 import Phaser from 'phaser'
@@ -115,11 +115,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.useTexture(this.cfg.key + '-lauf')
         this.play(this.cfg.key + '-lauf', true)
       }
-      // Das Herz schwebt noch kurz mit und blendet dann aus
-      if (this.markHideAt) {
-        if (time > this.markHideAt) { this.showMark(false); this.markHideAt = 0 }
-        else this.mark.setPosition(this.x, this.body.top - 8 + Math.sin(time / 200) * 0.8)
-      }
+      // Das Herz bleibt dauerhaft über dem Tier und schwebt sanft mit
+      this.mark.setPosition(this.x, this.body.top - 8 + Math.sin(time / 200) * 0.8)
       return
     }
     if (this.isCalm(time)) { this.setVelocityX(0); this.mark.setVisible(false); return }
@@ -442,7 +439,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.clearTint()
     this.setVelocity(0, 0)
     this.setAngle(0)
-    this.showMark(false)
     this.stateUntil = 0
     this.wanderPause = true
     // WICHTIG: erst die laufende Animation anhalten! Sonst malt Phaser im
@@ -450,15 +446,13 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // sah dann geheilt immer noch böse aus.
     this.anims.stop()
     if (this.scene.textures.exists(this.cfg.key + '-heil')) this.useTexture(this.cfg.key + '-heil')
+    // Aus dem Zeichen wird ein Herz – und das bleibt: so sieht man immer, wer schon lieb ist.
+    this.showMark(true, '♥', MARK.rosa)
     // Blattschneiderameisen: alle kehren um und tragen wieder ein Blatt nach Hause.
-    // Das Umdrehen und das Blatt sind das Zeichen: die Kolonne ist geheilt.
     if (this.cfg.ai?.kind === 'marcher') {
       this.dir = -this.dir
       this.wanderPause = false
       this.stateUntil = Number.MAX_SAFE_INTEGER      // kein zufälliges Stehenbleiben mehr
-      // Aus dem "?" wird ein Herz: das sieht man auch im dichten Grün noch.
-      this.showMark(true, '♥', MARK.rosa)
-      this.markHideAt = this.scene.time.now + 2500
     }
     // Ein Herz steigt auf – bei JEDER Ameise, damit man sofort sieht,
     // dass die ganze Reihe erlöst ist und nicht nur die eine, die man getroffen hat.

@@ -76,7 +76,7 @@ Entscheidungen so, dass Kinder mitlesen können.
 - **Ampel über jedem Gegner** (`Enemy.updateMark`, eine Sprache für alle Tiere, Tilman-Wunsch: friedlich/gefährlich
   muss sofort erkennbar sein): `?` weiß = verwirrt, harmlos (stromert/sitzt/hängt) · `!` gelb = hat dich gesehen, gleich
   geht's los (noch harmlos) · `!` rot, pulsierend = GEFAHR, Berühren tut weh · `★` gelb = benommen, jetzt treffen ·
-  `♥` = geheilt. **Weh tut ein Gegner NUR bei Rot** (`hurtsOnTouch` ⇔ `dangerous`: Zustand `roll`, Eule `swoop`,
+  `♥` = geheilt (bleibt dauerhaft über dem Tier). **Weh tut ein Gegner NUR bei Rot** (`hurtsOnTouch` ⇔ `dangerous`: Zustand `roll`, Eule `swoop`,
   marschierende Ameisen). Der Affe ist nach seiner Salve nicht benommen, sondern schaut sich nur um (`?`).
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
 - Hintergrund-Ebenen (`BACKGROUND.layers`): am OBEREN Bildrand darf nichts angeschnitten sein –
@@ -107,6 +107,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - La Palma: Gegner Graja (`flyer` wie die Eule), Eidechse (`charger` mit `ai.laufAnim` = Lauf-Animation statt Kugel),
   Ziege (`hopper`), Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Lavaröhre = ein
   Kachel hoher Kriechgang unter der Basaltwand (nur Leonel). Sechs Ostereier liegen als Deko `osterei` versteckt.
+  Ostereier sind Sammelobjekte (`osterei`, `ITEMS`): selten (4 pro Wald), jedes gibt dem Finder ein Herz zurück.
+  **Ein Tier ist entweder Gegner oder friedliches Deko-Tier, nie beides** (Tilman-Wunsch) – Graja/Eidechse sind Gegner.
   Neuer Wald = Kachelsets (pixflux `create_sidescroller_tileset`, 2–3 Gen.), 4 Hintergrund-Ebenen, 3–4 Kulissen, ~8 Deko,
   4 Gegner mit je Grundbild + Animation + Schlafbild (`animate_image`, letztes Bild), 3 Intro-Folien (Pro) – zusammen ~200 Generierungen.
 

@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 3,
- "nextobjectid": 289,
+ "nextobjectid": 284,
  "tilesets": [
   {
    "firstgid": 1,
@@ -12692,31 +12692,43 @@
     },
     {
      "name": "osterei",
-     "type": "deko",
+     "type": "osterei",
      "point": true,
-     "x": 2718,
-     "y": 224,
+     "x": 2597,
+     "y": 112,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 269
     },
     {
      "name": "osterei",
-     "type": "deko",
+     "type": "osterei",
+     "point": true,
+     "x": 390,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 270
+    },
+    {
+     "name": "osterei",
+     "type": "osterei",
+     "point": true,
+     "x": 3745,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 271
+    },
+    {
+     "name": "osterei",
+     "type": "osterei",
      "point": true,
      "x": 399,
      "y": 224,
@@ -12724,166 +12736,70 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 270
+     "id": 272
     },
     {
-     "name": "osterei",
-     "type": "deko",
+     "name": "schmetterling",
+     "type": "tier",
      "point": true,
-     "x": 2807,
+     "x": 5638,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 273
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 1692,
      "y": 128,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 271
-    },
-    {
-     "name": "osterei",
-     "type": "deko",
-     "point": true,
-     "x": 881,
-     "y": 112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 272
-    },
-    {
-     "name": "osterei",
-     "type": "deko",
-     "point": true,
-     "x": 5322,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 273
-    },
-    {
-     "name": "osterei",
-     "type": "deko",
-     "point": true,
-     "x": 539,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 274
     },
     {
-     "name": "osterei",
-     "type": "deko",
+     "name": "schmetterling",
+     "type": "tier",
      "point": true,
-     "x": 3807,
+     "x": 1685,
      "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
      "id": 275
     },
     {
-     "name": "osterei",
-     "type": "deko",
+     "name": "schmetterling",
+     "type": "tier",
      "point": true,
-     "x": 133,
+     "x": 4743,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "id": 276
+    },
+    {
+     "name": "schmetterling",
+     "type": "tier",
+     "point": true,
+     "x": 3179,
      "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "properties": [
-      {
-       "name": "vorne",
-       "type": "bool",
-       "value": false
-      },
-      {
-       "name": "spiegeln",
-       "type": "bool",
-       "value": false
-      }
-     ],
-     "id": 276
+     "id": 277
     },
     {
-     "name": "graja",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 5895,
@@ -12892,10 +12808,10 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 277
+     "id": 278
     },
     {
-     "name": "eidechse",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 417,
@@ -12904,10 +12820,10 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 278
+     "id": 279
     },
     {
-     "name": "graja",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 1898,
@@ -12916,10 +12832,10 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 279
+     "id": 280
     },
     {
-     "name": "eidechse",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 5073,
@@ -12928,10 +12844,10 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 280
+     "id": 281
     },
     {
-     "name": "graja",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 3174,
@@ -12940,10 +12856,10 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 281
+     "id": 282
     },
     {
-     "name": "eidechse",
+     "name": "schmetterling",
      "type": "tier",
      "point": true,
      "x": 1698,
@@ -12952,79 +12868,7 @@
      "height": 0,
      "rotation": 0,
      "visible": true,
-     "id": 282
-    },
-    {
-     "name": "graja",
-     "type": "tier",
-     "point": true,
-     "x": 1835,
-     "y": 176,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
      "id": 283
-    },
-    {
-     "name": "eidechse",
-     "type": "tier",
-     "point": true,
-     "x": 5011,
-     "y": 192,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 284
-    },
-    {
-     "name": "graja",
-     "type": "tier",
-     "point": true,
-     "x": 4937,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 285
-    },
-    {
-     "name": "eidechse",
-     "type": "tier",
-     "point": true,
-     "x": 755,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 286
-    },
-    {
-     "name": "graja",
-     "type": "tier",
-     "point": true,
-     "x": 5175,
-     "y": 128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 287
-    },
-    {
-     "name": "eidechse",
-     "type": "tier",
-     "point": true,
-     "x": 418,
-     "y": 160,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "id": 288
     }
    ]
   }

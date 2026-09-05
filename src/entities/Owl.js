@@ -23,7 +23,7 @@ export default class Owl extends Enemy {
   get dangerous() { return this.state === 'swoop' }   // nur der Sturzflug tut weh
 
   update(time, groundLayer, heroes = []) {
-    if (this.healed) { this.setVelocity(0, 0); this.body.setAllowGravity(true); return }   // geheilt: setzt sich hin
+    if (this.healed) { this.setVelocity(0, 0); this.body.setAllowGravity(true); this.mark.setPosition(this.x, this.body.top - 8 + Math.sin(time / 200) * 0.8); return }   // geheilt: setzt sich hin, Herz bleibt
     if (this.isCalm(time)) { this.setVelocity(0, 0); this.mark.setVisible(false); return }
     const ai = this.cfg.ai
     switch (this.state) {
