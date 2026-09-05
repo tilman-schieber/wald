@@ -70,3 +70,4 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 - Intro (Pro, 480×270, Rand per edge-fill.mjs): Flugzeugfenster `59b5092b…`, Santa Cruz `2120368c…`, Los Tilos mit Drachenbaum `678e4ec0…`
   (erster Anlauf `52103814…`/`431a4f32…`/`3dcea938…` blieb hängen und wurde als "failed" markiert)
 - Musik: music/la_palma.mp3 ("Moonlit Save Point", war schon da)
+- Jubelbild (Pro, 480×270, ohne edge-fill): `6376c1d7…` → bg/la_palma_ende.png

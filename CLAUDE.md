@@ -8,9 +8,11 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Phaser 3 + Vite, reines JavaScript (kein TypeScript)
 - `npm run dev` startet mit `--host` → im WLAN auf dem Handy testbar
 - Tiled-Maps als JSON in `src/levels/`, werden in `BootScene` in den Cache gelegt.
-  Der Schwarzwald ist EIN durchgehendes Level (`schwarzwald.json`, 300 Kacheln breit), zusammengesetzt aus
-  den Teilstücken `schwarzwald_01…05.json` per `node tools/merge-levels.mjs` (nach Änderungen an Teilstücken neu ausführen).
-  Wegweiser-Speicherpunkte (`checkpoint`) an jedem Teilstück-Anfang; kein Bildschirmwechsel mehr (Tilman-Wunsch).
+  Jeder Wald ist EIN durchgehendes Level ohne Bildschirmwechsel (Tilman-Wunsch), erzeugt von `tools/gen-<wald>.mjs`
+  (Schwarzwald 430, Tijuca 400, La Palma 420 Kacheln). Die Rätsel-Zonen sind im Generator mit festen Kachelspalten
+  gebaut; `EXTRA = [[abSpalte, mehrKacheln], …]` schiebt dazwischen freien Wald ein, `X(c)`/`PX(x)` rechnen alte
+  Spalten/Pixel um – Levels größer machen = nur EXTRA ändern. Speicherpunkte (`checkpoint`) automatisch alle ~55 Kacheln.
+  (`schwarzwald_01…05.json` + `merge-levels.mjs` sind Altbestand aus der Zeit vor dem Generator.)
 - `?debug` an die URL → Trefferboxen sichtbar; `?touch` → Touch-Knöpfe auch am PC;
   `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)

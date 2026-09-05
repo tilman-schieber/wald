@@ -1,17 +1,26 @@
-// Baut das Schwarzwald-Level (300 Kacheln) – hügeliger Boden, viele Plattformen,
+// Baut das Schwarzwald-Level (430 Kacheln) – hügeliger Boden, viele Plattformen,
 // feste Rätsel-Zonen, Gegner, Tiere, Deko, Speicherpunkte.
 //   node tools/gen-schwarzwald.mjs [seed]
 // Der Boden steigt und fällt in Stufen (Arcade-Physik kennt keine Schrägen).
 import fs from 'fs'
-const W = 300, H = 17, T = 16
+const H = 17, T = 16
 const ERDE = 1, GRAS = 2, STEIN = 17
 let seed = Number(process.argv[2] ?? 2026)
 const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
 const between = (a, b) => a + Math.floor(rnd() * (b - a + 1))
 const pick = (arr) => arr[Math.floor(rnd() * arr.length)]
 
+// ---------- Größer machen: zwischen den festen Rätsel-Zonen wird freier Wald eingeschoben ----------
+// EXTRA = [ab welcher (alten) Kachelspalte, wie viele Kacheln mehr]. X(c) rechnet eine alte
+// Spalte in die neue um, PX(x) dasselbe für Pixel. So bleiben alle Rätsel exakt gleich gebaut,
+// nur der Wald dazwischen wird länger – mit automatisch mehr Plattformen, Gegnern und Deko.
+const EXTRA = [[13, 40], [101, 40], [217, 50]]
+const X = (c) => c + EXTRA.reduce((s, [ab, n]) => s + (c >= ab ? n : 0), 0)
+const PX = (x) => X(x / T) * T
+const W = X(300)   // 300 Kacheln Grundriss + eingeschobene Stücke = 430
+
 // ---------- Zonen: hier bleibt der Boden flach (Rätsel brauchen das) ----------
-const FLAT = [[0, 12], [80, 100], [136, 150], [176, 216], [262, 300]]
+const FLAT = [[0, 12], [80, 100], [136, 150], [176, 216], [262, 300]].map(([a, b]) => [X(a), X(b)])
 const isFlat = (x) => FLAT.some(([a, b]) => x >= a && x < b)
 
 // ---------- Bodenprofil: Zeile der Oberkante je Spalte (15 = normal, 11 = 4 hoch) ----------
@@ -49,17 +58,17 @@ for (let c = 6; c < W - 8; c += between(7, 13)) {
 
 // ---------- Rätsel-Zonen (Kacheln) ----------
 // Zone B (80–100): Torbogen; Zone C (136–150): Mauer bis zur Decke mit Spalt; Zone D (176–216): Treppe + Mauer
-for (let r = 9; r <= 11; r++) set(90, r, STEIN)                               // Torbogen über Tor B
-for (let r = 0; r <= 8; r++) { set(140, r, STEIN); set(141, r, STEIN) }       // Mauer C (Tor darunter, Spalt ganz unten)
-for (let c = 176; c <= 179; c++) set(c, 12, STEIN)                             // Treppe D
-for (let c = 182; c <= 185; c++) set(c, 9, STEIN)
-for (let c = 188; c <= 192; c++) set(c, 6, STEIN)
-for (let r = 0; r <= 11; r++) { set(196, r, STEIN); set(197, r, STEIN) }       // Mauer D
-for (let c = 206; c <= 210; c++) set(c, 10, STEIN)
-for (let c = 268; c <= 275; c++) set(c, 12, STEIN)                             // Hügel fürs Waldherz
-for (let c = 270; c <= 273; c++) set(c, 11, STEIN)
+for (let r = 9; r <= 11; r++) set(X(90), r, STEIN)                               // Torbogen über Tor B
+for (let r = 0; r <= 8; r++) { set(X(140), r, STEIN); set(X(141), r, STEIN) }       // Mauer C (Tor darunter, Spalt ganz unten)
+for (let c = X(176); c <= X(179); c++) set(c, 12, STEIN)                             // Treppe D
+for (let c = X(182); c <= X(185); c++) set(c, 9, STEIN)
+for (let c = X(188); c <= X(192); c++) set(c, 6, STEIN)
+for (let r = 0; r <= 11; r++) { set(X(196), r, STEIN); set(X(197), r, STEIN) }       // Mauer D
+for (let c = X(206); c <= X(210); c++) set(c, 10, STEIN)
+for (let c = X(268); c <= X(275); c++) set(c, 12, STEIN)                             // Hügel fürs Waldherz
+for (let c = X(270); c <= X(273); c++) set(c, 11, STEIN)
 // Sims für die Ranke in Zone C
-for (let c = 156; c <= 164; c++) set(c, 4, STEIN)
+for (let c = X(156); c <= X(164); c++) set(c, 4, STEIN)
 
 // ---------- Objekte ----------
 const objs = []
@@ -69,23 +78,23 @@ const top = (c) => { for (let r = 0; r < H; r++) if (solid(c, r)) return r * T; 
 const boden = (c) => g[c] * T                                                                  // der ECHTE Boden (nicht die Plattform darüber)
 point('start', 'spawn', 48, 240)
 // Zone B: Platte hält Tor, Hebel öffnet dauerhaft
-rect('b_tor', 'tor', 90 * T, 192, 16, 48); rect('b_platte', 'platte', 84 * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', 97 * T, 224, 12, 16, { oeffnet: 'b_tor' })
-point('eule', 'enemy', 95 * T, 130)
+rect('b_tor', 'tor', X(90) * T, 192, 16, 48); rect('b_platte', 'platte', X(84) * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', X(97) * T, 224, 12, 16, { oeffnet: 'b_tor' })
+point('eule', 'enemy', X(95) * T, 130)
 // Zone C: Tor (Spalt darunter für Leonel), Hebel rechts, Ranke zum Sims
-rect('c_tor', 'tor', 140 * T, 144, 32, 80); rect('c_hebel', 'hebel', 147 * T, 224, 12, 16, { oeffnet: 'c_tor' })
-rect('c_ranke', 'ranke', 155 * T - 4, 64, 8, 160); point('blatt', 'blatt', 159 * T, 48); point('blatt', 'blatt', 162 * T, 48)
-point('wildschwein', 'enemy', 170 * T, boden(170))
+rect('c_tor', 'tor', X(140) * T, 144, 32, 80); rect('c_hebel', 'hebel', X(147) * T, 224, 12, 16, { oeffnet: 'c_tor' })
+rect('c_ranke', 'ranke', X(155) * T - 4, 64, 8, 160); point('blatt', 'blatt', X(159) * T, 48); point('blatt', 'blatt', X(162) * T, 48)
+point('wildschwein', 'enemy', X(170) * T, boden(X(170)))
 // Zone D: Treppe zur Platte, Tor unten, Hebel, Ranke
-rect('d_tor', 'tor', 196 * T, 192, 32, 48); rect('d_platte', 'platte', 190 * T, 92, 16, 4, { oeffnet: 'd_tor' }); rect('d_hebel', 'hebel', 213 * T, 224, 12, 16, { oeffnet: 'd_tor' })
-rect('d_ranke', 'ranke', 187 * T - 4, 96, 8, 128); point('blatt', 'blatt', 192 * T, 80); point('blatt', 'blatt', 208 * T, 144)
-point('eule', 'enemy', 205 * T, 120); point('wildschwein', 'enemy', 212 * T, 240)
+rect('d_tor', 'tor', X(196) * T, 192, 32, 48); rect('d_platte', 'platte', X(190) * T, 92, 16, 4, { oeffnet: 'd_tor' }); rect('d_hebel', 'hebel', X(213) * T, 224, 12, 16, { oeffnet: 'd_tor' })
+rect('d_ranke', 'ranke', X(187) * T - 4, 96, 8, 128); point('blatt', 'blatt', X(192) * T, 80); point('blatt', 'blatt', X(208) * T, 144)
+point('eule', 'enemy', X(205) * T, 120); point('wildschwein', 'enemy', X(212) * T, 240)
 // Zone E: Waldherz
-point('waldherz', 'waldherz', 271.5 * T, 176)
+point('waldherz', 'waldherz', X(271.5) * T, 176)
 // Ranken an hohen Plattformen (jede 3. Plattform, wenn sie 4 hoch ist)
 plats.filter((p, i) => i % 3 === 1).forEach((p) => { const gx = p.x0 - 1; if (top(gx) - p.row * T >= 48) rect('ranke_' + p.x0, 'ranke', gx * T + 4, p.row * T, 8, top(gx) - p.row * T - 16) })
 // Gegner auf Boden-Plateaus abwechselnd: Igel, verwirrter Hase, ab und zu ein Wildschwein
 let gegnerNr = 0
-for (let c = 20; c < 260; c += between(20, 30)) {
+for (let c = 20; c < X(260); c += between(20, 30)) {
   if (isFlat(c) && c > 12) continue
   const art = ['igel', 'hase', 'igel', 'wildschwein', 'igel'][gegnerNr++ % 5]
   point(art, 'enemy', c * T, boden(c))
@@ -95,14 +104,15 @@ plats.filter((p, i) => i % 8 === 3).forEach((p) => point('hase', 'enemy', ((p.x0
 plats.forEach((p, i) => { if (i % 2 === 0) point('blatt', 'blatt', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T - 20) })
 // Kulissen im Hintergrund (Schwarzwald bei Freiburg): weit weg = kleine tiefe
 const kulisse = (name, x, tiefe, spiegeln = false) => objs.push({ name, type: 'kulisse', point: true, x, y: 240, width: 0, height: 0, rotation: 0, visible: true, properties: [{ name: 'tiefe', type: 'string', value: String(tiefe) }, { name: 'spiegeln', type: 'bool', value: spiegeln }] })
-kulisse('muenster', 260, 0.15)          // ganz am Anfang: Freiburg liegt hinter uns
-kulisse('schwarzwaldhof', 900, 0.55)
-kulisse('hochsitz', 1700, 0.7)
-kulisse('schauinsland', 3300, 0.4)
-kulisse('schwarzwaldhof', 4000, 0.5, true)
-kulisse('hochsitz', 4550, 0.65, true)
+kulisse('muenster', PX(260), 0.15)          // ganz am Anfang: Freiburg liegt hinter uns
+kulisse('schwarzwaldhof', PX(900), 0.55)
+kulisse('hochsitz', PX(1700), 0.7)
+kulisse('schauinsland', PX(3300), 0.4)
+kulisse('schwarzwaldhof', PX(4000), 0.5, true)
+kulisse('hochsitz', PX(4550), 0.65, true)
 // Speicherpunkte (Eichhörnchen) am Anfang jeder Zone
-for (const [i, c] of [[2, 62], [3, 118], [4, 172], [5, 240]]) point('speicher' + i, 'checkpoint', c * T, boden(c))
+let sp = 2
+for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12) k += 4; point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }
 
 // ---------- Deko + Tiere auf allen Stehflächen ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)
@@ -123,7 +133,7 @@ for (const run of runs) {
 // Tiere (keine Eichhörnchen – die sind Speicherpunkte)
 const wide = runs.filter((r) => r.x1 - r.x0 >= 64)
 // Friedliche Tiere: im Schwarzwald sind Hasen GEGNER, deshalb hier nur Schmetterlinge
-for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }
+for (let i = 0; i < 16; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }
 
 const map = {
   compressionlevel: -1, height: H, width: W, infinite: false, orientation: 'orthogonal', renderorder: 'right-down',

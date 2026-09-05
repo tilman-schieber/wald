@@ -716,7 +716,7 @@ export const FORESTS = {
     },
     musik: 'la_palma',
     endeText: 'Der Lorbeerwald von La Palma rauscht wieder!',
-    endeBild: null,
+    endeBild: 'assets/bg/la_palma_ende.png',      // Pro 6376c1d7…
     weiter: null,
   },
 }

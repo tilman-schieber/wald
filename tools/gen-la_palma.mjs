@@ -1,18 +1,27 @@
-// Baut das Level des Lorbeerwalds auf La Palma (260 Kacheln): welliger Vulkanboden mit
+// Baut das Level des Lorbeerwalds auf La Palma (420 Kacheln): welliger Vulkanboden mit
 // Basalt-Felsen, ein Barranco (Schlucht) mit Wasserfall, eine Lavaröhre, durch die nur
 // Leonel kriecht, Luftwurzeln zum Schwingen, Drachenbäume, die vier Inselbewohner
 // (Graja, Eidechse, Ziege, Lorbeertaube) und am Ende das Waldherz.
 //   node tools/gen-la_palma.mjs [seed]
 import fs from 'fs'
-const W = 260, H = 17, T = 16
+const H = 17, T = 16
 const ERDE = 1, MOOS = 2, BASALT = 17
 let seed = Number(process.argv[2] ?? 4001)
 const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
 const between = (a, b) => a + Math.floor(rnd() * (b - a + 1))
 const pick = (arr) => arr[Math.floor(rnd() * arr.length)]
 
+// ---------- Größer machen: zwischen den festen Rätsel-Zonen wird freier Wald eingeschoben ----------
+// EXTRA = [ab welcher (alten) Kachelspalte, wie viele Kacheln mehr]. X(c) rechnet eine alte
+// Spalte in die neue um, PX(x) dasselbe für Pixel. So bleiben alle Rätsel exakt gleich gebaut,
+// nur der Wald dazwischen wird länger – mit automatisch mehr Plattformen, Gegnern und Deko.
+const EXTRA = [[13, 50], [99, 50], [171, 60]]
+const X = (c) => c + EXTRA.reduce((s, [ab, n]) => s + (c >= ab ? n : 0), 0)
+const PX = (x) => X(x / T) * T
+const W = X(260)   // 260 Kacheln Grundriss + eingeschobene Stücke = 420
+
 // Flache Zonen: Start, Rätsel B (Tor mit Platte), Rätsel C (Lavaröhre), Ziel
-const FLAT = [[0, 12], [76, 98], [140, 164], [226, 260]]
+const FLAT = [[0, 12], [76, 98], [140, 164], [226, 260]].map(([a, b]) => [X(a), X(b)])
 const isFlat = (x) => FLAT.some(([a, b]) => x >= a && x < b)
 
 // ---------- Bodenprofil: Insel = auf und ab, aber nie steiler als zwei Kacheln ----------
@@ -46,13 +55,13 @@ for (let c = 6; c < W - 8; c += between(6, 11)) {
 }
 
 // ---------- Rätsel aus Basalt ----------
-for (let r = 9; r <= 11; r++) set(86, r, BASALT)                                 // Torpfosten Zone B
+for (let r = 9; r <= 11; r++) set(X(86), r, BASALT)                                 // Torpfosten Zone B
 // Zone C: Lavaröhre – eine Basaltwand bis zum Boden, darunter ein EIN Kachel hoher Gang (nur Leonel)
-for (let c = 150; c <= 152; c++) for (let r = 0; r <= 13; r++) set(c, r, BASALT)
-for (let c = 150; c <= 152; c++) set(c, 14, 0)                                    // der Kriechgang
-for (let c = 162; c <= 170; c++) set(c, 4, BASALT)                               // hoher Sims mit Ranke
-for (let c = 232; c <= 239; c++) set(c, 12, BASALT)                              // Hügel fürs Waldherz
-for (let c = 234; c <= 237; c++) set(c, 11, BASALT)
+for (let c = X(150); c <= X(152); c++) for (let r = 0; r <= 13; r++) set(c, r, BASALT)
+for (let c = X(150); c <= X(152); c++) set(c, 14, 0)                                    // der Kriechgang
+for (let c = X(162); c <= X(170); c++) set(c, 4, BASALT)                               // hoher Sims mit Ranke
+for (let c = X(232); c <= X(239); c++) set(c, 12, BASALT)                              // Hügel fürs Waldherz
+for (let c = X(234); c <= X(237); c++) set(c, 11, BASALT)
 
 // ---------- Objekte ----------
 const objs = []
@@ -63,17 +72,17 @@ const boden = (c) => g[c] * T
 
 point('start', 'spawn', 48, 240)
 // Zone B: Platte hält das Tor, Hebel öffnet es dauerhaft
-rect('b_tor', 'tor', 86 * T, 192, 16, 48); rect('b_platte', 'platte', 80 * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', 93 * T, 224, 12, 16, { oeffnet: 'b_tor' })
+rect('b_tor', 'tor', X(86) * T, 192, 16, 48); rect('b_platte', 'platte', X(80) * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', X(93) * T, 224, 12, 16, { oeffnet: 'b_tor' })
 // Zone C: Lavaröhre – Leonel kriecht durch, zieht den Hebel, das Tor daneben geht für Jonas auf
-rect('c_tor', 'tor', 153 * T, 144, 16, 96); rect('c_hebel', 'hebel', 158 * T, 224, 12, 16, { oeffnet: 'c_tor' })
-rect('c_ranke', 'ranke', 161 * T - 4, 64, 8, 160)
-point('blatt', 'blatt', 165 * T, 48); point('blatt', 'blatt', 168 * T, 48)
+rect('c_tor', 'tor', X(153) * T, 144, 16, 96); rect('c_hebel', 'hebel', X(158) * T, 224, 12, 16, { oeffnet: 'c_tor' })
+rect('c_ranke', 'ranke', X(161) * T - 4, 64, 8, 160)
+point('blatt', 'blatt', X(165) * T, 48); point('blatt', 'blatt', X(168) * T, 48)
 // Waldherz
-point('waldherz', 'waldherz', 235.5 * T, 176)
+point('waldherz', 'waldherz', X(235.5) * T, 176)
 
 // ---------- Luftwurzeln zum Schwingen: über breite Lücken zwischen Plattformen ----------
 let schwingen = 0
-for (let i = 0; i < plats.length - 1 && schwingen < 6; i++) {
+for (let i = 0; i < plats.length - 1 && schwingen < 9; i++) {
   const a = plats[i], b = plats[i + 1]
   const luecke = (b.x0 - a.x1 - 1) * T
   if (luecke < 60 || luecke > 150 || Math.abs(a.row - b.row) > 2) continue
@@ -89,22 +98,23 @@ for (let i = 0; i < plats.length - 1 && schwingen < 6; i++) {
 // (stürzen herab), Eidechsen und Ziegen laufen unten
 plats.filter((p, i) => i % 3 === 0 && p.row < 11).forEach((p) => point('taube', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T))
 let nr = 0
-for (let c = 22; c < 225; c += between(18, 26)) {
+for (let c = 22; c < X(225); c += between(18, 26)) {
   if (isFlat(c) && c > 12) continue
   point(['eidechse', 'ziege', 'eidechse'][nr++ % 3], 'enemy', c * T, boden(c))
 }
-for (const c of [40, 118, 186, 214]) if (!isFlat(c)) point('graja', 'enemy', c * T, (Math.min(...g.slice(c - 4, c + 5)) - 6) * T)
+for (const c of [40, 118, 186, 214].map(X)) if (!isFlat(c)) point('graja', 'enemy', c * T, (Math.min(...g.slice(c - 4, c + 5)) - 6) * T)
 
 // ---------- Kulissen von der Insel ----------
 const kulisse = (name, x, tiefe, spiegeln = false) => point(name, 'kulisse', x, 240, [prop('tiefe', String(tiefe)), prop('spiegeln', spiegeln)])
-kulisse('vulkan', 900, 0.12)
-kulisse('lostilos', 1900, 0.4)
-kulisse('drachenbaum', 2500, 0.55)
-kulisse('haus', 3300, 0.5)
-kulisse('drachenbaum', 3900, 0.45, true)
+kulisse('vulkan', PX(900), 0.12)
+kulisse('lostilos', PX(1900), 0.4)
+kulisse('drachenbaum', PX(2500), 0.55)
+kulisse('haus', PX(3300), 0.5)
+kulisse('drachenbaum', PX(3900), 0.45, true)
 
 // ---------- Speicherpunkte ----------
-for (const [i, c] of [[2, 60], [3, 112], [4, 178]]) point('speicher' + i, 'checkpoint', c * T, boden(c))
+let sp = 2
+for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12) k += 4; point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }
 
 // ---------- Deko und Tiere ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn', 'schwinge'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)
@@ -127,9 +137,9 @@ for (const run of runs) {
   if (!run.ground) { for (let hx = run.x0 + 12; hx < run.x1 - 8; hx += 26 + rnd() * 28) if (rnd() < 0.6) point(rnd() < 0.5 ? 'moos' : 'flechte', 'deko', Math.round(hx), run.top + 16, [prop('vorne', rnd() < 0.4)]) }
 }
 // Ostern! Ein paar Ostereier liegen versteckt im Gras – auch oben auf Plattformen
-for (let i = 0; i < 6; i++) { const r = pick(runs); const tx = r.x0 + 10 + rnd() * Math.max(8, r.x1 - r.x0 - 20); if (!busy(tx, r.top)) point('osterei', 'deko', Math.round(tx), r.top, [prop('vorne', false), prop('spiegeln', false)]) }
+for (let i = 0; i < 8; i++) { const r = pick(runs); const tx = r.x0 + 10 + rnd() * Math.max(8, r.x1 - r.x0 - 20); if (!busy(tx, r.top)) point('osterei', 'deko', Math.round(tx), r.top, [prop('vorne', false), prop('spiegeln', false)]) }
 const wide = runs.filter((r) => r.x1 - r.x0 >= 64)
-for (let i = 0; i < 8; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point(i % 2 ? 'eidechse' : 'graja', 'tier', Math.round(tx), r.top) }
+for (let i = 0; i < 12; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point(i % 2 ? 'eidechse' : 'graja', 'tier', Math.round(tx), r.top) }
 
 const map = {
   compressionlevel: -1, height: H, width: W, infinite: false, orientation: 'orthogonal', renderorder: 'right-down',

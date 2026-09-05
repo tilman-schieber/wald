@@ -1,17 +1,26 @@
-// Baut das Level der Floresta da Tijuca (240 Kacheln): hügeliger Lehmboden,
+// Baut das Level der Floresta da Tijuca (400 Kacheln): hügeliger Lehmboden,
 // viele Plattformen, Lianen zum Schwingen, Bambus-Tunnel für Leonel,
 // die vier tropischen Gegner, Kulissen aus Rio und am Ende das Waldherz.
 //   node tools/gen-tijuca.mjs [seed]
 import fs from 'fs'
-const W = 240, H = 17, T = 16
+const H = 17, T = 16
 const ERDE = 1, GRAS = 2, STEIN = 17
 let seed = Number(process.argv[2] ?? 3001)
 const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
 const between = (a, b) => a + Math.floor(rnd() * (b - a + 1))
 const pick = (arr) => arr[Math.floor(rnd() * arr.length)]
 
+// ---------- Größer machen: zwischen den festen Rätsel-Zonen wird freier Wald eingeschoben ----------
+// EXTRA = [ab welcher (alten) Kachelspalte, wie viele Kacheln mehr]. X(c) rechnet eine alte
+// Spalte in die neue um, PX(x) dasselbe für Pixel. So bleiben alle Rätsel exakt gleich gebaut,
+// nur der Wald dazwischen wird länger – mit automatisch mehr Plattformen, Gegnern und Deko.
+const EXTRA = [[13, 50], [93, 50], [160, 60]]
+const X = (c) => c + EXTRA.reduce((s, [ab, n]) => s + (c >= ab ? n : 0), 0)
+const PX = (x) => X(x / T) * T
+const W = X(240)   // 240 Kacheln Grundriss + eingeschobene Stücke = 400
+
 // Flache Zonen: hier stehen Rätsel und das Ziel
-const FLAT = [[0, 12], [70, 92], [128, 150], [206, 240]]
+const FLAT = [[0, 12], [70, 92], [128, 150], [206, 240]].map(([a, b]) => [X(a), X(b)])
 const isFlat = (x) => FLAT.some(([a, b]) => x >= a && x < b)
 
 // ---------- Bodenprofil ----------
@@ -43,11 +52,11 @@ for (let c = 6; c < W - 8; c += between(6, 11)) {
 }
 
 // ---------- Rätsel: Aquädukt-Mauern aus Stein ----------
-for (let r = 9; r <= 11; r++) set(80, r, STEIN)                                  // Torbogen Zone B
-for (let c = 138; c <= 139; c++) for (let r = 0; r <= 8; r++) set(c, r, STEIN)   // Mauer Zone C (Bambus-Tunnel darunter)
-for (let c = 150; c <= 158; c++) set(c, 4, STEIN)                                // hoher Sims mit Ranke
-for (let c = 212; c <= 219; c++) set(c, 12, STEIN)                               // Hügel fürs Waldherz
-for (let c = 214; c <= 217; c++) set(c, 11, STEIN)
+for (let r = 9; r <= 11; r++) set(X(80), r, STEIN)                                  // Torbogen Zone B
+for (let c = X(138); c <= X(139); c++) for (let r = 0; r <= 8; r++) set(c, r, STEIN)   // Mauer Zone C (Bambus-Tunnel darunter)
+for (let c = X(150); c <= X(158); c++) set(c, 4, STEIN)                                // hoher Sims mit Ranke
+for (let c = X(212); c <= X(219); c++) set(c, 12, STEIN)                               // Hügel fürs Waldherz
+for (let c = X(214); c <= X(217); c++) set(c, 11, STEIN)
 
 // ---------- Objekte ----------
 const objs = []
@@ -59,17 +68,17 @@ const top = (c) => { for (let r = 0; r < H; r++) if (solid(c, r)) return r * T; 
 
 point('start', 'spawn', 48, 240)
 // Zone B: Platte hält das Tor, Hebel öffnet es dauerhaft
-rect('b_tor', 'tor', 80 * T, 192, 16, 48); rect('b_platte', 'platte', 74 * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', 87 * T, 224, 12, 16, { oeffnet: 'b_tor' })
+rect('b_tor', 'tor', X(80) * T, 192, 16, 48); rect('b_platte', 'platte', X(74) * T, 236, 16, 4, { oeffnet: 'b_tor' }); rect('b_hebel', 'hebel', X(87) * T, 224, 12, 16, { oeffnet: 'b_tor' })
 // Zone C: Bambus-Tunnel unter dem Tor (nur Leonel kriecht durch), Hebel dahinter
-rect('c_tor', 'tor', 138 * T, 144, 32, 80); rect('c_hebel', 'hebel', 145 * T, 224, 12, 16, { oeffnet: 'c_tor' })
-rect('c_ranke', 'ranke', 149 * T - 4, 64, 8, 160)
-point('blatt', 'blatt', 153 * T, 48); point('blatt', 'blatt', 156 * T, 48)
+rect('c_tor', 'tor', X(138) * T, 144, 32, 80); rect('c_hebel', 'hebel', X(145) * T, 224, 12, 16, { oeffnet: 'c_tor' })
+rect('c_ranke', 'ranke', X(149) * T - 4, 64, 8, 160)
+point('blatt', 'blatt', X(153) * T, 48); point('blatt', 'blatt', X(156) * T, 48)
 // Waldherz
-point('waldherz', 'waldherz', 215.5 * T, 176)
+point('waldherz', 'waldherz', X(215.5) * T, 176)
 
 // ---------- Lianen zum Schwingen: über breite Lücken zwischen Plattformen ----------
 let schwingen = 0
-for (let i = 0; i < plats.length - 1 && schwingen < 6; i++) {
+for (let i = 0; i < plats.length - 1 && schwingen < 9; i++) {
   const a = plats[i], b = plats[i + 1]
   const luecke = (b.x0 - a.x1 - 1) * T
   if (luecke < 60 || luecke > 150 || Math.abs(a.row - b.row) > 2) continue
@@ -84,7 +93,7 @@ for (let i = 0; i < plats.length - 1 && schwingen < 6; i++) {
 // Affen sitzen auf Plattformen (von oben werfen sie), Nasenbären und Ameisen unten
 plats.filter((p, i) => i % 3 === 0 && p.row < 11).forEach((p) => point('affe', 'enemy', ((p.x0 + p.x1) / 2 + 0.5) * T, p.row * T))
 let nr = 0
-for (let c = 22; c < 205; c += between(18, 26)) {
+for (let c = 22; c < X(205); c += between(18, 26)) {
   if (isFlat(c) && c > 12) continue
   point(['nasenbaer', 'ameise', 'nasenbaer'][nr++ % 3], 'enemy', c * T, boden(c))
 }
@@ -93,13 +102,14 @@ plats.filter((p, i) => i % 4 === 2 && p.x1 - p.x0 >= 4).slice(0, 5).forEach((p) 
 
 // ---------- Kulissen aus Rio ----------
 const kulisse = (name, x, tiefe, spiegeln = false) => point(name, 'kulisse', x, 240, [prop('tiefe', String(tiefe)), prop('spiegeln', spiegeln)])
-kulisse('cristo', 700, 0.12)
-kulisse('cascatinha', 1500, 0.45)
-kulisse('pavillon', 2600, 0.55)
-kulisse('cascatinha', 3200, 0.35, true)
+kulisse('cristo', PX(700), 0.12)
+kulisse('cascatinha', PX(1500), 0.45)
+kulisse('pavillon', PX(2600), 0.55)
+kulisse('cascatinha', PX(3200), 0.35, true)
 
 // ---------- Speicherpunkte ----------
-for (const [i, c] of [[2, 55], [3, 105], [4, 165]]) point('speicher' + i, 'checkpoint', c * T, boden(c))
+let sp = 2
+for (let c = 55; c < W - 30; c += 55) { let k = c; while (isFlat(k) && k > 12) k += 4; point('speicher' + sp++, 'checkpoint', k * T, boden(k)) }
 
 // ---------- Deko und Tiere ----------
 const busy = (px, ty) => objs.some((o) => ['tor', 'platte', 'hebel', 'waldherz', 'checkpoint', 'spawn', 'schwinge'].includes(o.type) && Math.abs((o.x + (o.width || 0) / 2) - px) < 36 && Math.abs((o.y + (o.height || 0)) - ty) < 24)
@@ -119,7 +129,7 @@ for (const run of runs) {
   if (!run.ground) { for (let hx = run.x0 + 12; hx < run.x1 - 8; hx += 26 + rnd() * 28) if (rnd() < 0.7) point(rnd() < 0.5 ? 'liane' : 'moos', 'deko', Math.round(hx), run.top + 16, [prop('vorne', rnd() < 0.4)]) }
 }
 const wide = runs.filter((r) => r.x1 - r.x0 >= 64)
-for (let i = 0; i < 10; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }
+for (let i = 0; i < 14; i++) { const r = pick(wide); const tx = r.x0 + 20 + rnd() * (r.x1 - r.x0 - 40); if (!busy(tx, r.top)) point('schmetterling', 'tier', Math.round(tx), r.top) }
 
 const map = {
   compressionlevel: -1, height: H, width: W, infinite: false, orientation: 'orthogonal', renderorder: 'right-down',
