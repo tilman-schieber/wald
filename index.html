@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="data:," />
+    <title>W.A.L.D. — Wächter Aller Lebenden Dinge</title>
+    <style>
+      html, body { margin: 0; padding: 0; background: #181425; height: 100%; overflow: hidden; }
+      /* touch-action: none → das Handy scrollt/zoomt nicht, wenn man auf die Knöpfe drückt */
+      #game { width: 100%; height: 100%; touch-action: none; }
+      /* Ladeanzeige, solange das Spiel selbst noch geladen wird */
+      #laden { position: fixed; inset: 0; display: flex; flex-direction: column;
+               align-items: center; justify-content: center; gap: 14px;
+               background: #181425; color: #fee761; font-family: monospace; }
+      #laden .titel { font-size: 34px; letter-spacing: 3px; }
+      #laden .text  { font-size: 13px; color: #c0cbdc; }
+      #laden .balken { width: 200px; height: 10px; border: 2px solid #5a6988; }
+      #laden .balken i { display: block; height: 100%; width: 30%; background: #63c74d;
+                         animation: hin 1.1s ease-in-out infinite alternate; }
+      @keyframes hin { from { margin-left: 0 } to { margin-left: 70% } }
+      canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+    </style>
+    <script type="module" crossorigin src="/wald/assets/index-BEmYoVOZ.js"></script>
+  </head>
+  <body>
+    <div id="game"></div>
+    <div id="laden">
+      <div class="titel">W.A.L.D.</div>
+      <div class="text">Der Wald wächst …</div>
+      <div class="balken"><i></i></div>
+    </div>
+  </body>
+</html>
