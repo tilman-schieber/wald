@@ -56,3 +56,17 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
   kleinerer Kapuzineraffe `829cc473…` (32×32 statt 44×48) + Wurf `beeeaf04…` + beruhigt `975ef13d…`;
   Nasenbär-Bilder mit `tools/spiegeln.mjs` nach links gedreht (er war als einziger nach rechts gezeichnet);
   Tijuca-Musik: "Frozen Sprite Loop (1).mp3" durch `~/crush.py --preset snes`
+
+## Lorbeerwald La Palma (05.09.2026)
+- Kacheln: `create_sidescroller_tileset` Vulkanboden mit Moos `e3e41c50…` (Basis `43a34f40…`) → tiles/la_palma.png (palettisiert OHNE Rottöne/Pink, sonst wurde die Erde knallrot),
+  Basalt `946d9759…` (Basis `ed65ac11…`) → tiles/la_palma_stein.png
+- Hintergrund (pixflux, palettisiert, per mirror-tile.mjs auf 800 px): Caldera + Sternwarten `501202c2…`, Lorbeerbäume `139a2e21…` (erster Versuch `0e85bdb2…` war pechschwarz),
+  Kronen `c05f8d17…` (ab Zeile 85 weich ausgeblendet), Farne `d0401ab8…` (erster Versuch `824bc276…` zu klein, mit Erdstreifen)
+- Kulissen (pixflux, palettisiert, zugeschnitten): Vulkan Cumbre Vieja `0e344d50…`, Haus mit Balkonen `1576fa22…`, Los-Tilos-Wasserfall `dd5f1afc…` (erster Versuch `7aa5ef46…` hatte Himmel drin)
+- Deko (pixen): Drachenbaum `e8fee217…` (auch als Kulisse), Lorbeerbusch `bac06cdb…`, Glockenblume `1a077d65…`, Lavafels `87f2d275…`, Tajinaste `9bac276a…`, Kiefer `4b9a4f4b…`, Bartflechte `3c811622…`, Osterei `97c2a7ce…`
+- Gegner (alle nach links): Graja `6c55e90e…` (pixen) + Flug `8a999bc4…` + Schlaf `018a296c…`; Eidechse `53cbdecc…` (pixflux 48×32; pixen-Versuch `6c63b885…` sah aus wie eine Katze)
+  + Lauf `b94fa6c5…` (2 Ausreißer aussortiert) + Sonnen `90cde710…`; Ziege `319586f5…` + Hüpfen `b951e3e1…` (Bild 4 = Sprung-Pose) + Schlaf `cb57782e…`;
+  Lorbeertaube `5503605b…` + Wurf `0bdf7bc9…` + Dösen `745d3174…`; Lorbeere (Geschoss) `fc490212…`
+- Intro (Pro, 480×270, Rand per edge-fill.mjs): Flugzeugfenster `59b5092b…`, Santa Cruz `2120368c…`, Los Tilos mit Drachenbaum `678e4ec0…`
+  (erster Anlauf `52103814…`/`431a4f32…`/`3dcea938…` blieb hängen und wurde als "failed" markiert)
+- Musik: music/la_palma.mp3 ("Moonlit Save Point", war schon da)

@@ -43,6 +43,7 @@ export default class BootScene extends Phaser.Scene {
       if (enemy.ballFile) this.load.image(enemy.key + '-kugel', enemy.ballFile)
       if (enemy.flyFile) this.load.image(enemy.key + '-flug', enemy.flyFile)
       if (enemy.groundFile) this.load.image(enemy.key + '-boden', enemy.groundFile)
+      if (enemy.wurfFile) this.load.image(enemy.key + '-wurf', enemy.wurfFile)
     }
     for (const [name, file] of Object.entries(MUSIC.tracks)) this.load.audio('musik-' + name, [file])
     for (const [name, d] of Object.entries(DEKO)) {

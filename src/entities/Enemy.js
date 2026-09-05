@@ -346,7 +346,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Lauf-Animation, wenn es eine gibt (nur beim Gehen); im Alarm läuft die Alarm-Animation
     // Läuft er gerade? Auch beim Verfolgen/Hüpfen/Marschieren sollen die Beine gehen –
     // sonst rutscht ein Gegner wie ein Möbelstück über den Boden.
-    const jagt = this.state === 'roll' && ['hopper', 'climber', 'marcher'].includes(ai.kind)
+    const jagt = this.state === 'roll' && (['hopper', 'climber', 'marcher'].includes(ai.kind) || ai.laufAnim)   // laufAnim: auch beim Sprint die Beine bewegen (Eidechse)
     const walking = (this.state === 'wander' && !this.wanderPause) || jagt
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
       // WICHTIG: auch `isPlaying` prüfen! Nach einem anims.stop() merkt sich Phaser

@@ -645,10 +645,12 @@ export default class GameScene extends Phaser.Scene {
   // Sie fliegt wie ein geworfener Ball: nach vorn und oben, dann zieht sie die
   // Schwerkraft herunter. Trifft sie den Boden oder einen Helden, zerplatzt sie.
   wirfFrucht(affe, ziel) {
-    if (!this.textures.exists(WURF.key)) return
+    // Jeder Werfer darf sein eigenes Geschoss haben (Taube: Lorbeere), sonst die Jackfrucht
+    const key = affe.cfg.wurfFile ? affe.cfg.key + '-wurf' : WURF.key
+    if (!this.textures.exists(key)) return
     const dir = ziel ? Math.sign(ziel.x - affe.x) || 1 : affe.dir
     const w = affe.cfg.ai.wurf ?? { x: 130, y: -190 }
-    const p = new Projectile(this, affe.x + dir * 8, affe.body.center.y, WURF.key, dir * w.x, w.y)
+    const p = new Projectile(this, affe.x + dir * 8, affe.body.center.y, key, dir * w.x, w.y)
     this.physics.add.collider(p, this.groundLayer, () => p.zerplatzen())
     for (const held of [this.jonas, this.leonel]) {
       this.physics.add.overlap(p, held, () => {

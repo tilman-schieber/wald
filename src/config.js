@@ -361,6 +361,74 @@ ENEMIES.ameise = {
   ai: { kind: 'marcher', spiky: false, wanderSpeed: 22, sight: { x: 0, y: 0 }, alertMs: 0, dizzyMs: 0, cooldownMs: 0, healedWanderSpeed: 18 },
 }
 
+// ------------------------------------------------------------
+//  Die Gegner des Lorbeerwalds auf La Palma
+// ------------------------------------------------------------
+//  Verwirrte Graja (Alpenkrähe): schwarzer Vogel mit rotem Schnabel, das Wahrzeichen
+//  der Insel. Hockt in der Luft und stürzt herab wie die Eule (Owl.js).
+ENEMIES.graja = {
+  key: 'graja', name: 'Verwirrte Graja', kind: 'flyer', hp: 3, damage: 1,
+  frame: { w: 32, h: 32 }, body: { w: 22, h: 22 },
+  color: P.schwarz, accent: P.feuerRot,
+  file: 'assets/sprites/graja.png',                 // pixen 6c55e90e…
+  healedFile: 'assets/sprites/graja_heil.png',      // schläft (animate_image 018a296c…, letztes Bild)
+  flyFile: 'assets/sprites/graja_flug.png',
+  flySheet: { file: 'assets/sprites/graja_flug_anim.png', w: 32, h: 32, n: 6, rate: 10 },   // animate_image 8a999bc4…
+  ai: { spiky: true, sight: { x: 170, y: 160 }, alertMs: 500, swoopSpeed: 180, restMs: 1500, returnSpeed: 100, cooldownMs: 1500 },
+}
+
+//  Verwirrte Kanaren-Eidechse: klein, flach, blitzschnell. Flitzt wie das Wildschwein
+//  hin und her – aber sie läuft dabei richtig (Lauf-Animation) statt zu "rollen".
+ENEMIES.eidechse = {
+  key: 'eidechse', name: 'Verwirrte Eidechse', hp: 3, speed: 40, damage: 1,
+  frame: { w: 40, h: 19 }, body: { w: 30, h: 12 },
+  color: P.steinGrau, accent: P.eisBlau,
+  file: 'assets/sprites/eidechse.png',               // pixflux 53cbdecc…
+  healedFile: 'assets/sprites/eidechse_heil.png',    // sonnt sich (animate_image 90cde710…, letztes Bild)
+  walkSheet: { file: 'assets/sprites/eidechse_lauf.png', w: 41, h: 20, n: 4, rate: 12 },   // animate_image b94fa6c5…
+  ai: {
+    kind: 'charger', spiky: false, rotate: false, laufAnim: true,
+    wanderSpeed: 35, sight: { x: 160, y: 40 }, alertMs: 500,
+    rollSpeed: 190, rollMaxMs: 900, charges: 2, turnMs: 350,   // drei kurze Sprints, dazwischen kurz verwundbar
+    dizzyMs: 1800, cooldownMs: 1500, healedWanderSpeed: 12,
+  },
+}
+
+//  Verwirrte Ziege: auf La Palma laufen überall Ziegen herum. Sie springt in
+//  großen Sätzen heran wie der Hase – nur schwerer.
+ENEMIES.ziege = {
+  key: 'ziege', name: 'Verwirrte Ziege', hp: 4, speed: 35, damage: 1,
+  frame: { w: 26, h: 30 }, body: { w: 20, h: 24 },
+  color: P.holzBraun, accent: P.sandHell,
+  file: 'assets/sprites/ziege.png',                  // pixen 319586f5…
+  ballFile: 'assets/sprites/ziege_sprung.png',       // Sprung-Pose (Bild 4 der Hüpf-Animation)
+  walkSheet: { file: 'assets/sprites/ziege_hop.png', w: 26, h: 30, n: 6, rate: 9 },    // animate_image b951e3e1…
+  healedFile: 'assets/sprites/ziege_heil.png',       // liegt und döst (animate_image cb57782e…, letztes Bild)
+  ai: {
+    kind: 'hopper', spiky: false, wanderSpeed: 28, wanderHopMs: 1100,
+    sight: { x: 150, y: 60 }, alertMs: 450, hops: 3, hopPower: 320, hopSpeed: 110,
+    dizzyMs: 1300, cooldownMs: 1300, healedWanderSpeed: 0,
+  },
+}
+
+//  Verwirrte Lorbeertaube: gibt es nur auf den Kanaren. Sitzt oben im Lorbeer
+//  und lässt Lorbeeren fallen – wie der Affe, nur mit kürzerem Wurf.
+ENEMIES.taube = {
+  key: 'taube', name: 'Verwirrte Lorbeertaube', hp: 3, speed: 0, damage: 1,
+  frame: { w: 30, h: 31 }, body: { w: 18, h: 24 },
+  color: P.schieferGrau, accent: P.rosaHell,
+  file: 'assets/sprites/taube.png',                  // pixen 5503605b…
+  healedFile: 'assets/sprites/taube_heil.png',       // döst (animate_image 745d3174…, letztes Bild)
+  alertSheet: { file: 'assets/sprites/taube_wurf.png', w: 30, h: 31, n: 7, rate: 10 },   // animate_image 0bdf7bc9…
+  wurfFile: 'assets/sprites/lorbeere.png',           // ihr Geschoss: eine Lorbeere (pixen fc490212…)
+  ai: {
+    kind: 'thrower', spiky: false, wanderSpeed: 0,
+    sight: { x: 180, y: 140 }, alertMs: 600,
+    throws: 2, throwEveryMs: 1200, wurf: { x: 90, y: -140 },
+    cooldownMs: 1800, healedWanderSpeed: 0,
+  },
+}
+
 //  Tore (Rätsel): der Torflügel selbst wird gemalt (siehe BootScene),
 //  der Steinbalken darüber macht aus der Mauer einen richtigen Durchgang.
 export const TOR = { bogen: 'assets/sprites/torbogen.png' }   // PixelLab pixen 0975c40a…
@@ -383,6 +451,11 @@ export const INTROS = {
   { image: 'assets/bg/tijuca_intro_flug.png', lines: ['In den Sommerferien geht es weit weg:', 'Jonas und Leonel fliegen nach Rio de Janeiro.', 'Unten liegt das Meer – und mitten in der Stadt ein Wald.'] },
   { image: 'assets/bg/tijuca_intro_wald.png', lines: ['Die Floresta da Tijuca ist der größte Stadtwald der Welt.', 'Früher war hier alles abgeholzt.', 'Menschen haben sie Baum für Baum zurückgepflanzt.', 'Doch auch hier ruft jetzt kein Vogel mehr …'] },
  ],
+ la_palma: [
+  { image: 'assets/bg/la_palma_intro_flug.png', lines: ['Osterferien! Diesmal geht es weit hinaus in den Atlantik.', 'Unter dem Flugzeug taucht eine grüne Insel auf –', 'mit einem riesigen Krater in der Mitte: La Palma.'] },
+  { image: 'assets/bg/la_palma_intro_stadt.png', lines: ['Alle nennen sie die Isla Bonita, die schöne Insel.', 'Im Norden wächst ein Wald wie vor Millionen Jahren:', 'der Lorbeerwald, voller Nebel, Farne und Drachenbäume.', 'Dort rufen die Grajas – schwarze Vögel mit roten Schnäbeln.'] },
+  { image: 'assets/bg/la_palma_intro_wald.png', lines: ['Doch heute ruft keine Graja.', 'Zwischen den Drachenbäumen ist es still.', 'Jonas und Leonel wissen, was das heißt:', 'Der Wald braucht seine Wächter.'] },
+ ],
 }
 
 // ------------------------------------------------------------
@@ -401,6 +474,10 @@ export const KULISSEN = {
   cristo:         { file: 'assets/bg/kulisse_cristo.png', standY: 150 },        // Floresta da Tijuca
   cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png', standY: 236 },
   pavillon:       { file: 'assets/bg/kulisse_pavillon.png', standY: 244 },
+  vulkan:         { file: 'assets/bg/kulisse_vulkan.png', standY: 200 },        // La Palma: Cumbre Vieja (fern)
+  lostilos:       { file: 'assets/bg/kulisse_lostilos.png', standY: 236 },      // Wasserfall in der Schlucht von Los Tilos
+  haus:           { file: 'assets/bg/kulisse_haus.png', standY: 205 },          // Haus mit Holzbalkonen (Santa Cruz)
+  drachenbaum:    { file: 'assets/sprites/deko_drachenbaum.png', standY: 236 }, // ein ferner Drachenbaum (dasselbe Bild wie die Deko)
 }
 
 //  Wie tief im Bild etwas liegt, hängt allein am Scroll-Tempo:
@@ -449,6 +526,14 @@ export const DEKO = {
   bambus:   { file: 'assets/sprites/deko_bambus.png' },
   liane:    { file: 'assets/sprites/deko_liane.png', haengend: true },
   monstera: { file: 'assets/sprites/deko_monstera.png' },
+  drachenbaum:  { file: 'assets/sprites/deko_drachenbaum.png' },   // ab hier: Lorbeerwald La Palma (pixen e8fee217…)
+  lorbeerbusch: { file: 'assets/sprites/deko_lorbeerbusch.png' },  // pixen bac06cdb…
+  glockenblume: { file: 'assets/sprites/deko_glockenblume.png' },  // Kanarische Glockenblume, pixen 1a077d65…
+  lavafels:     { file: 'assets/sprites/deko_lavafels.png' },      // pixen 87f2d275…
+  tajinaste:    { file: 'assets/sprites/deko_tajinaste.png' },     // pixen 9bac276a…
+  kiefer:       { file: 'assets/sprites/deko_kiefer.png' },        // Kanarische Kiefer, pixen 4b9a4f4b…
+  flechte:      { file: 'assets/sprites/deko_flechte.png', haengend: true },   // Bartflechte, pixen 3c811622…
+  osterei:      { file: 'assets/sprites/deko_osterei.png', glow: true },       // versteckte Ostereier (pixen 97c2a7ce…)
 }
 
 // ------------------------------------------------------------
@@ -459,6 +544,8 @@ export const TIERE = {
   eichhoernchen: { file: 'assets/sprites/tier_eichhoernchen_anim.png', anim: { w: 22, h: 24, n: 4, rate: 5 }, hop: true },   // animate_image 28597ae5…
   hase:          { file: 'assets/sprites/tier_hase_anim.png', anim: { w: 21, h: 29, n: 4, rate: 5 }, hop: true },            // animate_image d69dca68…
   schmetterling: { file: 'assets/sprites/tier_schmetterling_anim.png', anim: { w: 26, h: 19, n: 4, rate: 10 }, flatter: true }, // animate_image c15efac9…
+  graja:         { file: 'assets/sprites/graja_flug_anim.png', anim: { w: 32, h: 32, n: 6, rate: 8 }, flatter: true },   // friedliche Graja (La Palma)
+  eidechse:      { file: 'assets/sprites/eidechse_lauf.png', anim: { w: 41, h: 20, n: 4, rate: 8 }, hop: true },         // flitzende Eidechse
 }
 
 // ------------------------------------------------------------
@@ -598,6 +685,37 @@ export const FORESTS = {
     },
     musik: 'tijuca',
     endeText: 'Die Floresta da Tijuca lebt wieder!',
+    endeBild: null,
+    weiter: 'la_palma',
+  },
+  la_palma: {
+    name: 'Lorbeerwald von La Palma',
+    level: 'la_palma',
+    tiles: {
+      key: 'tiles_la_palma',
+      file: 'assets/tiles/la_palma.png',          // PixelLab e3e41c50… (Vulkanboden mit Moos)
+      columns: 4,
+      wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
+    },
+    tiles2: {
+      key: 'tiles_la_palma2',
+      name: 'stein',
+      file: 'assets/tiles/la_palma_stein.png',    // PixelLab 946d9759… (Basalt)
+      columns: 4,
+      wangFrames: [12, 13, 0, 3, 8, 1, 14, 5, 15, 4, 11, 2, 9, 10, 7, 6],
+    },
+    background: {
+      layers: [
+        { key: 'lp_berge',  file: 'assets/bg/la_palma_berge.png', scroll: 0.1 },                              // Caldera + Sternwarten
+        { key: 'lp_baeume', file: 'assets/bg/la_palma_baeume.png', scroll: 0.3, tint: 0x9fb0c8, alpha: 0.9 },
+        { key: 'lp_baeume', scroll: 0.55, offsetX: 300 },
+        { key: 'lp_kronen', file: 'assets/bg/la_palma_kronen.png', scroll: 1.2, h: 160, depth: 22, alpha: 0.9 },
+        { key: 'lp_farne',  file: 'assets/bg/la_palma_farne.png', scroll: 1.1, y: 214, h: 96, depth: 21, alpha: 0.9 },
+      ],
+      haze: 0.26,      // Nebelwald: etwas mehr Dunst als in Rio
+    },
+    musik: 'la_palma',
+    endeText: 'Der Lorbeerwald von La Palma rauscht wieder!',
     endeBild: null,
     weiter: null,
   },

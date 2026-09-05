@@ -99,9 +99,14 @@ Entscheidungen so, dass Kinder mitlesen können.
   blendet die Ränder weich aus)
 - Deko mit `vorne=true` wird automatisch halb durchsichtig, sobald ein Held dahintersteht (`vorneDeko` in GameScene)
 - Schrift "Waldschrift" (TTF, FontFace in BootScene), Holz-Panel als NineSlice fürs HUD; PixelLab-Abo: 2000/Monat
-- Vier Wälder: Schwarzwald (fertig), Floresta da Tijuca (fertig), Lorbeerwald La Palma, Plänterwald.
+- Vier Wälder: Schwarzwald (fertig), Floresta da Tijuca (fertig), Lorbeerwald La Palma (fertig, Ostern), Plänterwald.
   Jeder Wald steht in `FORESTS` (config.js) mit Level, Kacheln, Hintergrund, Musik, Schlusssatz und `weiter`.
-  Levels bauen: `node tools/gen-schwarzwald.mjs` bzw. `node tools/gen-tijuca.mjs`.
+  Levels bauen: `node tools/gen-schwarzwald.mjs`, `node tools/gen-tijuca.mjs`, `node tools/gen-la_palma.mjs`.
+- La Palma: Gegner Graja (`flyer` wie die Eule), Eidechse (`charger` mit `ai.laufAnim` = Lauf-Animation statt Kugel),
+  Ziege (`hopper`), Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Lavaröhre = ein
+  Kachel hoher Kriechgang unter der Basaltwand (nur Leonel). Sechs Ostereier liegen als Deko `osterei` versteckt.
+  Neuer Wald = Kachelsets (pixflux `create_sidescroller_tileset`, 2–3 Gen.), 4 Hintergrund-Ebenen, 3–4 Kulissen, ~8 Deko,
+  4 Gegner mit je Grundbild + Animation + Schlafbild (`animate_image`, letztes Bild), 3 Intro-Folien (Pro) – zusammen ~200 Generierungen.
 
 ## Sprites (PixelLab MCP)
 - Trial: 40 Generierungen, **sehr sparsam** – Stand in `public/assets/QUELLEN.md`
