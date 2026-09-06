@@ -597,19 +597,22 @@ export const INTROS = {
 // ------------------------------------------------------------
 //  standY = auf welcher Höhe die Kulisse steht. Weit entferntes gehört an den
 //  Horizont (kleinere Zahl), Nahes auf die Bodenlinie (240).
+//  boden: true → die Kulisse STEHT auf dem Boden: die GameScene setzt sie jeden Frame auf die
+//  Bodenkante, die gerade unter ihr liegt (sie wandert ja langsamer als der Boden). Ohne boden
+//  gilt standY = feste Höhe am Horizont (Berge, Vulkan, Cristo – die stehen auf nichts).
 export const KULISSEN = {
-  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', standY: 190 },
+  schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', boden: true },
   schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png', standY: 200 },
   titisee:        { file: 'assets/bg/kulisse_titisee.png', standY: 205 },
   muenster:       { file: 'assets/bg/kulisse_muenster.png', standY: 190 },
-  hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png', standY: 244 },
+  hochsitz:       { file: 'assets/bg/kulisse_hochsitz.png', boden: true },
   cristo:         { file: 'assets/bg/kulisse_cristo.png', standY: 150 },        // Floresta da Tijuca
-  cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png', standY: 236 },
-  pavillon:       { file: 'assets/bg/kulisse_pavillon.png', standY: 244 },
+  cascatinha:     { file: 'assets/bg/kulisse_cascatinha.png', boden: true },
+  pavillon:       { file: 'assets/bg/kulisse_pavillon.png', boden: true },
   vulkan:         { file: 'assets/bg/kulisse_vulkan.png', standY: 200 },        // La Palma: Cumbre Vieja (fern)
-  lostilos:       { file: 'assets/bg/kulisse_lostilos.png', standY: 236 },      // Wasserfall in der Schlucht von Los Tilos
-  haus:           { file: 'assets/bg/kulisse_haus.png', standY: 205 },          // Haus mit Holzbalkonen (Santa Cruz)
-  drachenbaum:    { file: 'assets/sprites/deko_drachenbaum.png', standY: 236 }, // ein ferner Drachenbaum (dasselbe Bild wie die Deko)
+  lostilos:       { file: 'assets/bg/kulisse_lostilos.png', boden: true },      // Wasserfall in der Schlucht von Los Tilos
+  haus:           { file: 'assets/bg/kulisse_haus.png', boden: true },          // Haus mit Holzbalkonen (Santa Cruz)
+  drachenbaum:    { file: 'assets/sprites/deko_drachenbaum.png', boden: true }, // ein ferner Drachenbaum (dasselbe Bild wie die Deko)
 }
 
 //  Wie tief im Bild etwas liegt, hängt allein am Scroll-Tempo:

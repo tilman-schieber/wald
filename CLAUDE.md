@@ -111,8 +111,10 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Kulissen (`kulisse`-Objekte, `KULISSEN` in config): große Hintergrundbilder mit eigener Parallax-Tiefe
   (`tiefe` 0.15–0.8), x wird umgerechnet: bild.x = x·tiefe + 240·(1−tiefe); Intro = Folien `INTRO` (Bild + Sätze).
   Weil Kulissen langsamer wandern als der Boden, schieben sie sich im Lauf des Levels über JEDE Bodenhöhe.
-  Darum muss `standY` knapp über der höchsten Bodenkante liegen, die vor der Kulisse vorkommt – sonst versinkt
-  sie im Hügel (Schwarzwaldhof steckte bis zum Fenster im Boden). Und Kulissen brauchen freigestellte Ränder:
+  Darum stehen Kulissen mit `boden: true` (Haus, Hochsitz, Wasserfall …) nicht auf einer festen Höhe, sondern
+  `GameScene.updateKulissen` stellt sie jeden Frame auf die tiefste Bodenkante unter ihrem Bild (`bodenOben`,
+  weich nachgeführt) – ein festes `standY` schwebte über Senken oder steckte im Hügel (Tilman hat beides gesehen).
+  `standY` nur noch für Horizont-Kulissen (Berge, Vulkan, Cristo), die auf nichts stehen. Und Kulissen brauchen freigestellte Ränder:
   ein rechteckiges Bild klebt sonst als Kachel im Wald (`node tools/rand-weich.mjs <ein> <aus> [l r o u]`
   blendet die Ränder weich aus)
 - Deko mit `vorne=true` wird automatisch halb durchsichtig, sobald ein Held dahintersteht (`vorneDeko` in GameScene)

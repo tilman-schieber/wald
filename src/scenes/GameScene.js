@@ -103,6 +103,14 @@ export default class GameScene extends Phaser.Scene {
 
     // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
     this.groundLayer = map.createLayer('Boden', tiles2 ? [tiles, tiles2] : tiles, 0, 0).setDepth(0)
+    // Der echte Boden je Kachelspalte (Oberkante in px): von unten hochzählen, solange Kacheln da sind.
+    // Schwebende Plattformen zählen nicht – darauf steht kein Haus. Für Kulissen mit `boden: true`.
+    this.bodenOben = []
+    for (let c = 0; c < map.width; c++) {
+      let r = map.height - 1
+      while (r >= 0 && this.groundLayer.getTileAt(c, r) !== null) r--
+      this.bodenOben.push(r === map.height - 1 ? map.heightInPixels : (r + 1) * map.tileHeight)
+    }
     this.groundLayer.setCollisionByExclusion([-1])   // jede gesetzte Kachel ist fest
 
     // Mit echtem Tileset: Boden unsichtbar (nur Kollision), hübsche Grafik-Ebene obendrauf
@@ -263,6 +271,11 @@ export default class GameScene extends Phaser.Scene {
     // Kulissen: große Hintergrundbilder mit eigener Parallax-Tiefe. Damit ein Objekt an
     // seiner Welt-Position erscheint, wenn die Kamera dort steht, wird x umgerechnet:
     //   bild.x = x·tiefe + halbeBildschirmbreite·(1 − tiefe)
+    // Kulissen mit `boden: true` stehen auf dem Boden: weil sie langsamer wandern als der Boden,
+    // schiebt sich im Lauf des Levels JEDE Bodenhöhe unter sie – darum setzt `updateKulissen`
+    // sie jeden Frame auf die Bodenkante, die gerade unter ihnen liegt (sonst schweben sie
+    // über Senken oder stecken in Hügeln).
+    this.kulissen = []
     for (const o of objects.filter((o) => o.type === 'kulisse')) {
       const key = 'kulisse-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Kulisse:', o.name); continue }
@@ -276,6 +289,7 @@ export default class GameScene extends Phaser.Scene {
       // Fernes wird vom Dunst eingefärbt – genau wie die ferne Baumreihe
       if (tiefe < 0.5) img.setTint(0x8fa0c0)
       if (props(o).spiegeln) img.setFlipX(true)
+      this.kulissen.push({ img, tiefe, boden: !!k.boden, frisch: true })
     }
 
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
@@ -510,6 +524,28 @@ export default class GameScene extends Phaser.Scene {
     const sx = this.cameras.main.scrollX
     for (const l of this.bgLayers) l.ts.tilePositionX = sx * l.scroll + l.offsetX
     this.fgBushes.tilePositionX = sx * 1.3
+    this.updateKulissen(sx)
+  }
+
+  // Kulissen auf den Boden stellen, der gerade unter ihnen liegt. Unter dem Bild wird die
+  // TIEFSTE Bodenkante genommen (größtes y): steht die Kulisse halb vor einem Hügel, verdeckt
+  // der Hügel sie unten ein Stück – das sieht richtig aus. Schweben sähe falsch aus.
+  // Weich nachgeführt, damit sie an Geländestufen nicht springt.
+  updateKulissen(sx) {
+    const T = 16
+    for (const k of this.kulissen) {
+      if (!k.boden) continue
+      // Wo auf dem Bildschirm ist sie gerade? → welche Welt-Spalten liegen darunter?
+      const weltX = sx * (1 - k.tiefe) + k.img.x
+      const halb = Math.min(k.img.displayWidth * 0.3, 56)
+      const c0 = Phaser.Math.Clamp(Math.floor((weltX - halb) / T), 0, this.bodenOben.length - 1)
+      const c1 = Phaser.Math.Clamp(Math.floor((weltX + halb) / T), 0, this.bodenOben.length - 1)
+      let ziel = 0
+      for (let c = c0; c <= c1; c++) ziel = Math.max(ziel, this.bodenOben[c])
+      ziel += 2   // 2 px im Moos, wie alle Deko
+      if (k.frisch) { k.img.y = ziel; k.frisch = false }
+      else k.img.y += (ziel - k.img.y) * 0.12
+    }
   }
 
   // Musik läuft über das ganze Level durch; jeder Wald hat sein eigenes Stück.
