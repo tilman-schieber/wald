@@ -17,10 +17,15 @@
 //              dropper (Faultier):    hängt am Ast und lässt sich fallen
 //              marcher (Ameise):      marschiert nur, greift nie an
 //    turn    nur beim Wildschwein: Pause zwischen zwei Sturmläufen
-//    dizzy   danach benommen/außer Puste → tut nicht weh, gut zu treffen
+//    dizzy   NUR bei Stürmern (Igel, Wildschwein, Eidechse, Hirsch …): wer mit
+//            Anlauf gegen etwas rennt, ist danach benommen → "★", jetzt treffen
+//    pause   alle anderen nach ihrem Angriff: der Hase schnuppert und hoppelt weg,
+//            der Nasenbär gibt auf und schnüffelt, das Faultier liegt eine Weile –
+//            harmlos ("?"), aber NICHT benommen. Wer keine Stacheln hat, ist sowieso
+//            jederzeit zu treffen; der Jaguar bleibt nur beruhigt verwundbar.
 //
 //  Die AMPEL über dem Kopf (updateMark) sagt immer dasselbe – bei jedem Tier:
-//    ?  weiß   verwirrt, aber harmlos (stromert, sitzt, hängt)
+//    ?  weiß   verwirrt, aber harmlos (stromert, sitzt, hängt, schnuppert)
 //    !  gelb   hat dich gesehen – gleich geht's los (noch harmlos)
 //    !  rot    GEFAHR: greift an, Berühren tut weh (pulsiert)
 //    ★  gelb   benommen: harmlos und jetzt gut zu treffen
@@ -32,6 +37,8 @@ import { P } from '../palette.js'
 
 const rand = Phaser.Math.Between
 const MARK = { weiss: '#ffffff', gelb: '#fee761', rot: '#e43b44', rosa: '#f6757a' }
+// Rand um die Zeichen: die Schrift misst das Herz zu schmal, ohne Rand wird es rechts abgeschnitten
+export const MARK_PADDING = { x: 4, y: 2 }
 
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, cfg) {
@@ -59,7 +66,24 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (cfg.ai?.kind === 'dropper') { this.body.setAllowGravity(false); this.state = 'perch' }
     this.wanderPause = false
     this.alertReadyAt = 0
-    this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(25).setVisible(false)   // vor Deko und Farn-Ebene: das Zeichen muss man IMMER sehen
+    this.mark = scene.add.text(0, 0, '!', { fontFamily: 'monospace', fontSize: '10px', color: '#fee761', stroke: '#181425', strokeThickness: 2, padding: MARK_PADDING }).setOrigin(0.5).setDepth(25).setVisible(false)   // vor Deko und Farn-Ebene: das Zeichen muss man IMMER sehen
+  }
+
+  // Erwischt ihn Jonas' Stampfer? Alles, was am Boden lebt – nur wer gerade in der Luft
+  // hängt (Faultier am Ast) nicht. Die Eule (Owl.js) entscheidet das selbst.
+  stampfbar() {
+    if (this.healed) return false
+    return !(this.cfg.ai?.kind === 'dropper' && (this.state === 'perch' || this.state === 'return'))
+  }
+
+  // Nach dem Angriff eine Verschnaufpause – harmlos, aber nicht benommen ("?")
+  startPause(time) {
+    const ai = this.cfg.ai
+    this.setVelocityX(0)
+    this.stopRolling()
+    this.state = 'pause'
+    this.stateUntil = time + (ai.pauseMs ?? ai.dizzyMs ?? 1000)
+    this.pauseFlipAt = time + 500
   }
 
   // Bild wechseln und die Trefferbox unten-mittig neu ausrichten
@@ -215,9 +239,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           break
         }
         if (ai.kind === 'dropper') {
-          // --- Faultier: fällt herunter, bis es aufkommt ---
+          // --- Faultier: fällt herunter, bis es aufkommt – und liegt dann erst mal (Pause, nicht benommen) ---
           this.setVelocityX(0)
-          if (this.onGround) { this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs; this.scene.sfx?.play('slam') }
+          if (this.onGround) { this.startPause(time); this.scene.sfx?.play('slam') }
           break
         }
         if (ai.kind === 'climber') {
@@ -276,25 +300,24 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           } else {
             this.setVelocityX(this.dir * tempo)
           }
-          if (time >= this.stateUntil) { this.setVelocityX(0); this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs }
+          // Gibt auf: schnüffelt eine Weile herum (Pause) – er ist ja nicht gegen etwas gerannt
+          if (time >= this.stateUntil) this.startPause(time)
           break
         }
         if (ai.kind === 'hopper') {
           // --- Hase: große Sätze. Am Boden abspringen, in der Luft nur fliegen ---
+          if (this.onGround && time >= this.stateUntil) { this.startPause(time); break }   // Zeit um: gelandet → schnuppern
           if (this.onGround) {
             if (this.hopsLeft > 0 && time >= this.nextHopAt) {
               this.hopsLeft--
               this.setVelocity(this.dir * ai.hopSpeed, -ai.hopPower)
               this.nextHopAt = time + 220
             } else if (this.hopsLeft <= 0 && time >= this.nextHopAt) {
-              this.setVelocityX(0)
-              this.state = 'dizzy'
-              this.stateUntil = time + ai.dizzyMs
+              this.startPause(time)      // sitzt und schnuppert – nicht benommen, er ist ja nirgends dagegen gehüpft
             } else if (this.body.velocity.y === 0) {
               this.setVelocityX(0)   // kurz sammeln vor dem nächsten Satz
             }
           }
-          if (time >= this.stateUntil) { this.setVelocityX(0); this.state = 'dizzy'; this.stateUntil = time + ai.dizzyMs }
           break
         }
         // --- Igel und Wildschwein: geradeaus ---
@@ -337,6 +360,20 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           this.alertReadyAt = time + ai.cooldownMs
         }
         break
+      case 'pause': {
+        // Verschnaufpause nach dem Angriff: sitzt da und schaut sich um (harmlos, "?")
+        this.setVelocityX(0)
+        if (time >= this.pauseFlipAt) { this.pauseFlipAt = time + rand(400, 900); this.dir = -this.dir }
+        if (time >= this.stateUntil) {
+          this.alertReadyAt = time + ai.cooldownMs
+          this.stateUntil = time
+          if (ai.kind === 'dropper') { this.state = 'return'; break }
+          this.state = 'wander'
+          // Hase und Ziege hoppeln danach erst mal VOM Helden weg – wie ein echter Hase
+          if (ai.kind === 'hopper' && this.target) { this.dir = -(Math.sign(this.target.x - this.x) || 1); this.wanderPause = false; this.stateUntil = time + rand(900, 1600) }
+        }
+        break
+      }
     }
 
     if (this.state !== 'roll' || ai.rotate === false || ai.kind === 'hopper') this.setFlipX(this.dir > 0)
@@ -355,7 +392,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           this.play(this.cfg.key + '-lauf', true)
         }
       }
-      else if (this.anims.isPlaying && this.state !== 'alert' && this.state !== 'dizzy') { this.anims.stop(); this.useTexture(this.state === 'roll' ? this.cfg.key + '-kugel' : this.cfg.key) }
+      else if (this.anims.isPlaying && this.state !== 'alert' && this.state !== 'dizzy') { this.anims.stop(); this.useTexture(this.state === 'roll' && this.scene.textures.exists(this.cfg.key + '-kugel') ? this.cfg.key + '-kugel' : this.cfg.key) }
     }
     // Hüpfer mit eigenem Sprungbild (Jaguar): in der Luft das Sprungbild statt der Lauf-Animation
     if (ai.sprungBild && this.state === 'roll' && !this.onGround && this.scene.textures.exists(this.cfg.key + '-sprung')) { this.anims.stop(); this.useTexture(this.cfg.key + '-sprung') }
@@ -460,7 +497,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     // Ein Herz steigt auf – bei JEDER Ameise, damit man sofort sieht,
     // dass die ganze Reihe erlöst ist und nicht nur die eine, die man getroffen hat.
-    const heart = this.scene.add.text(this.x, this.body.top - 4, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a' }).setOrigin(0.5).setDepth(15)
+    const heart = this.scene.add.text(this.x, this.body.top - 4, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a', padding: MARK_PADDING }).setOrigin(0.5).setDepth(15)
     this.scene.tweens.add({ targets: heart, y: heart.y - 20, alpha: 0, duration: 900, onComplete: () => heart.destroy() })
   }
 

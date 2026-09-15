@@ -9,6 +9,11 @@ export default class IntroScene extends Phaser.Scene {
   constructor() { super('Intro') }
 
   init(data) {
+    // WICHTIG: Die Szene wird für jeden Wald wiederverwendet. `starting` bleibt sonst vom
+    // vorigen Wald auf "wahr" stehen – dann schluckt next() jeden Tastendruck, und die
+    // Geschichte des nächsten Waldes hängt nach dem ersten Satz fest (nur Neuladen half).
+    this.starting = false
+    this.typing = null
     this.forest = data.forest ?? 'schwarzwald'
     this.room = data.room ?? this.forest
     this.spawn = data.spawn ?? 'start'

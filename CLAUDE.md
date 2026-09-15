@@ -16,7 +16,8 @@ Entscheidungen so, dass Kinder mitlesen können.
 - `?debug` an die URL → Trefferboxen sichtbar; `?touch` → Touch-Knöpfe auch am PC;
   `?raum=schwarzwald_02` → Titelbild überspringen, direkt in den Raum
 - `window.__wald.scene` ist die laufende GameScene (zum Nachschauen in der Konsole)
-- Tasten: Pfeile/WASD, Leer springen, X/K schlagen, E Fähigkeit, Tab/Shift wechseln, C Komm!, P/Esc Pause, M Musik
+- Tasten (Tilman-Wunsch, linke Hand bleibt auf WASD): WASD/Pfeile laufen, W/Pfeil hoch springen, S ducken,
+  **Leertaste schlagen** (X auch), E Fähigkeit, **Q Komm!** (C auch), Tab/Shift wechseln, P/Esc Pause, M Musik
 - Szenen: Boot → Title → Intro (Geschichte, `INTRO` in config) → Game (ein Raum pro Szene, `{ room, spawn }`); `world.js` hält den Stand.
   Waldende (`finishForest`) → Jubelbild → direkt Intro des nächsten Waldes (`FORESTS[x].weiter`), mit vollen Herzen; nach dem letzten Wald → Title
   zwischen Räumen, `save.js` speichert ihn bei jedem Raumeingang in localStorage
@@ -48,7 +49,10 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Zwei Helden, immer einer aktiv, der andere KI-Begleiter. Wechsel sofort, ohne Animation,
   Kamera springt nicht. Begleiter kann nie ein Game Over verursachen.
 - Jonas: älter, stärker; klettert an Ranken (Pfeil hoch/runter), schwingt an Lianen (springt im Flug
-  automatisch hin, Leertaste lässt los – echtes Pendel in `Hero.updateSwing`), E = Stampfer.
+  automatisch hin, W lässt los – echtes Pendel in `Hero.updateSwing`), E = Stampfer.
+  Loslassen (W) = **Katapult in Schwungrichtung** (`SWING.absprungFaktor/absprungMin`), der Schwung bleibt bis zur
+  Landung (`hero.geschleudert`, nur leichtes Nachlenken). Stampfer (`SLAM`) trifft ALLE Bodentiere im Umkreis
+  (Kreis um die Füße, auch andere Plattformhöhen): benommen + 1 Schaden; Fliegende/Hängende (`stampfbar()`) nicht.
   Leonel: jünger, schneller, kleiner, kriecht durch Spalten, E = Waldgeist.
 - Jeder Gegner muss allein mit Basisangriff + Ausweichen zu schaffen sein.
 - **Keine Abgründe** in den Räumen (Tilman-Wunsch). Der Code dafür (fellIntoPit) bleibt als Sicherheitsnetz.
@@ -67,7 +71,10 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Hintergrund-Tiefe: `tiefeZuDepth(scroll) = -60 + scroll*20` gilt für Ebenen UND Kulissen
   (Kulisse +1, damit sie vor der gleich schnellen Ebene liegt). Der Himmel liegt bei -100.
   Kulissen stehen auf `KULISSEN[name].standY` – Fernes gehört an den Horizont, nicht auf die Bodenlinie.
-- Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen → benommen.
+- Gegner haben Zustände (`Enemy.js`, Werte in `ENEMIES[x].ai`): stromern → "!" → angreifen → danach
+  **benommen (`dizzy`, ★) NUR bei Stürmern** (Igel, Wildschwein, Eidechse, Wächter-Sturm), alle anderen machen
+  eine harmlose **Verschnaufpause (`pause`, ?, `ai.pauseMs`)**: Hase/Ziege schnuppern und hoppeln dann vom Helden
+  weg, Nasenbär gibt auf und schnüffelt, Faultier liegt eine Weile (Tilman-Wunsch: nicht alle gleich).
   Drei Arten (`ai.kind`): `roller` (Igel: rollt als Kugel geradeaus, nur benommen verwundbar),
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),
   `hopper` (Hase: hüpft in Sätzen heran), `thrower` (Affe: wirft Jackfrüchte im Bogen),
@@ -84,8 +91,9 @@ Entscheidungen so, dass Kinder mitlesen können.
   Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
 - **Wächter (Endgegner, `Boss.js`, `boss: true` in ENEMIES)** am Ende jedes Waldes, in einer flachen `arena`
   (Rechteck-Objekt aus dem Generator, davor ein Speicherpunkt). Regeln (Tilman-Wunsch): Er erscheint ERST, wenn
-  alle Blätter des Waldes gesammelt sind (HUD zeigt `x/y`; in der Arena und am Farn sagt der Wald sonst
-  „bleibt stumm … euch fehlen noch N Blätter"). Das Farn (Waldherz) ist grau und stumm, bis der Wächter geheilt
+  GENUG Blätter gesammelt sind – `BLAETTER.anteil` (0.7) aller Blätter, aufgerundet, HUD zeigt `gesammelt/nötig`;
+  nicht alle, weil manche Blätter zu hoch hängen. In der Arena und am Farn sagt der Wald sonst
+  „bleibt stumm … euch fehlen noch N Blätter". Das Farn (Waldherz) ist grau und stumm, bis der Wächter geheilt
   ist – dann leuchtet es und Berühren beendet den Wald. `ai.schild` = Schutzstücke (Geweih/Steinschuppen):
   solange eins dran ist, prallt jeder Schlag ab (`abprallText` sagt, was hilft), nur Jonas' Stampfer bricht
   eins ab (Bild wechselt auf `varianten.s1`/`.s0`, Bruchstück `stueckFile` fliegt). `ai.ruf` = Röhren
@@ -111,10 +119,11 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Kulissen (`kulisse`-Objekte, `KULISSEN` in config): große Hintergrundbilder mit eigener Parallax-Tiefe
   (`tiefe` 0.15–0.8), x wird umgerechnet: bild.x = x·tiefe + 240·(1−tiefe); Intro = Folien `INTRO` (Bild + Sätze).
   Weil Kulissen langsamer wandern als der Boden, schieben sie sich im Lauf des Levels über JEDE Bodenhöhe.
-  Darum stehen Kulissen mit `boden: true` (Haus, Hochsitz, Wasserfall …) nicht auf einer festen Höhe, sondern
-  `GameScene.updateKulissen` stellt sie jeden Frame auf die tiefste Bodenkante unter ihrem Bild (`bodenOben`,
-  weich nachgeführt) – ein festes `standY` schwebte über Senken oder steckte im Hügel (Tilman hat beides gesehen).
-  `standY` nur noch für Horizont-Kulissen (Berge, Vulkan, Cristo), die auf nichts stehen. Und Kulissen brauchen freigestellte Ränder:
+  Kulissen bewegen sich NIE senkrecht (scrollFactor y = 0): Sie gehören zu ihrer Hintergrund-Ebene, nicht zum
+  Gelände. `boden: true` (Haus, Hochsitz, Wasserfall …) = sie stehen auf der TIEFSTEN Bodenlinie des Levels
+  (`GameScene.bodenLinie` + 4 px); ein Hügel davor verdeckt sie unten, wie ein echtes Haus hinter einem Hügel.
+  (Der Versuch, sie jeden Frame auf den Boden darunter zu stellen, ließ sie beim Laufen auf und ab hüpfen –
+  Tilman hat das gesehen und will es nicht.) `standY` nur für Horizont-Kulissen (Berge, Vulkan, Cristo). Und Kulissen brauchen freigestellte Ränder:
   ein rechteckiges Bild klebt sonst als Kachel im Wald (`node tools/rand-weich.mjs <ein> <aus> [l r o u]`
   blendet die Ränder weich aus)
 - Deko mit `vorne=true` wird automatisch halb durchsichtig, sobald ein Held dahintersteht (`vorneDeko` in GameScene)
@@ -122,6 +131,11 @@ Entscheidungen so, dass Kinder mitlesen können.
 - Vier Wälder: Schwarzwald (fertig), Floresta da Tijuca (fertig), Lorbeerwald La Palma (fertig, Ostern), Plänterwald.
   Jeder Wald steht in `FORESTS` (config.js) mit Level, Kacheln, Hintergrund, Musik, Schlusssatz und `weiter`.
   Levels bauen: `node tools/gen-schwarzwald.mjs`, `node tools/gen-tijuca.mjs`, `node tools/gen-la_palma.mjs`.
+  Die Generatoren sind deterministisch (fester Seed): gleicher Code = identische JSON. Bodenprofil: max. 2 Kacheln
+  Stufe je Spalte UND keine 1-Kachel-Zwischenstufe (sonst 4-Kacheln-Klippe ohne Rückweg). Kein Sims höher als
+  64 px über der nächsten Stehfläche (Sprung schafft 72 px) – sonst Stufe oder Ranke davor.
+- Browser-Test ohne sichtbares Fenster: liegt der Chrome-Tab im Hintergrund, läuft kein requestAnimationFrame –
+  dann das Spiel von Hand takten: `for(…) __wald.spiel.step(t += 16.67, 16.67)` (lädt auch den Loader weiter).
 - La Palma: Gegner Graja (`flyer` wie die Eule), Eidechse (`charger` mit `ai.laufAnim` = Lauf-Animation statt Kugel),
   Ziege (`hopper`), Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Lavaröhre = ein
   Kachel hoher Kriechgang unter der Basaltwand (nur Leonel). Sechs Ostereier liegen als Deko `osterei` versteckt.

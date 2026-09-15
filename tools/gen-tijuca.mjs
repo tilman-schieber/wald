@@ -34,6 +34,12 @@ while (x < W) {
 }
 for (let i = 1; i < W; i++) if (g[i] < g[i - 1] - 2) g[i] = g[i - 1] - 2
 for (let i = W - 2; i >= 0; i--) if (g[i] < g[i + 1] - 2) g[i] = g[i + 1] - 2
+// Keine Treppe mit nur EINER Kachel Zwischenstufe (11 → 13 → 15): von unten wäre das eine
+// 4-Kacheln-Klippe, auf die man nicht zurückkäme. Die Zwischenstufe wird 2 Kacheln breit.
+for (let i = 1; i < W - 1; i++) {
+  if (g[i] - g[i - 1] === 2 && g[i + 1] - g[i] === 2) g[i + 1] = g[i]
+  if (g[i - 1] - g[i] === 2 && g[i] - g[i + 1] === 2) g[i - 1] = g[i]
+}
 
 const data = new Array(W * H).fill(0)
 const set = (c, r, v) => { if (c >= 0 && c < W && r >= 0 && r < H) data[r * W + c] = v }

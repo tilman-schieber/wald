@@ -84,8 +84,11 @@ export default class Owl extends Enemy {
     this.updateMark(time)
   }
 
+  // Der Stampfer erwischt nur, was am Boden sitzt – ein fliegender Vogel spürt nichts davon
+  stampfbar() { return !this.healed && this.state === 'rest' }
+
   stun(time, ms) {
-    if (this.healed || this.state === 'perch' || this.state === 'return') return   // in der Luft erwischt sie nichts
+    if (!this.stampfbar()) return   // in der Luft erwischt sie nichts
     this.state = 'rest'; this.stateUntil = time + ms; this.setVelocity(0, 0); this.useTexture(this.scene.textures.exists(this.cfg.key + '-boden') ? this.cfg.key + '-boden' : this.cfg.key)
   }
 

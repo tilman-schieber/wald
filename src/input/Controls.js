@@ -6,6 +6,11 @@
 //    { left, right, jump, jumpHeld, attack, switch }
 //  jump, attack und switch sind nur in dem EINEN Frame wahr, in dem
 //  die Taste neu gedrückt wurde. jumpHeld ist wahr, solange man hält.
+//
+//  Tasten (Tilman-Wunsch, die linke Hand bleibt auf WASD):
+//    W / Pfeil hoch  springen (an der Ranke: klettern)     S / Pfeil runter  ducken
+//    A D / Pfeile    laufen                                 Leertaste (oder X)  schlagen
+//    E  Fähigkeit    Q (oder C)  Komm!    Tab / Shift  wechseln
 // ============================================================
 import Phaser from 'phaser'
 
@@ -14,18 +19,20 @@ const JustDown = Phaser.Input.Keyboard.JustDown
 export default class Controls {
   constructor(scene) {
     const kb = scene.input.keyboard
+    this.kb = kb
     this.cursors = kb.createCursorKeys()
     this.keys = kb.addKeys({
       left: 'A', right: 'D', up: 'W',
-      jump: 'SPACE', switch: 'TAB', switch2: 'SHIFT',
-      attack: 'X', attack2: 'K', call: 'C', special: 'E', down: 'S',
+      switch: 'TAB', switch2: 'SHIFT',
+      attack: 'SPACE', attack2: 'X', call: 'Q', call2: 'C', special: 'E', down: 'S',
     })
     // Tab soll nicht im Browser "weiterspringen", Leertaste nicht scrollen
     kb.addCapture(['TAB', 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT'])
 
-    this.jumpKeys = [this.cursors.up, this.keys.up, this.keys.jump]
+    this.jumpKeys = [this.cursors.up, this.keys.up]
     this.switchKeys = [this.keys.switch, this.keys.switch2]
     this.attackKeys = [this.keys.attack, this.keys.attack2]
+    this.callKeys = [this.keys.call, this.keys.call2]
 
     // Wird von TouchButtons.js jeden Frame gesetzt
     this.touch = { left: false, right: false, jump: false, attack: false, switch: false, call: false, special: false, down: false }
@@ -50,7 +57,8 @@ export default class Controls {
     for (const key of this.switchKeys) if (JustDown(key)) sw = true
     let attack = false
     for (const key of this.attackKeys) if (JustDown(key)) attack = true
-    let call = JustDown(this.keys.call)
+    let call = false
+    for (const key of this.callKeys) if (JustDown(key)) call = true
     if (t.call && !this._prevTouchCall) call = true
     this._prevTouchCall = t.call
 
@@ -70,5 +78,11 @@ export default class Controls {
     const up = c.up.isDown || k.up.isDown || t.jump
 
     return { left, right, jump, jumpHeld, attack, switch: sw, call, special, crouch, up }
+  }
+
+  // Alle "gerade gedrückt"-Merker löschen – z. B. nach dem Pausenmenü, damit die
+  // Leertaste, mit der man "Weiterspielen" gewählt hat, nicht gleich einen Schlag auslöst
+  vergessen() {
+    this.kb.resetKeys()
   }
 }

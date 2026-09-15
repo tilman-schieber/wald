@@ -42,6 +42,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.swing = null            // Liane, an der ich gerade schwinge
     this.swingReadyAt = 0
     this.hopUntil = 0            // kurz nach dem Absprung von der Ranke: Satz nicht überschreiben
+    this.geschleudert = false    // von der Liane katapultiert: der Schwung bleibt bis zur Landung
     this.slamming = false        // Stampfer läuft (Jonas)
     this.attackAnimUntil = 0
     this.hurtAnimUntil = 0
@@ -100,7 +101,13 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     const speed = this.crouched ? this.cfg.speed * CROUCH.speedFactor : this.cfg.speed
 
     // --- laufen ---
-    if (cmd.left && !cmd.right) {
+    if (this.geschleudert && this.onGround) this.geschleudert = false
+    if (this.geschleudert) {
+      // Im Katapult-Flug von der Liane: der Schwung bleibt erhalten, man kann nur leicht nachlenken.
+      // (Sonst würde Laufen-Drücken den Flug auf Lauftempo abbremsen, Loslassen ihn ganz stoppen.)
+      const lenk = (cmd.right ? 1 : 0) - (cmd.left ? 1 : 0)
+      if (lenk) { this.setVelocityX(this.body.velocity.x + lenk * SWING.steuern); this.facing = lenk }
+    } else if (cmd.left && !cmd.right) {
       this.setVelocityX(-speed)
       this.facing = -1
     } else if (cmd.right && !cmd.left) {
@@ -178,6 +185,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   // vine = { x, top, bottom, side }. Man hängt an der Ranke, Schwerkraft aus.
   startClimb(vine) {
     this.vine = vine
+    this.geschleudert = false
     this.setCrouched(false)
     this.body.setAllowGravity(false)
     this.setVelocity(0, 0)
@@ -223,6 +231,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   startSwing(liane, time) {
     if (time < this.swingReadyAt) return false
     this.swing = { x: liane.x, y: liane.top, len: liane.len, rope: liane.rope }
+    this.geschleudert = false
     this.setCrouched(false)
     this.body.setAllowGravity(false)
     const dx = this.x - liane.x
@@ -251,15 +260,19 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.setFlipX(this.facing < 0)
     this.playIfNew('climb')
     if (cmd.jump) {
-      // Loslassen: Jonas fliegt genau so weiter, wie er sich gerade bewegt –
-      // wie beim Loslassen einer Schaukel. Für einen Punkt auf dem Kreis mit
-      // Winkel a gilt: Geschwindigkeit = Kreisgeschwindigkeit · (cos a, −sin a).
-      const v = s.vel * s.len
-      const vx = Math.cos(s.ang) * v
-      const vy = -Math.sin(s.ang) * v
+      // Loslassen: Jonas fliegt in die Richtung weiter, in die er gerade schwingt –
+      // wie beim Abspringen von einer Schaukel, nur kräftiger (Katapult!). Für einen
+      // Punkt auf dem Kreis mit Winkel a gilt: Geschwindigkeit = Kreisgeschwindigkeit · (cos a, −sin a).
+      const richtung = Math.sign(s.vel) || this.facing || 1
+      const v = Math.abs(s.vel) * s.len * SWING.absprungFaktor
+      const vx = Math.cos(s.ang) * Math.max(v, SWING.absprungMin) * richtung
+      const vy = -Math.sin(s.ang) * v * richtung
       this.stopSwing(time)
       // ein kleiner Schubs nach oben, damit man auch aus dem Stand abspringen kann
-      this.setVelocity(vx, vy - SWING.absprungBonus)
+      this.setVelocity(vx, Math.min(vy, 0) - SWING.absprungBonus)
+      this.facing = richtung
+      this.geschleudert = true          // Schwung bleibt bis zur Landung (siehe applyCommand)
+      this.jumpCut = true               // Loslassen der Taste soll den Katapult-Flug nicht abkürzen
       this.lastGroundTime = -9999
       this.hopUntil = time + 200
       this.scene.sfx?.play('jump')
@@ -316,6 +329,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   hurt(time, fromX) {
     if (this.isInvulnerable(time) || this.isDazed(time)) return null
     this.hp -= 1
+    this.geschleudert = false
     this.invulnUntil = time + COMBAT.invulnMs
     this.hurtAnimUntil = time + 350
     this.setVelocity(Math.sign(this.x - fromX || 1) * COMBAT.knockback, -COMBAT.knockback * 0.6)
@@ -345,6 +359,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   // Sofort stehen bleiben (beim Wechsel)
   halt() {
     this.setVelocityX(0)
+    this.geschleudert = false
     this.jumpBufferTime = -1
   }
 

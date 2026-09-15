@@ -116,17 +116,25 @@ export const CLIMB = {         // Jonas: klettert an Ranken (Pfeil hoch/runter a
 export const SWING = {        // Jonas: an Lianen schwingen (Floresta da Tijuca)
   pump: 2.2,                  // wie stark Links/Rechts das Schwingen verstärkt
   daempfung: 0.995,           // ganz leichte Bremse, sonst schwingt es ewig
+  absprungFaktor: 1.4,        // beim Loslassen wird der Schwung verstärkt → Katapult in Schwungrichtung
+  absprungMin: 170,           // mindestens so schnell fliegt Jonas los (auch aus fast ruhiger Liane; er läuft 110)
   absprungBonus: 120,         // zusätzlicher Schwung nach oben beim Loslassen
+  steuern: 6,                 // im Flug kann man pro Bild nur leicht nachlenken (der Schwung bleibt)
   greifPause: 350,            // so lange kann man nach dem Loslassen nicht neu greifen
 }
 
 export const SLAM = {          // Jonas: Stampfer (E) – springt hoch und knallt auf den Boden
   jump: 260,                   // Absprung nach oben
   fall: 520,                   // dann mit Wucht nach unten
-  radius: 72,                  // Gegner in dieser Nähe (waagerecht) werden benommen
-  dizzyMs: 1800,               // … so lange
+  radius: 80,                  // ALLE Bodentiere in diesem Umkreis (Kreis um Jonas' Füße) trifft es …
+  damage: 1,                   // … mit so viel Schaden …
+  dizzyMs: 1800,               // … und sie sind so lange benommen. Fliegende (Eule, Graja in der Luft) spüren nichts.
   cooldownMs: 1400,
 }
+
+// Wie viele Blätter braucht der Wächter? Nicht alle – ein paar dürfen fehlen
+// (manche hängen zu hoch für kleine Springer). Aufgerundet: 0.7 von 26 = 19.
+export const BLAETTER = { anteil: 0.7 }
 export const SPIRIT = {        // Leonel: Waldgeist rufen
   durationMs: 5000,            // so lange bleibt der Geist
   cooldownMs: 8000,            // Pause bis zum nächsten Ruf
@@ -272,7 +280,8 @@ ENEMIES.hase = {
     hops: 3,                // so viele große Sätze
     hopPower: 300,          // Absprungkraft nach oben
     hopSpeed: 120,          // Tempo nach vorn
-    dizzyMs: 1200,          // danach sitzt er benommen da
+    pauseMs: 1100,          // danach sitzt er da und schnuppert (harmlos, nicht benommen), dann hoppelt er weg
+    dizzyMs: 1200,          // benommen nur nach Jonas' Stampfer
     cooldownMs: 1200,
     healedWanderSpeed: 14,
   },
@@ -322,6 +331,7 @@ ENEMIES.nasenbaer = {
     jump: 380,                      // Absprungkraft – wie Jonas, sonst käme er auf keine Plattform
     jumpEveryMs: 600,               // nicht dauernd hüpfen
     rollMaxMs: 7000,                // so lange bleibt er dran
+    pauseMs: 1800,                  // dann gibt er auf und schnüffelt herum (nicht benommen – er ist ja nirgends dagegen gerannt)
     dizzyMs: 1500, cooldownMs: 1200, healedWanderSpeed: 12,
   },
 }
@@ -338,7 +348,8 @@ ENEMIES.faultier = {
     kind: 'dropper', spiky: false,
     dropWidth: 24,                  // so nah muss man darunter sein
     alertMs: 600,                   // es merkt es erst … langsam
-    dizzyMs: 3200,                  // liegt lange am Boden
+    pauseMs: 3200,                  // liegt lange am Boden (harmlos, jederzeit zu treffen)
+    dizzyMs: 1800,                  // benommen nur nach dem Stampfer
     climbSpeed: 22,                 // und klettert im Schneckentempo zurück
     cooldownMs: 2000, wanderSpeed: 0, sight: { x: 0, y: 0 }, healedWanderSpeed: 0,
   },
@@ -407,7 +418,7 @@ ENEMIES.ziege = {
   ai: {
     kind: 'hopper', spiky: false, wanderSpeed: 28, wanderHopMs: 1100,
     sight: { x: 150, y: 60 }, alertMs: 450, hops: 3, hopPower: 320, hopSpeed: 110,
-    dizzyMs: 1300, cooldownMs: 1300, healedWanderSpeed: 0,
+    pauseMs: 1200, dizzyMs: 1300, cooldownMs: 1300, healedWanderSpeed: 0,
   },
 }
 
@@ -513,7 +524,8 @@ ENEMIES.jaguar = {
     hopPower: 330,
     hopSpeed: 170,
     rollMaxMs: 3200,
-    dizzyMs: 1500,          // danach schnauft sie (aber: ✕ – erst beruhigen!)
+    pauseMs: 1500,          // danach lauert sie kurz (harmlos, aber erst beruhigen, sonst prallt alles ab)
+    dizzyMs: 1500,          // benommen nur nach dem Stampfer (✕ – erst beruhigen!)
     cooldownMs: 2000,
     healedWanderSpeed: 0,
   },
@@ -596,10 +608,12 @@ export const INTROS = {
 //  (0 = ganz weit weg, 1 = auf der Spielebene). Ankerpunkt unten-mittig.
 // ------------------------------------------------------------
 //  standY = auf welcher Höhe die Kulisse steht. Weit entferntes gehört an den
-//  Horizont (kleinere Zahl), Nahes auf die Bodenlinie (240).
-//  boden: true → die Kulisse STEHT auf dem Boden: die GameScene setzt sie jeden Frame auf die
-//  Bodenkante, die gerade unter ihr liegt (sie wandert ja langsamer als der Boden). Ohne boden
-//  gilt standY = feste Höhe am Horizont (Berge, Vulkan, Cristo – die stehen auf nichts).
+//  Horizont (kleinere Zahl), Nahes auf die Bodenlinie.
+//  boden: true → die Kulisse steht auf der TIEFSTEN Bodenlinie des Levels (ein paar Pixel darunter,
+//  damit der Fuß im Boden steckt). Sie bewegt sich NIE mit dem Gelände: Steht vorne ein Hügel,
+//  verdeckt er sie unten ein Stück – genau wie ein echtes Haus hinter einem Hügel. (Der Versuch,
+//  sie jeden Frame auf den Boden darunter zu stellen, ließ sie beim Laufen auf und ab hüpfen.)
+//  Ohne boden gilt standY = feste Höhe am Horizont (Berge, Vulkan, Cristo – die stehen auf nichts).
 export const KULISSEN = {
   schwarzwaldhof: { file: 'assets/bg/kulisse_schwarzwaldhof.png', boden: true },
   schauinsland:   { file: 'assets/bg/kulisse_schauinsland.png', standY: 200 },

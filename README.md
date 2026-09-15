@@ -8,8 +8,8 @@ Zwei Wälder sind spielbar: der **Schwarzwald** bei Freiburg und die **Floresta 
 
 Veröffentlichen: `sh tools/deploy.sh` baut das Spiel und schiebt es auf den Branch `gh-pages`.
 
-- Pfeile/WASD laufen, Leertaste springen, X schlagen, E Fähigkeit (Jonas: Stampfer, Leonel: Waldgeist),
-  Tab wechseln, C „Komm!“, ↑ an Ranken klettern (Jonas), ↓ ducken, P Pause, M Musik
+- WASD/Pfeile laufen, W/↑ springen (an Ranken: klettern, Jonas), S/↓ ducken, Leertaste schlagen,
+  E Fähigkeit (Jonas: Stampfer, Leonel: Waldgeist), Q „Komm!“, Tab wechseln, P Pause, M Musik
 - Läuft auch auf dem Handy (Touch-Knöpfe)
 
 ## Entwickeln

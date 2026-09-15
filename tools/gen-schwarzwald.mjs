@@ -38,6 +38,12 @@ while (x < W) {
 // Sanfter Übergang zu flachen Zonen: max. 2 Stufen pro Spalte
 for (let i = 1; i < W; i++) { if (g[i] < g[i - 1] - 2) g[i] = g[i - 1] - 2; }
 for (let i = W - 2; i >= 0; i--) { if (g[i] < g[i + 1] - 2) g[i] = g[i + 1] - 2; }
+// Keine Treppe mit nur EINER Kachel Zwischenstufe (11 → 13 → 15): von unten war das eine
+// 4-Kacheln-Klippe, auf die man nicht zurückkam. Die Zwischenstufe wird 2 Kacheln breit.
+for (let i = 1; i < W - 1; i++) {
+  if (g[i] - g[i - 1] === 2 && g[i + 1] - g[i] === 2) g[i + 1] = g[i]      // abwärts nach rechts
+  if (g[i - 1] - g[i] === 2 && g[i] - g[i + 1] === 2) g[i - 1] = g[i]      // aufwärts nach rechts
+}
 
 const data = new Array(W * H).fill(0)
 const set = (c, r, v) => { if (c >= 0 && c < W && r >= 0 && r < H) data[r * W + c] = v }
@@ -64,7 +70,8 @@ for (let c = X(176); c <= X(179); c++) set(c, 12, STEIN)                        
 for (let c = X(182); c <= X(185); c++) set(c, 9, STEIN)
 for (let c = X(188); c <= X(192); c++) set(c, 6, STEIN)
 for (let r = 0; r <= 11; r++) { set(X(196), r, STEIN); set(X(197), r, STEIN) }       // Mauer D
-for (let c = X(206); c <= X(210); c++) set(c, 10, STEIN)
+for (let c = X(206); c <= X(210); c++) set(c, 10, STEIN)                             // Sims mit Blatt hinter der Mauer …
+for (let c = X(201); c <= X(203); c++) set(c, 13, STEIN)                             // … und eine Stufe davor: 80 px hoch schafft kein Held in einem Sprung
 for (let c = X(268); c <= X(275); c++) set(c, 12, STEIN)                             // Hügel fürs Waldherz
 for (let c = X(270); c <= X(273); c++) set(c, 11, STEIN)
 // Sims für die Ranke in Zone C

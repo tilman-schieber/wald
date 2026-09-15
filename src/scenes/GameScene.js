@@ -26,7 +26,7 @@
 //             wenn alle Blätter des Waldes gesammelt sind; das Farn leuchtet erst, wenn er geheilt ist
 // ============================================================
 import Phaser from 'phaser'
-import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF, tiefeZuDepth } from '../config.js'
+import { GAME, ENEMIES, COMBAT, CLIMB, SLAM, SPIRIT, MUSIC, DEKO, TIERE, UI, KULISSEN, FORESTS, WURF, BLAETTER, tiefeZuDepth } from '../config.js'
 import { P } from '../palette.js'
 import { world, healedIn, gatesOpenIn, collectedIn } from '../world.js'
 import { saveGame, clearSave } from '../save.js'
@@ -35,7 +35,7 @@ import Jonas from '../entities/Jonas.js'
 import Leonel from '../entities/Leonel.js'
 import CompanionBrain from '../entities/CompanionBrain.js'
 import PlatformGraph from '../entities/PlatformGraph.js'
-import Enemy from '../entities/Enemy.js'
+import Enemy, { MARK_PADDING } from '../entities/Enemy.js'
 import Owl from '../entities/Owl.js'
 import Boss from '../entities/Boss.js'
 import Spirit from '../entities/Spirit.js'
@@ -103,13 +103,13 @@ export default class GameScene extends Phaser.Scene {
 
     // "Boden" ist die Ebene aus Tiled: Sie bestimmt, wo man stehen kann.
     this.groundLayer = map.createLayer('Boden', tiles2 ? [tiles, tiles2] : tiles, 0, 0).setDepth(0)
-    // Der echte Boden je Kachelspalte (Oberkante in px): von unten hochzählen, solange Kacheln da sind.
-    // Schwebende Plattformen zählen nicht – darauf steht kein Haus. Für Kulissen mit `boden: true`.
-    this.bodenOben = []
+    // Die tiefste Bodenlinie des Levels (Oberkante in px): je Spalte von unten hochzählen, solange
+    // Kacheln da sind, und das größte y nehmen. Darauf stehen die Kulissen mit `boden: true`.
+    this.bodenLinie = 0
     for (let c = 0; c < map.width; c++) {
       let r = map.height - 1
       while (r >= 0 && this.groundLayer.getTileAt(c, r) !== null) r--
-      this.bodenOben.push(r === map.height - 1 ? map.heightInPixels : (r + 1) * map.tileHeight)
+      this.bodenLinie = Math.max(this.bodenLinie, r === map.height - 1 ? map.heightInPixels : (r + 1) * map.tileHeight)
     }
     this.groundLayer.setCollisionByExclusion([-1])   // jede gesetzte Kachel ist fest
 
@@ -271,25 +271,27 @@ export default class GameScene extends Phaser.Scene {
     // Kulissen: große Hintergrundbilder mit eigener Parallax-Tiefe. Damit ein Objekt an
     // seiner Welt-Position erscheint, wenn die Kamera dort steht, wird x umgerechnet:
     //   bild.x = x·tiefe + halbeBildschirmbreite·(1 − tiefe)
-    // Kulissen mit `boden: true` stehen auf dem Boden: weil sie langsamer wandern als der Boden,
-    // schiebt sich im Lauf des Levels JEDE Bodenhöhe unter sie – darum setzt `updateKulissen`
-    // sie jeden Frame auf die Bodenkante, die gerade unter ihnen liegt (sonst schweben sie
-    // über Senken oder stecken in Hügeln).
+    // Senkrecht bewegt sich eine Kulisse NIE (scrollFactor y = 0): Sie gehört zu ihrer eigenen
+    // Hintergrund-Ebene, nicht zum Gelände vorne. Kulissen mit `boden: true` stehen auf der
+    // tiefsten Bodenlinie des Levels (Fuß ein paar Pixel im Boden). Liegt vorne ein Hügel,
+    // verdeckt er sie unten – so sieht ein Haus hinter einem Hügel wirklich aus. (Sie jeden
+    // Frame auf den Boden darunter zu setzen, ließ sie beim Laufen auf und ab hüpfen.)
     this.kulissen = []
     for (const o of objects.filter((o) => o.type === 'kulisse')) {
       const key = 'kulisse-' + o.name
       if (!this.textures.exists(key)) { console.warn('Unbekannte Kulisse:', o.name); continue }
       const tiefe = Number(props(o).tiefe ?? 0.5)
       const k = KULISSEN[o.name] ?? {}
+      const standY = k.boden ? this.bodenLinie + 4 : (k.standY ?? o.y)
       // WICHTIG: dieselbe Tiefen-Formel wie für die Hintergrund-Ebenen. Sonst liegt
       // eine ferne Kulisse VOR den nahen Bäumen und alles wirkt falsch gestapelt.
-      const img = this.add.image(o.x * tiefe + (GAME.width / 2) * (1 - tiefe), k.standY ?? o.y, key)
+      const img = this.add.image(o.x * tiefe + (GAME.width / 2) * (1 - tiefe), standY, key)
         .setOrigin(0.5, 1).setScrollFactor(tiefe, 0).setDepth(tiefeZuDepth(tiefe) + 1)   // knapp VOR der gleich schnellen Ebene, aber hinter der nächsten
       img.setAlpha(0.85 + tiefe * 0.15)
       // Fernes wird vom Dunst eingefärbt – genau wie die ferne Baumreihe
       if (tiefe < 0.5) img.setTint(0x8fa0c0)
       if (props(o).spiegeln) img.setFlipX(true)
-      this.kulissen.push({ img, tiefe, boden: !!k.boden, frisch: true })
+      this.kulissen.push({ img, tiefe })
     }
 
     // Deko: nur Bilder, keine Physik. Hinter den Figuren (Tiefe 2) oder davor (Tiefe 15).
@@ -328,7 +330,7 @@ export default class GameScene extends Phaser.Scene {
       this.physics.add.existing(img, true)
       img.y += 2
       this.addShadow(img, 14, false).setPosition(img.x, img.y - 1)
-      const heart = this.add.text(o.x, o.y - 30, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setDepth(8).setVisible(o.name === this.spawnName)
+      const heart = this.add.text(o.x, o.y - 30, '♥', { fontFamily: 'monospace', fontSize: '10px', color: '#f6757a', stroke: '#181425', strokeThickness: 2, padding: MARK_PADDING }).setOrigin(0.5).setDepth(8).setVisible(o.name === this.spawnName)
       return { img, heart, name: o.name, x: o.x, y: o.y }
     })
 
@@ -341,8 +343,10 @@ export default class GameScene extends Phaser.Scene {
     })
 
     // ---------- Wächter (Endgegner) und Farn ----------
-    // Das Farn bleibt stumm, bis alle Blätter gesammelt UND der Wächter geheilt ist.
+    // Das Farn bleibt stumm, bis genug Blätter gesammelt UND der Wächter geheilt ist.
+    // "Genug" = BLAETTER.anteil aller Blätter (aufgerundet) – ein paar dürfen fehlen.
     this.blaetterGesamt = objects.filter((o) => o.type === 'blatt').length
+    this.blaetterNoetig = Math.min(this.blaetterGesamt, Math.ceil(this.blaetterGesamt * BLAETTER.anteil))
     this.boss = this.enemies.find((e) => e.cfg.boss) ?? null
     const arenaObj = objects.find((o) => o.type === 'arena')
     this.arena = arenaObj ? { x0: arenaObj.x, x1: arenaObj.x + arenaObj.width } : this.boss ? { x0: this.boss.x - 170, x1: this.boss.x + 170 } : null
@@ -397,7 +401,7 @@ export default class GameScene extends Phaser.Scene {
     // Tastenhilfe: am Anfang gut sichtbar, nach 15 Sekunden blendet sie weg,
     // damit sie nicht dauernd im Wald herumliegt.
     if (!isTouch) {
-      const hilfe = this.add.text(GAME.width / 2, GAME.height - 3, 'Pfeile · Leer Sprung · X Schlag · E Fähigkeit · Tab Wechsel · C Komm · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
+      const hilfe = this.add.text(GAME.width / 2, GAME.height - 3, 'WASD/Pfeile · W Sprung · Leer Schlag · E Fähigkeit · Q Komm · Tab Wechsel · M Musik · P Pause', { fontFamily: 'monospace', fontSize: '7px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(100).setAlpha(0.7)
       this.tweens.add({ targets: hilfe, alpha: 0, delay: 15000, duration: 1500, onComplete: () => hilfe.destroy() })
     }
     this.updateNameText()
@@ -520,32 +524,11 @@ export default class GameScene extends Phaser.Scene {
     // 6. Pfeil über dem Aktiven
     this.marker.setPosition(Math.round(this.active.x), Math.round(this.active.body.top - 8))
 
-    // 7. Parallax: Hintergrund langsamer, Vordergrund schneller als die Kamera
+    // 7. Parallax: Hintergrund langsamer, Vordergrund schneller als die Kamera.
+    // (Kulissen brauchen hier nichts: ihr scrollFactor erledigt das Wandern, senkrecht stehen sie fest.)
     const sx = this.cameras.main.scrollX
     for (const l of this.bgLayers) l.ts.tilePositionX = sx * l.scroll + l.offsetX
     this.fgBushes.tilePositionX = sx * 1.3
-    this.updateKulissen(sx)
-  }
-
-  // Kulissen auf den Boden stellen, der gerade unter ihnen liegt. Unter dem Bild wird die
-  // TIEFSTE Bodenkante genommen (größtes y): steht die Kulisse halb vor einem Hügel, verdeckt
-  // der Hügel sie unten ein Stück – das sieht richtig aus. Schweben sähe falsch aus.
-  // Weich nachgeführt, damit sie an Geländestufen nicht springt.
-  updateKulissen(sx) {
-    const T = 16
-    for (const k of this.kulissen) {
-      if (!k.boden) continue
-      // Wo auf dem Bildschirm ist sie gerade? → welche Welt-Spalten liegen darunter?
-      const weltX = sx * (1 - k.tiefe) + k.img.x
-      const halb = Math.min(k.img.displayWidth * 0.3, 56)
-      const c0 = Phaser.Math.Clamp(Math.floor((weltX - halb) / T), 0, this.bodenOben.length - 1)
-      const c1 = Phaser.Math.Clamp(Math.floor((weltX + halb) / T), 0, this.bodenOben.length - 1)
-      let ziel = 0
-      for (let c = c0; c <= c1; c++) ziel = Math.max(ziel, this.bodenOben[c])
-      ziel += 2   // 2 px im Moos, wie alle Deko
-      if (k.frisch) { k.img.y = ziel; k.frisch = false }
-      else k.img.y += (ziel - k.img.y) * 0.12
-    }
   }
 
   // Musik läuft über das ganze Level durch; jeder Wald hat sein eigenes Stück.
@@ -575,7 +558,7 @@ export default class GameScene extends Phaser.Scene {
     this.pausePanel?.setVisible(this.paused)
     for (const t of this.pauseTexts) t.setVisible(this.paused)
     if (this.paused) { this.pauseSel = 0; this.pauseAuffrischen(); this.physics.pause(); this.anims.pauseAll(); this.tweens.pauseAll() }
-    else { this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll() }
+    else { this.physics.resume(); this.anims.resumeAll(); this.tweens.resumeAll(); this.controls.vergessen() }
   }
 
   // Im Pausenbild mit den Pfeiltasten auf und ab
@@ -751,16 +734,21 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
-  // Jonas ist mit dem Stampfer aufgekommen: Erschütterung!
+  // Jonas ist mit dem Stampfer aufgekommen: Erschütterung! Sie trifft JEDES Bodentier im
+  // Umkreis (Kreis um Jonas' Füße, auch auf Plattformen darüber oder darunter): es wird
+  // benommen UND verliert Lebenspunkte. Nur wer fliegt oder am Ast hängt, spürt nichts.
   onSlamLanded(hero, time) {
     this.cameras.main.shake(180, 0.006)
     this.sfx.play('slam')
     const ring = this.add.ellipse(hero.x, hero.body.bottom, 10, 4, 0, 0).setStrokeStyle(2, P.sandHell).setDepth(12)
     this.tweens.add({ targets: ring, width: SLAM.radius * 2, height: 10, alpha: 0, duration: 300, onComplete: () => ring.destroy() })
     for (const e of this.enemies) {
-      if (e.healed || Math.abs(e.x - hero.x) > SLAM.radius || Math.abs(e.body.bottom - hero.body.bottom) > 24) continue
-      if (this.gateBetween(hero.x, e.x, e.body.center.y)) continue   // Tore halten die Erschütterung auf
-      e.stun(time, SLAM.dizzyMs)
+      if (!e.stampfbar(time)) continue
+      if (Phaser.Math.Distance.Between(hero.x, hero.body.bottom, e.x, e.body.center.y) > SLAM.radius) continue
+      e.stun(time, SLAM.dizzyMs)                        // Wächter: bricht so ein Schutzstück ab
+      const result = e.hit(SLAM.damage, hero.x, time)   // null = noch geschützt (Schild), dann eben nur benommen
+      if (result) { healedIn(this.roomKey).add(e.objectId); this.sfx.play('heal'); this.sparkle(e.x, e.body.center.y, P.rosaHell, 16) }
+      else if (result === false) this.sparkle(e.x, e.body.center.y, P.sandHell, 6)
     }
   }
 
@@ -871,7 +859,7 @@ export default class GameScene extends Phaser.Scene {
       this.add.rectangle(0, 0, W, H, P.schwarz, 0.6).setOrigin(0).setScrollFactor(0).setDepth(250)
     }
     this.add.text(W / 2, 20, this.forest.endeText, { fontFamily: font, fontSize: '18px', color: '#fee761', stroke: '#181425', strokeThickness: 4 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
-    this.add.text(W / 2, H - 28, `${this.blaetterGesamt - this.leaves.length} von ${this.blaetterGesamt} Blättern gesammelt`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
+    this.add.text(W / 2, H - 28, `${this.blaetterGesammelt} von ${this.blaetterGesamt} Blättern gesammelt`, { fontFamily: font, fontSize: '11px', color: '#ffffff', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     if (this.naechsterWald) this.add.text(W / 2, H - 42, `Weiter geht es in die ${this.naechsterWald.name}!`, { fontFamily: font, fontSize: '11px', color: '#63c74d', stroke: '#181425', strokeThickness: 3 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     this.add.text(W / 2, H - 12, 'Weiter mit Leertaste / Antippen', { fontFamily: 'monospace', fontSize: '8px', color: '#c0cbdc', stroke: '#181425', strokeThickness: 2 }).setOrigin(0.5).setScrollFactor(0).setDepth(251)
     // Gibt es einen nächsten Wald, geht es direkt in seine Geschichte – der Text hat es ja
@@ -1023,7 +1011,8 @@ export default class GameScene extends Phaser.Scene {
 
   // ---------- Wächter (Endgegner) ----------
   get farnAktiv() { return !this.boss || this.boss.healed }
-  get blaetterFehlen() { return this.leaves.length }
+  get blaetterGesammelt() { return this.blaetterGesamt - this.leaves.length }
+  get blaetterFehlen() { return Math.max(0, this.blaetterNoetig - this.blaetterGesammelt) }
 
   // Der Wächter erwacht, wenn alle Blätter da sind und der aktive Held die Arena betritt.
   // Fehlen noch Blätter, sagt der Wald es – statt dass die Kinder rätseln, warum nichts passiert.
@@ -1122,7 +1111,8 @@ export default class GameScene extends Phaser.Scene {
 
   updateHud() {
     if (this.heartIcons) {
-      this.hudLeaves.setText(`${this.blaetterGesamt - this.leaves.length}/${this.blaetterGesamt}`)
+      // gesammelt / nötig für den Wächter (mehr geht immer)
+      this.hudLeaves.setText(`${this.blaetterGesammelt}/${this.blaetterNoetig}`)
       for (const [key, icons] of Object.entries(this.heartIcons)) icons.forEach((ic, i) => ic.setTexture(i < this[key].hp ? 'herz' : 'herz_leer'))
       const charge = this.active.specialCharge(this.time.now)
       this.abilityBar.width = Math.max(1, 20 * charge)
@@ -1130,7 +1120,7 @@ export default class GameScene extends Phaser.Scene {
       return
     }
     const hearts = (h) => '♥'.repeat(Math.max(0, h.hp)) + '♡'.repeat(Math.max(0, COMBAT.heroHp - h.hp))
-    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${this.blaetterGesamt - this.leaves.length}/${this.blaetterGesamt}`)
+    this.hud.setText(`Jonas ${hearts(this.jonas)}   Leonel ${hearts(this.leonel)}   Blätter: ${this.blaetterGesammelt}/${this.blaetterNoetig}`)
   }
 
   // Funkeln: kleine Punkte, die auseinanderfliegen und verblassen
