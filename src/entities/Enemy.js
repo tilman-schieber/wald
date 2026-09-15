@@ -16,6 +16,8 @@
 //              climber (Nasenbär):    läuft hinterher und springt auf Plattformen
 //              dropper (Faultier):    hängt am Ast und lässt sich fallen
 //              marcher (Ameise):      marschiert nur, greift nie an
+//              dasher  (Eidechse):    kurze Blitz-Sprints mit Stopps dazwischen, zielt jedes Mal neu
+//              (Graja: Tiefflug quer über den Boden – siehe Owl.js, ai.tiefflug)
 //    turn    nur beim Wildschwein: Pause zwischen zwei Sturmläufen
 //    dizzy   NUR bei Stürmern (Igel, Wildschwein, Eidechse, Hirsch …): wer mit
 //            Anlauf gegen etwas rennt, ist danach benommen → "★", jetzt treffen
@@ -100,7 +102,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   // Kann man ihn gerade treffen?
   isVulnerable(time) { return !this.cfg.ai.spiky || this.state === 'dizzy' || this.state === 'turn' || this.isCalm(time) }
   // Greift er gerade an? (Ameisen: ihr Marsch IST der Angriff – anrempeln tut weh)
-  get dangerous() { return this.state === 'roll' || (this.cfg.ai.kind === 'marcher' && this.state === 'wander') }
+  get dangerous() {
+    if (this.cfg.ai.kind === 'dasher') return this.state === 'roll' && !!this.dashing   // nur WÄHREND des Sprints
+    return this.state === 'roll' || (this.cfg.ai.kind === 'marcher' && this.state === 'wander')
+  }
   // Tut er gerade weh, wenn man ihn berührt? NUR beim Angriff (rotes "!") –
   // beim Stromern, Erschrecken und Benommensein ist jeder Gegner harmlos.
   hurtsOnTouch(time) { return !this.healed && !this.isCalm(time) && this.dangerous }
@@ -217,8 +222,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           this.throwsLeft = ai.throws ?? 0
           this.nextHopAt = 0
           this.nextThrowAt = 0
+          this.dashesLeft = ai.dashes ?? 0
+          this.dashing = false
+          this.dashPauseUntil = time
           if (ai.kind === 'dropper') this.body.setAllowGravity(true)     // loslassen!
-          if (!['hopper', 'thrower', 'climber', 'dropper'].includes(ai.kind)) this.useTexture(this.cfg.key + '-kugel')
+          if (!['hopper', 'thrower', 'climber', 'dropper', 'dasher'].includes(ai.kind)) this.useTexture(this.cfg.key + '-kugel')
         }
         break
       case 'roll': {
@@ -235,6 +243,26 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             // sich nur eine Weile um. Diese Pause ist die Zeit, um zu ihm hinaufzuklettern.
             this.state = 'wander'; this.stateUntil = time; this.wanderPause = true
             this.alertReadyAt = time + ai.cooldownMs
+          }
+          break
+        }
+        if (ai.kind === 'dasher') {
+          // --- Eidechse: Blitz-Sprint, Stopp, neu zielen, Sprint … Zwischen den Sprints steht sie
+          // still und ist harmlos – das ist der Moment zum Zuschlagen. Nach der Serie sonnt sie sich.
+          if (this.dashing) {
+            const blocked = this.dir < 0 ? this.body.blocked.left : this.body.blocked.right
+            const edge = this.onGround && !this.groundAhead(groundLayer)
+            if (blocked || edge || time >= this.dashUntil) { this.dashing = false; this.setVelocityX(0); this.dashPauseUntil = time + (ai.standMs ?? 400) }
+            else this.setVelocityX(this.dir * ai.dashSpeed)
+          } else {
+            this.setVelocityX(0)
+            if (time >= this.dashPauseUntil) {
+              if (this.dashesLeft <= 0) { this.startPause(time); break }
+              this.dashesLeft--
+              if (this.target) this.dir = Math.sign(this.target.x - this.x) || this.dir
+              this.dashing = true
+              this.dashUntil = time + (ai.dashMs ?? 350)
+            }
           }
           break
         }
@@ -380,7 +408,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Lauf-Animation, wenn es eine gibt (nur beim Gehen); im Alarm läuft die Alarm-Animation
     // Läuft er gerade? Auch beim Verfolgen/Hüpfen/Marschieren sollen die Beine gehen –
     // sonst rutscht ein Gegner wie ein Möbelstück über den Boden.
-    const jagt = this.state === 'roll' && (['hopper', 'climber', 'marcher'].includes(ai.kind) || ai.laufAnim)   // laufAnim: auch beim Sprint die Beine bewegen (Eidechse)
+    const jagt = this.state === 'roll' && (['hopper', 'climber', 'marcher'].includes(ai.kind) || ai.laufAnim || (ai.kind === 'dasher' && this.dashing))   // laufAnim: auch beim Sturm die Beine bewegen (Hirsch, Riesenechse)
     const walking = (this.state === 'wander' && !this.wanderPause) || jagt
     if (this.scene.anims.exists(this.cfg.key + '-lauf')) {
       // WICHTIG: auch `isPlaying` prüfen! Nach einem anims.stop() merkt sich Phaser

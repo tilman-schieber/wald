@@ -306,7 +306,7 @@ ENEMIES.affe = {
     sight: { x: 210, y: 140 },
     alertMs: 500,
     throws: 2, throwEveryMs: 1300,  // zwei Würfe mit Pause (fair auch für kleine Spieler)
-    wurf: { x: 130, y: -190 },      // Anfangsgeschwindigkeit der Frucht
+    wurf: { x: 130, y: -190, bounces: 1, bounce: 0.55 },   // hoher Bogen, die Frucht hüpft EINMAL hoch auf – drüberspringen!
     cooldownMs: 1600,               // so lange schaut er sich nach einer Salve nur um
     healedWanderSpeed: 0,
   },
@@ -376,7 +376,9 @@ ENEMIES.ameise = {
 //  Die Gegner des Lorbeerwalds auf La Palma
 // ------------------------------------------------------------
 //  Verwirrte Graja (Alpenkrähe): schwarzer Vogel mit rotem Schnabel, das Wahrzeichen
-//  der Insel. Hockt in der Luft und stürzt herab wie die Eule (Owl.js).
+//  der Insel. Hockt in der Luft – aber anders als die Eule stürzt sie nicht senkrecht herab,
+//  sondern fliegt VOR den Helden hinunter (gelb) und fegt dann im Tiefflug quer über den
+//  Boden an ihm vorbei (rot: drüberspringen!). Wo sie landet, sitzt sie kurz – da trifft man sie.
 ENEMIES.graja = {
   key: 'graja', name: 'Verwirrte Graja', kind: 'flyer', hp: 3, damage: 1,
   frame: { w: 32, h: 32 }, body: { w: 22, h: 22 },
@@ -385,11 +387,16 @@ ENEMIES.graja = {
   healedFile: 'assets/sprites/graja_heil.png',      // schläft (animate_image 018a296c…, letztes Bild)
   flyFile: 'assets/sprites/graja_flug.png',
   flySheet: { file: 'assets/sprites/graja_flug_anim.png', w: 32, h: 32, n: 6, rate: 10 },   // animate_image 8a999bc4…
-  ai: { spiky: true, sight: { x: 170, y: 160 }, alertMs: 500, swoopSpeed: 180, restMs: 1500, returnSpeed: 100, cooldownMs: 1500 },
+  ai: {
+    spiky: true, sight: { x: 190, y: 160 }, alertMs: 500,
+    tiefflug: true, anlauf: 70, strecke: 150,   // Anflug bis 70 px vor den Helden, dann 220 px Tiefflug
+    swoopSpeed: 200, restMs: 1500, returnSpeed: 100, cooldownMs: 1500,
+  },
 }
 
-//  Verwirrte Kanaren-Eidechse: klein, flach, blitzschnell. Flitzt wie das Wildschwein
-//  hin und her – aber sie läuft dabei richtig (Lauf-Animation) statt zu "rollen".
+//  Verwirrte Kanaren-Eidechse: klein, flach, blitzschnell. Kein langer Sturm wie das
+//  Wildschwein, sondern kurze Blitz-Sprints: flitzen, stoppen, neu zielen, flitzen … Zwischen
+//  den Sprints steht sie still und ist harmlos – da schlägt man zu. Danach sonnt sie sich.
 ENEMIES.eidechse = {
   key: 'eidechse', name: 'Verwirrte Eidechse', hp: 3, speed: 40, damage: 1,
   frame: { w: 40, h: 19 }, body: { w: 30, h: 12 },
@@ -398,15 +405,18 @@ ENEMIES.eidechse = {
   healedFile: 'assets/sprites/eidechse_heil.png',    // sonnt sich (animate_image 90cde710…, letztes Bild)
   walkSheet: { file: 'assets/sprites/eidechse_lauf.png', w: 41, h: 20, n: 4, rate: 12 },   // animate_image b94fa6c5…
   ai: {
-    kind: 'charger', spiky: false, rotate: false, laufAnim: true,
-    wanderSpeed: 35, sight: { x: 160, y: 40 }, alertMs: 500,
-    rollSpeed: 190, rollMaxMs: 900, charges: 2, turnMs: 350,   // drei kurze Sprints, dazwischen kurz verwundbar
+    kind: 'dasher', spiky: false, rotate: false,
+    wanderSpeed: 35, sight: { x: 160, y: 40 }, alertMs: 400,
+    dashes: 4, dashMs: 320, dashSpeed: 230, standMs: 450,   // vier Blitz-Sprints à 0,3 s, dazwischen 0,45 s Stillstand
+    rollMaxMs: 6000,                                        // (Sicherheitsnetz für die ganze Serie)
+    pauseMs: 1600,                                          // danach sonnt sie sich (harmlos)
     dizzyMs: 1800, cooldownMs: 1500, healedWanderSpeed: 12,
   },
 }
 
-//  Verwirrte Ziege: auf La Palma laufen überall Ziegen herum. Sie springt in
-//  großen Sätzen heran wie der Hase – nur schwerer.
+//  Verwirrte Ziege: auf La Palma laufen überall Ziegen herum. Sie scharrt lange mit dem
+//  Huf (gelb) und macht dann EINEN riesigen Bocksprung auf den Helden zu – nicht drei kleine
+//  wie der Hase. Landet sie, schüttelt sie sich erst mal (harmlos).
 ENEMIES.ziege = {
   key: 'ziege', name: 'Verwirrte Ziege', hp: 4, speed: 35, damage: 1,
   frame: { w: 26, h: 30 }, body: { w: 20, h: 24 },
@@ -417,13 +427,14 @@ ENEMIES.ziege = {
   healedFile: 'assets/sprites/ziege_heil.png',       // liegt und döst (animate_image cb57782e…, letztes Bild)
   ai: {
     kind: 'hopper', spiky: false, wanderSpeed: 28, wanderHopMs: 1100,
-    sight: { x: 150, y: 60 }, alertMs: 450, hops: 3, hopPower: 320, hopSpeed: 110,
-    pauseMs: 1200, dizzyMs: 1300, cooldownMs: 1300, healedWanderSpeed: 0,
+    sight: { x: 170, y: 60 }, alertMs: 750, hops: 1, hopPower: 420, hopSpeed: 160,   // ein einziger, hoher, weiter Satz
+    pauseMs: 1400, dizzyMs: 1300, cooldownMs: 1600, healedWanderSpeed: 0,
   },
 }
 
-//  Verwirrte Lorbeertaube: gibt es nur auf den Kanaren. Sitzt oben im Lorbeer
-//  und lässt Lorbeeren fallen – wie der Affe, nur mit kürzerem Wurf.
+//  Verwirrte Lorbeertaube: gibt es nur auf den Kanaren. Sitzt oben im Lorbeer und
+//  wirft Lorbeeren flach nach unten – die kullern dann hüpfend über den Boden
+//  (drei Aufpraller), ganz anders als die hohen Bögen des Affen.
 ENEMIES.taube = {
   key: 'taube', name: 'Verwirrte Lorbeertaube', hp: 3, speed: 0, damage: 1,
   frame: { w: 30, h: 31 }, body: { w: 18, h: 24 },
@@ -435,7 +446,7 @@ ENEMIES.taube = {
   ai: {
     kind: 'thrower', spiky: false, wanderSpeed: 0,
     sight: { x: 180, y: 140 }, alertMs: 600,
-    throws: 2, throwEveryMs: 1200, wurf: { x: 90, y: -140 },
+    throws: 2, throwEveryMs: 1200, wurf: { x: 110, y: -40, bounces: 3, bounce: 0.45 },   // flach, kullert dreimal auf
     cooldownMs: 1800, healedWanderSpeed: 0,
   },
 }

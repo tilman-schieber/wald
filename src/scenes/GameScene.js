@@ -700,8 +700,9 @@ export default class GameScene extends Phaser.Scene {
     if (!this.textures.exists(key)) return
     const dir = ziel ? Math.sign(ziel.x - affe.x) || 1 : affe.dir
     const w = affe.cfg.ai.wurf ?? { x: 130, y: -190 }
-    const p = new Projectile(this, affe.x + dir * 8, affe.body.center.y, key, dir * w.x, w.y)
-    this.physics.add.collider(p, this.groundLayer, () => p.zerplatzen())
+    const p = new Projectile(this, affe.x + dir * 8, affe.body.center.y, key, dir * w.x, w.y, { bounces: w.bounces ?? 0, bounce: w.bounce ?? 0.5 })
+    this.physics.add.collider(p, this.groundLayer, () => p.aufprall(this.time.now))
+    for (const g of Object.values(this.gates)) this.physics.add.collider(p, g, () => p.aufprall(this.time.now))
     for (const held of [this.jonas, this.leonel]) {
       this.physics.add.overlap(p, held, () => {
         if (!p.active) return

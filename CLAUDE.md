@@ -77,7 +77,9 @@ Entscheidungen so, dass Kinder mitlesen können.
   weg, Nasenbär gibt auf und schnüffelt, Faultier liegt eine Weile (Tilman-Wunsch: nicht alle gleich).
   Drei Arten (`ai.kind`): `roller` (Igel: rollt als Kugel geradeaus, nur benommen verwundbar),
   `charger` (Wildschwein: stürmt, dreht um, stürmt nochmal – beim Umdrehen und danach verwundbar),
-  `hopper` (Hase: hüpft in Sätzen heran), `thrower` (Affe: wirft Jackfrüchte im Bogen),
+  `hopper` (Hase: drei Sätze · Ziege: EIN riesiger Bocksprung), `thrower` (Affe: hohe Bögen, die Frucht hüpft
+  einmal auf · Taube: flache Lorbeeren, die dreimal kullernd aufprallen – `ai.wurf.bounces/.bounce`, `Projectile.aufprall`),
+  `dasher` (Eidechse: vier Blitz-Sprints mit Stopps dazwischen, zielt jedes Mal neu, weh tut nur der Sprint),
   `climber` (Nasenbär: verfolgt und SPRINGT auf Plattformen – Weg über `PlatformGraph` wie der Begleiter, Absprung
   genau im berechneten Fenster vor der Kante; er schwebt nie), `dropper` (Faultier: hängt am Ast und lässt sich fallen),
   `marcher` (Ameisenkolonne: marschiert stur im Gänsemarsch, alle in dieselbe Richtung – dreht eine um,
@@ -88,7 +90,9 @@ Entscheidungen so, dass Kinder mitlesen können.
   geht's los (noch harmlos) · `!` rot, pulsierend = GEFAHR, Berühren tut weh · `★` gelb = benommen, jetzt treffen ·
   `♥` = geheilt (bleibt dauerhaft über dem Tier). **Weh tut ein Gegner NUR bei Rot** (`hurtsOnTouch` ⇔ `dangerous`: Zustand `roll`, Eule `swoop`,
   marschierende Ameisen). Der Affe ist nach seiner Salve nicht benommen, sondern schaut sich nur um (`?`).
-  Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden.
+  Eule (`Owl.js`, kind 'flyer') sitzt in der Luft, stürzt herab, sitzt dann kurz am Boden. Graja (`ai.tiefflug`)
+  fliegt erst VOR den Helden hinunter (Anflug, gelb) und fegt dann im Tiefflug quer über den Boden (rot).
+  **Jedes Tier hat sein eigenes Verhalten** (Tilman-Wunsch): 12 Gegner, 12 Muster – kein Wald ist nur ein Re-Skin.
 - **Wächter (Endgegner, `Boss.js`, `boss: true` in ENEMIES)** am Ende jedes Waldes, in einer flachen `arena`
   (Rechteck-Objekt aus dem Generator, davor ein Speicherpunkt). Regeln (Tilman-Wunsch): Er erscheint ERST, wenn
   GENUG Blätter gesammelt sind – `BLAETTER.anteil` (0.7) aller Blätter, aufgerundet, HUD zeigt `gesammelt/nötig`;
@@ -136,8 +140,10 @@ Entscheidungen so, dass Kinder mitlesen können.
   64 px über der nächsten Stehfläche (Sprung schafft 72 px) – sonst Stufe oder Ranke davor.
 - Browser-Test ohne sichtbares Fenster: liegt der Chrome-Tab im Hintergrund, läuft kein requestAnimationFrame –
   dann das Spiel von Hand takten: `for(…) __wald.spiel.step(t += 16.67, 16.67)` (lädt auch den Loader weiter).
-- La Palma: Gegner Graja (`flyer` wie die Eule), Eidechse (`charger` mit `ai.laufAnim` = Lauf-Animation statt Kugel),
-  Ziege (`hopper`), Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Lavaröhre = ein
+- La Palma: Gegner Graja (`flyer` mit `tiefflug`), Eidechse (`dasher`), Ziege (`hopper`, ein Satz),
+  Lorbeertaube (`thrower` mit eigenem Geschoss: `wurfFile` → Textur `<key>-wurf`). Die Kacheln sind bewusst
+  DUNKEL (Vulkanboden, `tools/umfaerben.mjs` alt=neu-Regeln auf Palettennamen) – die erste, hell-rotbraune
+  Fassung mit knallgrüner Kante fand Tilman zu bunt. Lavaröhre = ein
   Kachel hoher Kriechgang unter der Basaltwand (nur Leonel). Sechs Ostereier liegen als Deko `osterei` versteckt.
   Ostereier sind Sammelobjekte (`osterei`, `ITEMS`): selten (4 pro Wald), jedes gibt dem Finder ein Herz zurück.
   Blätter liegen in allen Wäldern auf jeder zweiten Plattform (+ Rätselzonen), ~26–30 pro Wald – alle nötig für den Wächter.

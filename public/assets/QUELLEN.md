@@ -60,6 +60,8 @@ dann `node tools/palettize.mjs …` (nur Palettenfarben; bei Kacheln die Rottön
 ## Lorbeerwald La Palma (05.09.2026)
 - Kacheln: `create_sidescroller_tileset` Vulkanboden mit Moos `e3e41c50…` (Basis `43a34f40…`) → tiles/la_palma.png (palettisiert OHNE Rottöne/Pink, sonst wurde die Erde knallrot),
   Basalt `946d9759…` (Basis `ed65ac11…`) → tiles/la_palma_stein.png
+  Nachgedunkelt (15.09.2026, `tools/umfaerben.mjs`): Boden rindeBraun→erdeDunkel, erdeDunkel→schwarz, holzBraun/kupfer→rindeBraun,
+  wiesenGruen→blattGruen, blattGruen→moosGruen; Basalt: Lavaglut sonnenGelb/hellGelb/sandHell→schiefer-/steinGrau, kupfer/holzBraun→daemmerBlau
 - Hintergrund (pixflux, palettisiert, per mirror-tile.mjs auf 800 px): Caldera + Sternwarten `501202c2…`, Lorbeerbäume `139a2e21…` (erster Versuch `0e85bdb2…` war pechschwarz),
   Kronen `c05f8d17…` (ab Zeile 85 weich ausgeblendet), Farne `d0401ab8…` (erster Versuch `824bc276…` zu klein, mit Erdstreifen)
 - Kulissen (pixflux, palettisiert, zugeschnitten): Vulkan Cumbre Vieja `0e344d50…`, Haus mit Balkonen `1576fa22…`, Los-Tilos-Wasserfall `dd5f1afc…` (erster Versuch `7aa5ef46…` hatte Himmel drin)
